@@ -7,6 +7,7 @@ const tableSchema = new mongoose.Schema(
       enum: ["Indoor", "Outdoor"],
       required: true,
     },
+    number: { type: Number, required: true },
     branch: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
     capacity: { type: Number, required: true, min: 1 },
     isOccupied: { type: Boolean, default: false },

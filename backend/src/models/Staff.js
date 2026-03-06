@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const staffSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true, lowercase: true, maxLength: 50 },
-    email: { type: String, required: true, lowercase: true, maxLength: 100 },
+    username: { type: String, required: true, lowercase: true, maxLength: 50, unique: true },
+    email: { type: String, required: true, lowercase: true, maxLength: 100, unique: true },
     passwordHash: { type: String },
     role: {
       type: String,
@@ -13,7 +13,7 @@ const staffSchema = new mongoose.Schema(
     branch: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
     avatarUrl: { type: String },
     avatarId: { type: String },
-    phoneNumber: { type: String, required: true, maxLength: 12 },
+    phoneNumber: { type: String, required: true, maxLength: 12, unique: true },
     dateOfJoining: { type: Date, default: Date.now },
     gender: {
       type: String,

@@ -13,13 +13,18 @@ const dishSchema = new mongoose.Schema(
         required: true, 
         maxLength: 500 
     },
-    collection: {
+    category: {
       type: String,
       enum: ["Appetizers", "Main Courses", "Desserts", "Beverages"],
       required: true,
     },
     price: { 
         type: Number, 
+        required: true 
+    },
+    branch: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Branch", 
         required: true 
     },
     isAvailable: { 

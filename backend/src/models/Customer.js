@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema(
   {
-    email: { type: String, required: true, lowercase: true, maxLength: 100 },
+    email: { type: String, required: true, lowercase: true, maxLength: 100, unique: true },
     passwordHash: { type: String },
     role: {
       type: String,
@@ -14,6 +14,8 @@ const customerSchema = new mongoose.Schema(
     avatarId: { type: String },
     provider: {
         type: String,
+        enum: ["local", "google", "facebook"],
+        default: "local",
     },
     providerId: {
         type: String,

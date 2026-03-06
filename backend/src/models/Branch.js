@@ -5,7 +5,7 @@ const branchSchema = new mongoose.Schema(
     name: { type: String, required: true, lowercase: true, maxLength: 100 },
     location: { type: String, required: true, maxLength: 200 },
     contactNumber: { type: String, required: true, maxLength: 20 },
-    email: { type: String, required: true, lowercase: true, maxLength: 100 },
+    email: { type: String, required: true, lowercase: true, maxLength: 100, unique: true },
     openingHours: {
       mondayToFriday: {
         open: { type: String, required: true },
