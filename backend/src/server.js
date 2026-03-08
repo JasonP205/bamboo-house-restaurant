@@ -6,9 +6,10 @@ import chalk from "chalk";
 import { getLocalIP } from "./lib/network.js";
 import connectDB from "./lib/db.js";
 import customerRoute from "./routes/customerRoute.js";
-import staffRoute from "./routes/staffRoute.js";
-import orderRoute from "./routes/orderRoute.js";
 import branchRoute from "./routes/branchRoute.js";
+import staffRoute from "./routes/staffRoute.js";
+import authRoute from "./routes/authRoute.js";
+import { protectedRouteStaff } from "./middleware/authMiddleware.js";
 
 
 dotenv.config();
@@ -21,10 +22,11 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+
+app.use('/api/auth', authRoute);
 app.use("/api/customers", customerRoute);
-app.use("/api/staff", staffRoute);
-app.use("/api/orders", orderRoute);
-app.use("/api/branches", branchRoute);
+app.use("/api/branch", branchRoute);
+app.use("/api/staff", protectedRouteStaff, staffRoute);
 
 connectDB().then(() => {
   app.listen(PORT, () => {

@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const staffSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true, lowercase: true, maxLength: 50, unique: true },
+    StaffId: { type: String, required: true, unique: true },
+    displayName: { type: String, required: true, maxLength: 100 },
     email: { type: String, required: true, lowercase: true, maxLength: 100, unique: true },
     passwordHash: { type: String },
     role: {
@@ -10,7 +11,7 @@ const staffSchema = new mongoose.Schema(
       enum: ["Manager", "Chef", "Staff"],
       required: true,
     },
-    branch: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
+    branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
     avatarUrl: { type: String },
     avatarId: { type: String },
     phoneNumber: { type: String, required: true, maxLength: 12, unique: true },

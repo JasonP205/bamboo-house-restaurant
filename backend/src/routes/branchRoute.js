@@ -1,10 +1,18 @@
-import express from 'express'; 
-
+import express from "express";
+import {
+  fetchBranchs,
+  fetchBranchById,
+  createBranch,
+  updateBranch,
+  deleteBranch,
+} from "../controller/branchController.js";
+import { managerMiddleware } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-// Example route for branches
-router.get('/', (req, res) => {
-  res.json({ message: 'List of branches' });
-});
+router.get("/", fetchBranchs);
+router.get("/:branchId", fetchBranchById);
+router.post("/", managerMiddleware, createBranch);
+router.put("/", managerMiddleware, updateBranch);
+router.delete("/", managerMiddleware, deleteBranch);
 
 export default router;
