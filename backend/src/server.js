@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoute);
 app.use("/api/customers", customerRoute);
-app.use("/api/branch", branchRoute);
+app.use("/api/branches", branchRoute);
 app.use("/api/staff", protectedRouteStaff, staffRoute);
 
 connectDB().then(() => {

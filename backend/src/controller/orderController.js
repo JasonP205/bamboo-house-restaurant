@@ -223,9 +223,8 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-export const getOrderById = async (req, res) => {
-  const { orderId } = req?.params;
-  const { branchId } = req?.branchId;
+export const getOrderByBranchId = async (req, res) => {
+  const { orderId, branchId } = req?.body;
   if (!orderId) {
     return res.status(400).json({ success: false, message: "Missing orderId" });
   }
