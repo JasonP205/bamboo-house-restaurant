@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema(
   {
-    displayName: { type: String, required: true, lowercase: true, maxLength: 100 },
+    displayName: { type: String, required: true, maxLength: 100 },
     email: { type: String, required: true, lowercase: true, maxLength: 100, unique: true },
     passwordHash: { type: String },
     role: {

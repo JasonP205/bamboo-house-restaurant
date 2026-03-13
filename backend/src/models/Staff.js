@@ -9,9 +9,10 @@ const staffSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["Manager", "Chef", "Staff"],
+      default: "Staff",
       required: true,
     },
-    branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
+    branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch"},
     avatarUrl: { type: String },
     avatarId: { type: String },
     phoneNumber: { type: String, required: true, maxLength: 12, unique: true },

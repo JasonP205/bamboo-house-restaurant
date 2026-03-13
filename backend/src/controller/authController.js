@@ -3,6 +3,7 @@ import Customer from "../models/Customer.js";
 import Session from "../models/Session.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { nanoid } from "nanoid";
 
 const ACCESS_TOKEN_TTL = "15m";
@@ -35,6 +36,7 @@ const registerCustomer = async (req, res) => {
       displayName: `${firstName} ${lastName}`,
     });
     await newCustomer.save();
+    return res.json({ success: true, message: "Yay! You're officially a member. We can't wait to serve you soon!. Sign In now!!" });
   } catch (error) {
     console.error("Error registering customer:", error);
     return res.status(500).json({ success: false, message: error.message });
@@ -91,6 +93,7 @@ const registerStaff = async (req, res) => {
       branchId,
     });
     await newStaff.save();
+    return res.json({ success: true, message: "Staff registered successfully" });
   } catch (error) {
     console.error("Error registering staff:", error);
     return res.status(500).json({ success: false, message: error.message });
