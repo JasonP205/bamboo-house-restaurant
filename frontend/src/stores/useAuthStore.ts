@@ -4,6 +4,7 @@ import type { AuthState } from "@/types/auth";
 import { authService } from "@/services/authService";
 import { toast } from "@heroui/react";
 import { isAxiosError } from "axios";
+import i18n from "@/i18n";
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -31,16 +32,23 @@ export const useAuthStore = create<AuthState>()(
             set({
               accessToken: accessToken,
             });
-            toast.success("Signed in successfully!");
+            toast.success(i18n.t("auth:toast.customer.login.success.title"), {
+              description: i18n.t("auth:toast.customer.login.success.message"),
+              timeout: 5000,
+            });
+            await get().fetchMe();
           }
         } catch (error) {
           if (isAxiosError(error)) {
-            toast.danger("Oops...! Failed to sign in",{
-              description: "Hmm, something's not right. Please double-check your info or reset your password if you've forgotten it.",
+            toast.danger(i18n.t("auth:toast.customer.login.error.title"), {
+              description: i18n.t("auth:toast.customer.login.error.message"),
               timeout: 5000,
             });
           } else {
-            toast.danger("Unexpected error");
+            toast.danger(i18n.t("auth:toast.customer.login.error.title"), {
+              description: i18n.t("auth:toast.unexpectedError"),
+              timeout: 5000,
+            });
           }
           console.error("Error logging in customer:", error);
         } finally {
@@ -58,16 +66,26 @@ export const useAuthStore = create<AuthState>()(
           );
           console.log(res);
           if (res.success) {
-            toast.success("Yay! You're officially a member", {
-              description: "We can't wait to serve you soon!. Sign In now!!",
-              timeout: 5000,
-            })
+            toast.success(
+              i18n.t("auth:toast.customer.register.success.title"),
+              {
+                description: i18n.t(
+                  "auth:toast.customer.register.success.message",
+                ),
+                timeout: 5000,
+              },
+            );
           }
         } catch (error) {
           if (isAxiosError(error)) {
-            toast.danger(error.response?.data?.message || "Register failed");
+            toast.danger(i18n.t("auth:toast.customer.register.error.title"), {
+              description: i18n.t("auth:toast.customer.register.error.message"),
+              timeout: 5000,
+            });
           } else {
-            toast.danger("Unexpected error");
+            toast.danger(i18n.t("auth:toast.unexpectedError"), {
+              timeout: 5000,
+            });
           }
           console.error("Error registering customer:", error);
         } finally {
@@ -84,9 +102,11 @@ export const useAuthStore = create<AuthState>()(
           get().clearSession();
         } catch (error) {
           if (isAxiosError(error)) {
-            toast.danger(error.response?.data?.message || "Logout failed");
+            toast.danger(i18n.t("auth:toast.unexpectedError"), {
+              timeout: 5000,
+            });
           } else {
-            toast.danger("Unexpected error");
+            toast.danger(i18n.t("auth.unexpectedError"));
           }
           console.error("Error logging out:", error);
         } finally {
@@ -103,9 +123,39 @@ export const useAuthStore = create<AuthState>()(
               error.response?.data?.message || "Session refresh failed",
             );
           } else {
-            toast.danger("Unexpected error");
+            toast.danger(i18n.t("auth:toast.unexpectedError"), {
+              timeout: 5000,
+            });
           }
           console.error("Error refreshing session:", error);
+          get().clearSession();
+        } finally {
+          set({ loading: false });
+        }
+      },
+      fetchMe: async () => {
+        try {
+          set({ loading: true });
+          const res = await authService.fetchMe();
+          if (res.success) {
+            set({
+              user: res.user,
+            });
+          }
+        } catch (error) {
+          if (isAxiosError(error)) {
+            toast.danger(
+              error.response?.data?.message || "Failed to fetch user data",
+              {
+                timeout: 5000,
+              },
+            );
+          } else {
+            toast.danger(i18n.t("auth:toast.unexpectedError"), {
+              timeout: 5000,
+            });
+          }
+          console.error("Error fetching user data:", error);
           get().clearSession();
         } finally {
           set({ loading: false });

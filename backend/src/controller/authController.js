@@ -126,7 +126,7 @@ const staffLogin = async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-      { staffId: staff._id },
+      { id: staff._id, role: "staff" },
       process.env.JWT_SECRET,
       { expiresIn: ACCESS_TOKEN_TTL },
     );
@@ -176,7 +176,7 @@ const customerLogin = async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-      { customerId: customer._id },
+      { id: customer._id, role: "customer" },
       process.env.JWT_SECRET,
       { expiresIn: ACCESS_TOKEN_TTL },
     );
@@ -224,4 +224,27 @@ const logout = async (req, res) => {
   }
 };
 
-export { registerCustomer, registerStaff, staffLogin, customerLogin, logout };
+const fetchMe = async (req, res) => {
+  try {
+    const staff = req?.staff;
+    const customer = req?.customer;
+    if (staff) {
+      return res.json({
+        success: true,
+        user: staff
+      });
+    } else if (customer) {
+      return res.json({
+        success: true,
+        user: customer
+      });
+    } else {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { registerCustomer, registerStaff, staffLogin, customerLogin, logout, fetchMe };

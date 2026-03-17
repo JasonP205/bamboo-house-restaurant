@@ -1,16 +1,19 @@
 import { Helmet } from "react-helmet-async";
 import { Tabs } from "@heroui/react";
 import { useState } from "react";
-
+import ToggleTheme from "@/components/ui/toggleTheme";
+import ToggleLang from "@/components/ui/toggleLang";
 import CustomerLoginForm from "@/components/auth/CustomerLoginForm";
 import StaffLoginForm from "@/components/auth/StaffLoginForm";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
   const [activeTab, setActiveTab] = useState<any>("Customer");
+  const { t } = useTranslation("auth");
   return (
     <div className="relative isolate min-h-screen overflow-hidden">
       <Helmet>
-        <title>Login - Bamboo House Restaurant</title>
+        <title>{t("tabTitle.login")}</title>
         <meta
           name="description"
           content="Login to your Bamboo House account to manage your reservations, view your order history, and more!"
@@ -31,6 +34,10 @@ const LoginPage = () => {
           content="https://www.bamboohouse.com/auth/login"
         />
       </Helmet>
+      <div className="flex gap-2 absolute top-4 right-4">
+        <ToggleTheme />
+        <ToggleLang />
+      </div>
       <div className="bg-login"></div>
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-6 md:p-10">
         <div className="w-full max-w-4xl bg-background/60 border-none overflow-hidden rounded-xl shadow-xl backdrop-blur-sm">
@@ -60,8 +67,8 @@ const LoginPage = () => {
 
                 <p className="text-center text-muted text-xs md:text-sm leading-relaxed text-balance">
                   {activeTab === "Customer"
-                    ? "Hungry for more? Log in to explore our latest dishes and offers."
-                    : "Welcome back to the team! Let's make today a great one at Bamboo House."}
+                    ? t("greeting.login.customer")
+                    : t("greeting.login.staff")}
                 </p>
               </div>
 
@@ -76,12 +83,12 @@ const LoginPage = () => {
                     className="bg-background/50 backdrop-blur-md"
                   >
                     <Tabs.Tab id="Customer">
-                      Customer
+                      {t("loginTab.customer")}
                       <Tabs.Indicator />
                     </Tabs.Tab>
 
                     <Tabs.Tab id="Staff">
-                      Staff
+                      {t("loginTab.staff")}
                       <Tabs.Indicator />
                     </Tabs.Tab>
                   </Tabs.List>

@@ -2,11 +2,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Label, InputGroup, Description, Spinner } from "@heroui/react";
-import { Envelope, Key, Eye, EyeSlash } from "@gravity-ui/icons";
+import { HugeiconsIcon} from "@hugeicons/react"
+import {MailAccount02Icon, ViewIcon, ViewOffSlashIcon, LockKeyIcon} from "@hugeicons/core-free-icons"
 import { useState } from "react";
 import { toast } from "@heroui/react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const customerRegisterSchema = z
   .object({
@@ -47,6 +49,8 @@ const CustomerRegisterForm = () => {
     navigate("/auth/login");
   };
 
+  const { t } = useTranslation("auth");
+
   return (
     <div className="">
       <form
@@ -55,65 +59,65 @@ const CustomerRegisterForm = () => {
       >
         <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 gap-3">
           <div className="flex flex-col">
-            <Label htmlFor="firstName">First Name</Label>
+            <Label htmlFor="firstName">{t("registerForm.firstNameLabel")}</Label>
             <InputGroup className="mt-2">
               <InputGroup.Input
                 id="firstName"
                 className="w-full"
-                placeholder="First Name"
+                placeholder={t("registerForm.firstNameLabel")}
                 {...register("firstName")}
               />
             </InputGroup>
             {errors.firstName && (
-              <p className="text-danger text-sm">{errors.firstName.message}</p>
+              <p className="text-danger text-sm">{t("errors.register.firstName")}</p>
             )}
           </div>
           <div className="flex flex-col">
-            <Label htmlFor="lastName">Last Name</Label>
+            <Label htmlFor="lastName">{t("registerForm.lastNameLabel")}</Label>
             <InputGroup className="mt-2">
               <InputGroup.Input
                 id="lastName"
                 className="w-full"
-                placeholder="Last Name"
+                placeholder={t("registerForm.lastNameLabel")}
                 {...register("lastName")}
               />
             </InputGroup>
             {errors.lastName && (
-              <p className="text-danger text-sm">{errors.lastName.message}</p>
+              <p className="text-danger text-sm">{t("errors.register.lastName")}</p>
             )}
           </div>
         </div>
         <div className="flex flex-col">
-          <Label htmlFor="email">Email address</Label>
+          <Label htmlFor="email">{t("registerForm.emailLabel")}</Label>
           <InputGroup className="mt-2">
             <InputGroup.Prefix>
-              <Envelope className="size-4 text-muted" />
+              <HugeiconsIcon icon={MailAccount02Icon} className="size-4 text-muted" />
             </InputGroup.Prefix>
             <InputGroup.Input
               id="email"
               autoComplete="email"
               className="w-full"
-              placeholder="name@email.com"
+              placeholder="name@example.com"
               {...register("email")}
             />
           </InputGroup>
           <Description className="mt-1">
-            We'll never share this with anyone else
+            {t("registerForm.emailDescription")}
           </Description>
           {errors.email && (
-            <p className="text-danger text-sm">{errors.email.message}</p>
+            <p className="text-danger text-sm">{t("errors.register.email")}</p>
           )}
         </div>
         <div className="flex flex-col">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t("registerForm.passwordLabel")}</Label>
           <InputGroup className="mt-2">
             <InputGroup.Prefix>
-              <Key className="size-4 text-muted" />
+              <HugeiconsIcon icon={LockKeyIcon} className="size-4 text-muted" />
             </InputGroup.Prefix>
             <InputGroup.Input
               id="password"
               className="w-full"
-              placeholder="Password"
+              placeholder={t("registerForm.passwordLabel")}
               autoComplete="password"
               type={passwordVisible ? "text" : "password"}
               {...register("password")}
@@ -126,27 +130,27 @@ const CustomerRegisterForm = () => {
                 onPress={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
-                  <Eye className="size-4 text-muted" />
+                  <HugeiconsIcon icon={ViewIcon} className="size-4 text-muted" />
                 ) : (
-                  <EyeSlash className="size-4 text-muted" />
+                  <HugeiconsIcon icon={ViewOffSlashIcon} className="size-4 text-muted" />
                 )}
               </Button>
             </InputGroup.Suffix>
           </InputGroup>
           {errors.password && (
-            <p className="text-danger text-sm">{errors.password.message}</p>
+            <p className="text-danger text-sm">{t("errors.register.password")}</p>
           )}
         </div>
         <div className="flex flex-col">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">{t("registerForm.confirmPasswordLabel")}</Label>
           <InputGroup className="mt-2">
             <InputGroup.Prefix>
-              <Key className="size-4 text-muted" />
+              <HugeiconsIcon icon={LockKeyIcon} className="size-4 text-muted" />
             </InputGroup.Prefix>
             <InputGroup.Input
               id="confirmPassword"
               className="w-full"
-              placeholder="Confirm Password"
+              placeholder={t("registerForm.confirmPasswordLabel")}
               autoComplete="password"
               type={passwordVisible ? "text" : "password"}
               {...register("confirmPassword")}
@@ -154,7 +158,7 @@ const CustomerRegisterForm = () => {
           </InputGroup>
           {errors.confirmPassword && (
             <p className="text-danger text-sm">
-              {errors.confirmPassword.message}
+              {t("errors.register.confirmPassword")}
             </p>
           )}
         </div>
@@ -162,18 +166,17 @@ const CustomerRegisterForm = () => {
           {loading ? (
             <>
               <Spinner color="current" size="sm" />
-              Registering...
+              {t("registerForm.submitButtonPending")}
             </>
           ) : (
-            "Create Account"
+            t("registerForm.submitButton")
           )}
         </Button>
         <span className="text-center text-sm">
-          Already have an account?{" "}
+          {t("registerForm.loginPrompt")}{" "}
           <a href="/auth/login" className="text-accent hover:underline">
-            Log in
-          </a>{" "}
-          now!
+            {t("registerForm.loginLink")}
+          </a>
         </span>
       </form>
     </div>

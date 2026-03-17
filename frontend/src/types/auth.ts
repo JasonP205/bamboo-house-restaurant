@@ -58,4 +58,5 @@ export interface AuthState {
   ) => Promise<void>;
   logout: () => void;
   refresh: () => Promise<void>;
+  fetchMe: () => Promise<void>;
 }

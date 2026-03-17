@@ -23,6 +23,8 @@ pids
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.development
 
 # Build
 dist/
@@ -46,6 +48,7 @@ vite.svg
 # =========================
 .DS_Store
 Thumbs.db
+.gitignore
 
 # =========================
 # IDE / Editor

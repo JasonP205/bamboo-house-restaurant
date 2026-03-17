@@ -1,8 +1,19 @@
 import axios from "axios";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5002/api",
-  withCredentials: true
+  withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+  const accessToken = useAuthStore.getState().accessToken;
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
 });
 
 export default api;

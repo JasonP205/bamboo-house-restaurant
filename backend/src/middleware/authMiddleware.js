@@ -128,3 +128,44 @@ export const managerMiddleware = async (req, res, next) => {
     });
   }
 };
+export const protectedRoute = async (req, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+    }
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        console.error("JWT verification error:", err);
+        return res
+          .status(403)
+          .json({ message: "Invalid or expired access token" });
+      }
+      if (decoded.role === "staff") {
+        const staff = await Staff.findById(decoded.id)
+          .select("-passwordHash")
+          .exec();
+        if (!staff) {
+          return res.status(404).json({ message: "Staff not found" });
+        }
+        req.staff = staff;
+        req.branchId = staff.branchId;
+      } else if (decoded.role === "customer") {
+        const customer = await Customer.findById(decoded.id)
+          .select("-passwordHash")
+          .exec();
+        if (!customer) {
+          return res.status(404).json({ message: "Customer not found" });
+        }
+        req.customer = customer;
+      } else {
+        return res.status(403).json({ message: "Invalid user role" });
+      }
+      next();
+    });
+  } catch (error) {
+    console.error("Error in authentication middleware:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
