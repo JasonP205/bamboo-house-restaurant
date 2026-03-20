@@ -6,6 +6,7 @@ import {
   customerLogin,
   logout,
   fetchMe,
+  refresh,
 } from "../controller/authController.js";
 import { managerMiddleware, protectedRoute } from "../middleware/authMiddleware.js";
 
@@ -16,6 +17,7 @@ router.post("/register/staff", managerMiddleware, registerStaff);
 router.post("/login/staff", staffLogin);
 router.post("/login/customer", customerLogin);
 router.post("/logout", logout);
+router.post("/refresh", refresh);
 router.get("/me", protectedRoute, fetchMe);
 
 export default router;

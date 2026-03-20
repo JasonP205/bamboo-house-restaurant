@@ -1,0 +1,15 @@
+{
+    "staffNavItems": {
+        "dashboard": "Dashboard",
+        "branches": "Branches",
+        "staff": "Staff",
+        "menu": "Menu",
+        "orders": "Orders",
+        "settings": "Settings",
+        "logoutButton": "Logout"
+    },
+    "toggleLangOptions": {
+        "en": "English",
+        "vi": "Vietnamese"
+    }
+}

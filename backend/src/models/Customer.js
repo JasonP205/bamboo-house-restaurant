@@ -7,7 +7,7 @@ const customerSchema = new mongoose.Schema(
     passwordHash: { type: String },
     role: {
       type: String,
-      default: "Customer",
+      default: "customer",
       required: true,
     },
     tiers:{

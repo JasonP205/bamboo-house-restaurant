@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Label, InputGroup, Description, Spinner } from "@heroui/react";
 import { HugeiconsIcon} from "@hugeicons/react"
-import {MailAccount02Icon, ViewIcon, ViewOffSlashIcon, LockKeyIcon} from "@hugeicons/core-free-icons"
+import {MailAccount02Icon, ViewIcon, ViewOffSlashIcon, LockKeyIcon, Login02Icon} from "@hugeicons/core-free-icons"
 import { useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslation } from "react-i18next";
@@ -102,7 +102,11 @@ const CustomerLoginForm = () => {
               {t("loginForm.customer.submitButtonPending")}
             </>
           ) : (
-            t("loginForm.customer.submitButton")
+            <>
+              {t("loginForm.customer.submitButton")}
+              {" "}
+              <HugeiconsIcon icon={Login02Icon} className="size-6 text-white" />
+            </>
           )}
         </Button>
         <span className="text-center text-sm text-muted">

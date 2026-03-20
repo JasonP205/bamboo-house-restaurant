@@ -12,7 +12,7 @@ interface ToggleThemeProps {
 const ToggleTheme = ({ className }: ToggleThemeProps) => {
   const { mode, setMode } = useTheme();
   return (
-    <div className={`z-100 ${className}`}>
+    <div className={`z-50 ${className}`}>
       <Tabs selectedKey={mode} onSelectionChange={(key) => setMode(key as ThemeMode)} className="w-full max-w-md">
       <Tabs.ListContainer>
         <Tabs.List aria-label="Options">

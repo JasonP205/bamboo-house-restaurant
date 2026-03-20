@@ -8,9 +8,9 @@ export const authService = {
     });
     return response.data.accessToken;
   },
-  staffLogin: async (staffNumber: string, password: string) => {
+  staffLogin: async (staffId: string, password: string) => {
     const response = await api.post("/auth/login/staff", {
-      staffNumber,
+      staffId,
       password,
     });
     return response.data.accessToken;
@@ -31,20 +31,20 @@ export const authService = {
   },
   staffRegister: async (
     email: string,
-    password: string,
     firstName: string,
     lastName: string,
     phoneNumber: string,
-    gender: "Male" | "Female" | "Other",
-    branchId: string,
+    gender: "male" | "female" | "other",
+    securityCode: string,
+    branchId?: string,
   ) => {
-    const response = await api.post("/auth/staff/register", {
+    const response = await api.post("/auth/register/staff", {
       email,
-      password,
       firstName,
       lastName,
       phoneNumber,
       gender,
+      securityCode,
       branchId,
     });
     return response.data;

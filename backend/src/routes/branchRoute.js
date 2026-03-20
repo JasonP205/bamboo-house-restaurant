@@ -6,13 +6,19 @@ import {
   updateBranch,
   deleteBranch,
 } from "../controller/branchController.js";
-import { managerMiddleware } from "../middleware/authMiddleware.js";
+import { managerMiddleware, protectedRouteStaff } from "../middleware/authMiddleware.js";
+import { uploadImage } from "../middleware/fileMiddleware.js";
 const router = express.Router();
 
 router.get("/", fetchBranchs);
 router.get("/:branchId", fetchBranchById);
-router.post("/", managerMiddleware, createBranch);
-router.put("/", managerMiddleware, updateBranch);
-router.delete("/", managerMiddleware, deleteBranch);
+router.post(
+  "/",
+  protectedRouteStaff,
+  uploadImage.single("image"),
+  createBranch,
+);
+router.put("/:id", protectedRouteStaff, updateBranch);
+router.delete("/:id", protectedRouteStaff, deleteBranch);
 
 export default router;

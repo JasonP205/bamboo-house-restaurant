@@ -10,7 +10,7 @@ import branchRoute from "./routes/branchRoute.js";
 import staffRoute from "./routes/staffRoute.js";
 import authRoute from "./routes/authRoute.js";
 import { protectedRouteStaff } from "./middleware/authMiddleware.js";
-
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
 const start = process.hrtime.bigint();
@@ -18,15 +18,23 @@ const start = process.hrtime.bigint();
 const app = express();
 const PORT = process.env.PORT || 5002;
 
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:2303",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 
+//Cloudinary Configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-app.use('/api/auth', authRoute);
+app.use("/api/auth", authRoute);
 app.use("/api/customers", customerRoute);
 app.use("/api/branches", branchRoute);
 app.use("/api/staff", protectedRouteStaff, staffRoute);

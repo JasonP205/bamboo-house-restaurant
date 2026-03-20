@@ -17,18 +17,19 @@ export const protectedRouteStaff = async (req, res, next) => {
       if (err) {
         console.error("JWT verification error:", err);
         return res
-          .status(403)
+          .status(401)
           .json({ message: "Invalid or expired access token" });
       }
-      const staff = await Staff.findById(decodedStaff._id)
+      const staff = await Staff.findById(decodedStaff.id)
         .select("-hashedPassword")
         .exec();
       if (!staff) {
-        return res.status(404).json({ message: "Staff not found" });
+        return res
+          .status(404)
+          .json({ message: "Staff not found", decodedStaff });
       }
       req.staff = staff;
-      req.branchId = staff.branchId;
-
+      req.role = staff.role;
       next();
     });
   } catch (error) {
@@ -50,10 +51,10 @@ export const protectedRouteCustomer = async (req, res, next) => {
       if (err) {
         console.error("JWT verification error:", err);
         return res
-          .status(403)
+          .status(401)
           .json({ message: "Invalid or expired access token" });
       }
-      const customer = await Customer.findById(decodedCustomer._id)
+      const customer = await Customer.findById(decodedCustomer.id)
         .select("-hashedPassword")
         .exec();
       if (!customer) {
@@ -82,7 +83,7 @@ export const optionalAuthCustomer = async (req, res, next) => {
       if (err) {
         return next(); // Token không hợp lệ thì vẫn cho qua
       }
-      const customer = await Customer.findById(decodedCustomer._id)
+      const customer = await Customer.findById(decodedCustomer.id)
         .select("-hashedPassword")
         .exec();
       if (customer) {
@@ -97,34 +98,62 @@ export const optionalAuthCustomer = async (req, res, next) => {
 
 export const managerMiddleware = async (req, res, next) => {
   try {
-    const staff = req?.staff;
-    const { privateCode } = req?.body;
-    if (privateCode) {
-      const isMatch = await bcrypt.compare(
-        privateCode,
-        process.env.PRIVATE_KEY,
-      );
-      if (isMatch) {
+    const securityCode = req.body?.securityCode;
+
+    if (securityCode) {
+      const pass = bcrypt.compare(securityCode, process.env.PRIVATE_KEY);
+      if (pass) {
         return next();
       }
     }
-    if (!staff) {
+
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized",
+        message: "Access token is missing",
       });
     }
+
+    let staff;
+    let decoded;
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        console.error("JWT verification error:", err);
+        return res.status(403).json({
+          success: false,
+          message: "Invalid or expired access token",
+        });
+      }
+      decoded = decoded;
+    });
+
+    staff = await Staff.findById(decoded.id).select("-hashedPassword").exec();
+
+    if (!staff) {
+      return res.status(404).json({
+        success: false,
+        message: "Staff not found",
+      });
+    }
+
     if (staff.role !== "Manager") {
       return res.status(403).json({
         success: false,
         message: "Forbidden: Manager access required",
       });
     }
+
+    req.staff = staff;
+
     next();
   } catch (error) {
+    console.error("Error in manager middleware:", error);
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal server error",
     });
   }
 };
@@ -139,7 +168,7 @@ export const protectedRoute = async (req, res, next) => {
       if (err) {
         console.error("JWT verification error:", err);
         return res
-          .status(403)
+          .status(401)
           .json({ message: "Invalid or expired access token" });
       }
       if (decoded.role === "staff") {

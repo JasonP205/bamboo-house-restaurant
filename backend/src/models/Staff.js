@@ -8,8 +8,8 @@ const staffSchema = new mongoose.Schema(
     passwordHash: { type: String },
     role: {
       type: String,
-      enum: ["Manager", "Chef", "Staff"],
-      default: "Staff",
+      enum: ["manager", "chef", "staff"],
+      default: "staff",
       required: true,
     },
     branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch"},
@@ -19,7 +19,7 @@ const staffSchema = new mongoose.Schema(
     dateOfJoining: { type: Date, default: Date.now },
     gender: {
       type: String,
-      enum: ["Male", "Female", "Other"],
+      enum: ["male", "female", "other"],
       required: true,
     },
   },

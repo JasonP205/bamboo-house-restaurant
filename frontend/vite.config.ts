@@ -12,7 +12,7 @@ export default defineConfig({
     }
   },
   plugins: [react(), tailwindcss()],
-  // server: {
-  //   port: 2303
-  // },
+  server: {
+    port: 2303
+  },
 })

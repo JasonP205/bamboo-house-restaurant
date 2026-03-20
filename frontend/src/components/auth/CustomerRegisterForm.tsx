@@ -2,8 +2,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Label, InputGroup, Description, Spinner } from "@heroui/react";
-import { HugeiconsIcon} from "@hugeicons/react"
-import {MailAccount02Icon, ViewIcon, ViewOffSlashIcon, LockKeyIcon} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  MailAccount02Icon,
+  ViewIcon,
+  ViewOffSlashIcon,
+  LockKeyIcon,
+  CrownPlusIcon,
+} from "@hugeicons/core-free-icons";
 import { useState } from "react";
 import { toast } from "@heroui/react";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -59,7 +65,9 @@ const CustomerRegisterForm = () => {
       >
         <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 gap-3">
           <div className="flex flex-col">
-            <Label htmlFor="firstName">{t("registerForm.firstNameLabel")}</Label>
+            <Label htmlFor="firstName">
+              {t("registerForm.firstNameLabel")}
+            </Label>
             <InputGroup className="mt-2">
               <InputGroup.Input
                 id="firstName"
@@ -69,7 +77,9 @@ const CustomerRegisterForm = () => {
               />
             </InputGroup>
             {errors.firstName && (
-              <p className="text-danger text-sm">{t("errors.register.firstName")}</p>
+              <p className="text-danger text-sm">
+                {t("errors.register.firstName")}
+              </p>
             )}
           </div>
           <div className="flex flex-col">
@@ -83,7 +93,9 @@ const CustomerRegisterForm = () => {
               />
             </InputGroup>
             {errors.lastName && (
-              <p className="text-danger text-sm">{t("errors.register.lastName")}</p>
+              <p className="text-danger text-sm">
+                {t("errors.register.lastName")}
+              </p>
             )}
           </div>
         </div>
@@ -91,7 +103,10 @@ const CustomerRegisterForm = () => {
           <Label htmlFor="email">{t("registerForm.emailLabel")}</Label>
           <InputGroup className="mt-2">
             <InputGroup.Prefix>
-              <HugeiconsIcon icon={MailAccount02Icon} className="size-4 text-muted" />
+              <HugeiconsIcon
+                icon={MailAccount02Icon}
+                className="size-4 text-muted"
+              />
             </InputGroup.Prefix>
             <InputGroup.Input
               id="email"
@@ -130,19 +145,29 @@ const CustomerRegisterForm = () => {
                 onPress={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
-                  <HugeiconsIcon icon={ViewIcon} className="size-4 text-muted" />
+                  <HugeiconsIcon
+                    icon={ViewIcon}
+                    className="size-4 text-muted"
+                  />
                 ) : (
-                  <HugeiconsIcon icon={ViewOffSlashIcon} className="size-4 text-muted" />
+                  <HugeiconsIcon
+                    icon={ViewOffSlashIcon}
+                    className="size-4 text-muted"
+                  />
                 )}
               </Button>
             </InputGroup.Suffix>
           </InputGroup>
           {errors.password && (
-            <p className="text-danger text-sm">{t("errors.register.password")}</p>
+            <p className="text-danger text-sm">
+              {t("errors.register.password")}
+            </p>
           )}
         </div>
         <div className="flex flex-col">
-          <Label htmlFor="confirmPassword">{t("registerForm.confirmPasswordLabel")}</Label>
+          <Label htmlFor="confirmPassword">
+            {t("registerForm.confirmPasswordLabel")}
+          </Label>
           <InputGroup className="mt-2">
             <InputGroup.Prefix>
               <HugeiconsIcon icon={LockKeyIcon} className="size-4 text-muted" />
@@ -169,10 +194,18 @@ const CustomerRegisterForm = () => {
               {t("registerForm.submitButtonPending")}
             </>
           ) : (
-            t("registerForm.submitButton")
+            <>
+              <span className="flex items-center justify-center gap-2">
+                {t("registerForm.submitButton")}
+                <HugeiconsIcon
+                  icon={CrownPlusIcon}
+                  className="size-5 text-white"
+                />
+              </span>
+            </>
           )}
         </Button>
-        <span className="text-center text-sm">
+        <span className="text-center text-sm text-muted">
           {t("registerForm.loginPrompt")}{" "}
           <a href="/auth/login" className="text-accent hover:underline">
             {t("registerForm.loginLink")}

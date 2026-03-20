@@ -2,7 +2,7 @@ export interface Customer {
   _id: string;
   displayName: string;
   email: string;
-  role: "Customer";
+  role: "customer";
   tiers: "Sprout" | "Shoot" | "Stem" | "Grove" | "Legend";
   points: number;
   avatarUrl?: string;
@@ -11,12 +11,12 @@ export interface Staff {
   _id: string;
   staffId: string;
   displayName: string;
-  role: "Staff" | "Manager";
+  role: "staff" | "manager";
   branchId: string;
   avatarUrl?: string;
   phoneNumber: string;
   dateOfJoining: string;
-  gender: "Male" | "Female" | "Other";
+  gender: "male" | "female" | "other";
 }
 export interface CustomerRegisterData {
   firstName: string;
@@ -26,19 +26,19 @@ export interface CustomerRegisterData {
 }
 export interface StaffRegisterData {
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  gender: "Male" | "Female" | "Other";
-  branchId: string;
+  gender: "male" | "female" | "other";
+  securityCode: string;
+  branchId?: string;
 }
 export interface CustomerLoginData {
   email: string;
   password: string;
 }
 export interface StaffLoginData {
-  staffNumber: string;
+  staffId: string;
   password: string;
 }
 
@@ -46,7 +46,10 @@ export interface AuthState {
   loading: boolean;
   accessToken: string | null;
   user: Customer | Staff | null;
+  role: string | null;
   branchId: string | null;
+  setBranchId: (branchId: string) => void;
+  setAccessToken: (token: string) => void;
   clearSession: () => void;
   staffLogin: (loginData: StaffLoginData) => Promise<void>;
   customerLogin: (loginData: CustomerLoginData) => Promise<void>;
@@ -56,7 +59,7 @@ export interface AuthState {
   staffRegister: (
     data: StaffRegisterData
   ) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   refresh: () => Promise<void>;
   fetchMe: () => Promise<void>;
 }

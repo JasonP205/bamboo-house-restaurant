@@ -1,30 +1,28 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import HttpBackend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import enAuth from "./locales/en/auth.json";
-import viAuth from "./locales/vi/auth.json";
-
 i18n
+  .use(HttpBackend)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
 
-    ns: ["auth", "home", "common"],
+    ns: ["auth", "branch", "common"],
 
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
     },
 
-    resources: {
-      en: {
-        auth: enAuth,
-      },
-      vi: {
-        auth: viAuth,
-      },
+    backend: {
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+
+    react: {
+      useSuspense: true,
     },
   });
 

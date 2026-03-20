@@ -6,15 +6,11 @@ const branchSchema = new mongoose.Schema(
     location: { type: String, required: true, maxLength: 200 },
     contactNumber: { type: String, required: true, maxLength: 20 },
     openingHours: {
-      mondayToFriday: {
         open: { type: String, required: true },
         close: { type: String, required: true },
-      },
-      saturdayAndSunday: {
-        open: { type: String, required: true },
-        close: { type: String, required: true },
-      },
     },
+    imageUrl: { type: String },
+    imageId: { type: String },
   },
   { timestamps: true },
 );

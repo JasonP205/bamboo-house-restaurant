@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { nanoid } from "nanoid";
 
-const ACCESS_TOKEN_TTL = "15m";
+const ACCESS_TOKEN_TTL = "40m";
 const REFRESH_TOKEN_TTL = {
   staff: 8 * 60 * 60 * 1000, // 8 hours
   customer: 2 * 60 * 60 * 1000, // 2 hours
@@ -46,29 +46,26 @@ const registerStaff = async (req, res) => {
   try {
     const {
       email,
-      password,
       firstName,
       lastName,
       phoneNumber,
       gender,
-      branchId,
+      branchId
     } = req.body;
 
     if (
       !email ||
-      !password ||
       !firstName ||
       !lastName ||
       !phoneNumber ||
-      !gender ||
-      !branchId
+      !gender
     ) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
     }
 
-    if (gender !== "Male" && gender !== "Female" && gender !== "Other") {
+    if (gender !== "male" && gender !== "female" && gender !== "other") {
       return res
         .status(400)
         .json({ success: false, message: "Invalid gender value" });
@@ -82,7 +79,7 @@ const registerStaff = async (req, res) => {
     }
     const StaffId = `BBH-${nanoid(6)}`;
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(StaffId, 10);
     const newStaff = new Staff({
       StaffId,
       email,
@@ -93,7 +90,7 @@ const registerStaff = async (req, res) => {
       branchId,
     });
     await newStaff.save();
-    return res.json({ success: true, message: "Staff registered successfully" });
+    return res.json({ success: true, message: "Staff registered successfully", StaffId });
   } catch (error) {
     console.error("Error registering staff:", error);
     return res.status(500).json({ success: false, message: error.message });
@@ -247,4 +244,40 @@ const fetchMe = async (req, res) => {
   }
 };
 
-export { registerCustomer, registerStaff, staffLogin, customerLogin, logout, fetchMe };
+const refresh = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({ success: false, message: "Refresh token is required" });
+    }
+
+    const session = await Session.findOne({ refreshToken }).lean().exec();
+    if (!session || session.expiresAt < new Date()) {
+      return res.status(403).json({ success: false, message: "Invalid or expired refresh token" });
+    }
+
+    let user;
+    if (session.userType === "Staff") {
+      user = await Staff.findById(session.userId).lean().exec();
+    } else if (session.userType === "Customer") {
+      user = await Customer.findById(session.userId).lean().exec();
+    }
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const accessToken = jwt.sign(
+      { id: user._id, role: session.userType.toLowerCase() },
+      process.env.JWT_SECRET,
+      { expiresIn: ACCESS_TOKEN_TTL },
+    );
+
+    return res.json({ success: true, accessToken });
+  } catch (error) {
+    console.error("Error refreshing access token:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { registerCustomer, registerStaff, staffLogin, customerLogin, logout, fetchMe, refresh };

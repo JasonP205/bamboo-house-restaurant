@@ -1,9 +1,10 @@
 import Branch from "../models/Branch.js";
 import bcrypt from "bcrypt";
+import { uploadBranchImageFromBuffer } from "../middleware/fileMiddleware.js";
 
 const fetchBranchs = async (req, res) => {
   try {
-    const branches = await Branch.find();
+    const branches = await Branch.find().sort({ createdAt: -1 }).lean();
     if (!branches || branches.length === 0) {
       return res
         .status(404)
@@ -31,34 +32,60 @@ const fetchBranchById = async (req, res) => {
   }
 };
 const createBranch = async (req, res) => {
-  const { name, location, contactNumber, openingHours, privateCode } =
-    req?.body;
-  if (!name || !location || !contactNumber || !openingHours) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing important information" });
-  }
-  let isValid = await bcrypt.compare(privateCode, process.env.PRIVATE_KEY);
-  if (!isValid) {
-    return res.status(403).json({ success: false, message: "Invalid action" });
-  }
-
   try {
+    let { name, location, contactNumber, openingHours } = req.body;
+
+    // 🔥 parse từ string → object
+    if (typeof openingHours === "string") {
+      openingHours = JSON.parse(openingHours);
+    }
+
+    // ✅ validate
+    if (
+      !name ||
+      !location ||
+      !contactNumber ||
+      !openingHours?.open ||
+      !openingHours?.close
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing important information",
+      });
+    }
+
     const newBranch = new Branch({
       name,
       location,
       contactNumber,
       openingHours,
     });
+
+    if (req.file) {
+      const result = await uploadBranchImageFromBuffer(req.file.buffer, {
+        public_id: `branch_${newBranch._id}`,
+      });
+      newBranch.imageUrl = result.secure_url;
+      newBranch.imageId = result.public_id;
+    }
     await newBranch.save();
-    res.status(201).json({ success: true, branch: newBranch });
+
+    res.status(201).json({
+      success: true,
+      branch: newBranch,
+    });
   } catch (error) {
     console.error("Error creating branch:", error);
-    return res.status(500).json({ success: false, message: error.message });
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 const updateBranch = async (req, res) => {
-  const { branchId, name, location, contactNumber, openingHours } = req?.body;
+  const { branchId } = req?.params;
+  const { name, location, contactNumber, openingHours } = req?.body;
   if (!branchId) {
     return res
       .status(400)
@@ -85,7 +112,7 @@ const updateBranch = async (req, res) => {
 };
 
 const deleteBranch = async (req, res) => {
-  const { branchId } = req?.body;
+  const { branchId } = req?.params;
   if (!branchId) {
     return res
       .status(400)

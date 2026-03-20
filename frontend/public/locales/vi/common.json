@@ -1,0 +1,15 @@
+{
+    "staffNavItems": {
+        "dashboard": "Dashboard",
+        "branches": "Chi Nhánh",
+        "staff": "Nhân Viên",
+        "menu": "Thực Đơn",
+        "orders": "Đơn Hàng",
+        "settings": "Cài Đặt",
+        "logoutButton": "Đăng Xuất"
+    },
+    "toggleLangOptions": {
+        "en": "Tiếng Anh",
+        "vi": "Tiếng Việt"
+    }
+}

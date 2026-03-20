@@ -1,0 +1,58 @@
+{
+    "toast" : {
+        "errors" : {
+            "fetchBranchesTitle": "Failed to load branches. Please try again later.",
+            "fetchBranchesMessage": "We are having trouble fetching the branch information. Please refresh the page or contact support if the problem persists."
+        }
+    },
+    "createBranchButton": "Create New Branch",
+    "createBranchForm": {
+        "title": "Create New Branch",
+        "imageLabel": "Branch Image",
+        "imagePlaceholder": "Drag and drop an image for the branch",
+        "branchNameLabel": "Branch Name",
+        "branchNamePlaceholder": "Enter branch name",
+        "branchAddressLabel": "Branch Address",
+        "branchAddressPlaceholder": "Enter branch address",
+        "openingHoursLabel": "Opening Hours",
+        "openingHoursPlaceholder": "e.g., 9:00 AM - 9:00 PM",
+        "closingHoursLabel": "Closing Hours",
+        "closingHoursPlaceholder": "e.g., 9:00 PM",
+        "phoneNumberLabel": "Contact Number",
+        "phoneNumberPlaceholder": "Enter contact number",
+        "submitButton": "Create Branch",
+        "submitButtonPending": "Creating...",
+        "cancelButton": "Cancel",
+        "validation": {
+            "imageRequired": "Branch image is required.",
+            "nameRequired": "Branch name is required.",
+            "locationRequired": "Branch location is required.",
+            "contactNumberRequired": "Contact number is required.",
+            "openingHoursRequired": "Opening hours are required.",
+            "closingHoursRequired": "Closing hours are required.",
+            "invalidContactNumber": "Please enter a valid contact number.",
+            "invalidOpeningHours": "Please enter valid opening hours in the format '9:00 AM - 9:00 PM'.",
+            "invalidClosingHours": "Please enter valid closing hours in the format '9:00 PM'."
+        },
+        "toast": {
+            "success": {
+                "title": "Branch Created Successfully",
+                "description": "The new branch has been created and is now available in the system."
+            },
+            "error": {
+                "title": "Failed to Create Branch",
+                "description": "An error occurred while creating the branch. Please try again later or contact support if the problem persists."
+            }
+        }
+    },
+    "page":{
+        "title": "Branch Management - Bamboo House",
+        "description": "Manage your branches effectively. Create new branches, update existing ones, and ensure your customers have the best experience at every location.",
+        "emptyBranchList": "No available branches"
+    },
+    "branchCard": {
+        "locationLabel": "Location",
+        "contactNumberLabel": "Contact Number",
+        "openingHours": "Opening Hours"
+    }
+}
