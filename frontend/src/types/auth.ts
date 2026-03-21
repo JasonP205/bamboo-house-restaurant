@@ -43,11 +43,13 @@ export interface StaffLoginData {
 }
 
 export interface AuthState {
+  deviceId: string | null;
   loading: boolean;
   accessToken: string | null;
   user: Customer | Staff | null;
   role: string | null;
   branchId: string | null;
+  getDeviceId: () => void;
   setBranchId: (branchId: string) => void;
   setAccessToken: (token: string) => void;
   clearSession: () => void;

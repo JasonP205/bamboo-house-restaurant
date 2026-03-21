@@ -36,4 +36,8 @@ export const branchService = {
     });
     return response.data.branch;
   },
+  getBranchById: async (id: string) => {
+    const response = await api.get(`/branches/${id}`);
+    return response.data.branch;
+  },
 };

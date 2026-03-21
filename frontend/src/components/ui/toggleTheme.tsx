@@ -1,5 +1,5 @@
 import { useTheme, type ThemeMode } from "@/hooks/themeHook";
-import { Tabs, Button } from "@heroui/react";
+import { Tabs } from "@heroui/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Sun01Icon,

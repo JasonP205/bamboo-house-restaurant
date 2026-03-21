@@ -10,6 +10,7 @@ import branchRoute from "./routes/branchRoute.js";
 import staffRoute from "./routes/staffRoute.js";
 import authRoute from "./routes/authRoute.js";
 import { protectedRouteStaff } from "./middleware/authMiddleware.js";
+import { deviceIDMiddleware } from "./middleware/deviceIDMiddleware.js";
 import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
@@ -33,7 +34,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
+app.use(deviceIDMiddleware);
 app.use("/api/auth", authRoute);
 app.use("/api/customers", customerRoute);
 app.use("/api/branches", branchRoute);

@@ -6,15 +6,21 @@ import { toast } from "@heroui/react";
 import { isAxiosError } from "axios";
 import i18n from "@/i18n";
 import { useBranchStore } from "./useBranchStore";
+import { v4 as uuid } from "uuid"
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
+      deviceId: null,
       loading: false,
       accessToken: null,
       user: null,
       role: null,
       branchId: null,
+      getDeviceId: () => {
+        const deviceId = uuid().toString();
+        set({ deviceId })
+      },
       clearSession: () => {
         set({ accessToken: null, user: null, branchId: null, loading: false, role: null });
       },
@@ -39,6 +45,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           console.error("Error logging in staff:", error);
           get().clearSession();
+          throw error;
         } finally {
           set({ loading: false });
         }
@@ -75,6 +82,8 @@ export const useAuthStore = create<AuthState>()(
             });
           }
           console.error("Error logging in customer:", error);
+          get().clearSession();
+          throw error;
         } finally {
           set({ loading: false });
         }
@@ -227,6 +236,7 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage",
       partialize: (state) => ({
+        deviceId: state.deviceId,
         accessToken: state.accessToken,
         user: state.user,
         role: state.role,

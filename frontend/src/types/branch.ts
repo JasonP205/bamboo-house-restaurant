@@ -13,9 +13,18 @@ export interface Branch {
   updatedAt: string;
 }
 
+export interface BranchDetail extends Branch {
+  indoorTables: number;
+  outdoorTables: number;
+  totalStaffs: number;
+}
+
 export interface branchState {
   branches: Branch[];
   loading: boolean;
+  selectedBranchId: string | null;
+  selectedBranch: BranchDetail | null;
+  setSelectedBranchId: (id: string) => void;
   fetchBranches: () => Promise<void>;
   createBranch: (data: {
     name: string;
@@ -27,4 +36,5 @@ export interface branchState {
     };
     image?: File;
   }) => Promise<void>;
+  getBranchInfo: (id: string) => Promise<void>;
 }

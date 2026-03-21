@@ -7,9 +7,9 @@ import {
   MapPinpoint02Icon,
   TelephoneIcon,
   Clock01Icon,
-  Tool,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import {useBranchStore } from "@/stores/useBranchStore";
 
 interface BranchCardProps {
   branch: Branch;
@@ -18,9 +18,11 @@ interface BranchCardProps {
 //branch, className
 const BranchCard = ({ branch, className }: BranchCardProps) => {
   const { t } = useTranslation(["branch"]);
+  const { setSelectedBranchId } = useBranchStore();
 
   return (
     <Link
+      onClick={() => setSelectedBranchId(branch._id)}
       to={`/app/branches/${branch._id}`}
       className={cn("w-full", className)}
     >

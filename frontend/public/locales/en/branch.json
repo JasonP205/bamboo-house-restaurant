@@ -54,5 +54,17 @@
         "locationLabel": "Location",
         "contactNumberLabel": "Contact Number",
         "openingHours": "Opening Hours"
+    },
+    "branchDetail": {
+        "chip": "Branch",
+        "notFound": "Branch not found",
+        "contactTitle": "Contact & Hours",
+        "contactDescription": "How to find and reach this location",
+        "metaTitle": "Branch Information",
+        "metaDescription": "System record details for this branch",
+        "indoorTables": "Indoor Tables",
+        "outdoorTables": "Outdoor Tables",
+        "totalStaffs": "Total Staff",
+        "activeStatus": "Active"
     }
 }

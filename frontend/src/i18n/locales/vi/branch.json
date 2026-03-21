@@ -49,5 +49,21 @@
         "title": "Quản lý chi nhánh - Bamboo House",
         "description": "Quản lý các chi nhánh một cách hiệu quả. Tạo mới, cập nhật thông tin và đảm bảo khách hàng có trải nghiệm tốt nhất tại mọi địa điểm.",
         "emptyBranchList": "Không có chi nhánh nào"
+    },
+    "branchCard": {
+        "locationLabel": "Địa chỉ",
+        "contactNumberLabel": "Số điện thoại",
+        "openingHours": "Giờ mở cửa"
+    },
+    "branchDetail": {
+        "chip": "Chi nhánh",
+        "notFound": "Không tìm thấy chi nhánh",
+        "contactTitle": "Liên hệ & Giờ hoạt động",
+        "contactDescription": "Cách tìm và liên lạc với chi nhánh này",
+        "metaTitle": "Thông tin hệ thống",
+        "metaDescription": "Chi tiết bản ghi hệ thống của chi nhánh",
+        "createdAt": "Ngày tạo",
+        "updatedAt": "Cập nhật lần cuối",
+        "activeStatus": "Đang hoạt động"
     }
 }

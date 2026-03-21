@@ -18,6 +18,9 @@ export function useIsMobile() {
       media.removeEventListener("change", handleChange);
     };
   }, []);
+  if (isMobile) {
+    document.documentElement.classList.add("scrollbar-hidden");
+  }
 
   return isMobile;
 }

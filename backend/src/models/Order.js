@@ -16,6 +16,8 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    deviceId: [{ id: String }],
+
     servedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Staff" },
 
     customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },

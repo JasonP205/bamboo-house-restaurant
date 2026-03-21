@@ -49,5 +49,21 @@
         "title": "Branch Management - Bamboo House",
         "description": "Manage your branches effectively. Create new branches, update existing ones, and ensure your customers have the best experience at every location.",
         "emptyBranchList": "No available branches"
+    },
+    "branchCard": {
+        "locationLabel": "Location",
+        "contactNumberLabel": "Contact Number",
+        "openingHours": "Opening Hours"
+    },
+    "branchDetail": {
+        "chip": "Branch",
+        "notFound": "Branch not found",
+        "contactTitle": "Contact & Hours",
+        "contactDescription": "How to find and reach this location",
+        "metaTitle": "Branch Information",
+        "metaDescription": "System record details for this branch",
+        "createdAt": "Created",
+        "updatedAt": "Last Updated",
+        "activeStatus": "Active"
     }
 }

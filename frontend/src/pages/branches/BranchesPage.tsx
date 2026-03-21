@@ -6,11 +6,17 @@ import Metadata from "@/components/Metadata";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/useAuthStore";
 import BranchCard from "@/components/ui/BranchCard";
+import { useEffect } from "react";
 
 const BranchesPage = () => {
-  const { branches } = useBranchStore();
+  const { branches, fetchBranches } = useBranchStore();
   const { role } = useAuthStore();
   const { t } = useTranslation("branch");
+
+  useEffect(() => {
+    fetchBranches();
+  }, []);
+
   if (branches.length === 0) {
     return (
       <>
@@ -26,7 +32,7 @@ const BranchesPage = () => {
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="w-full h-full overflow-y-auto p-4">
         <Metadata title={t("page.title")} description={t("page.description")} />
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-muted justify-between">
           {branches.map((branch) => (

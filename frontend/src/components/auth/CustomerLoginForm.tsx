@@ -44,6 +44,7 @@ const CustomerLoginForm = () => {
             <InputGroup.Input
               autoComplete="email"
               className="w-full"
+              maxLength={150}
               placeholder="name@email.com"
               {...register("email")}
             />
@@ -65,6 +66,7 @@ const CustomerLoginForm = () => {
               className="w-full"
               placeholder={t("loginForm.customer.passwordLabel")}
               autoComplete="password"
+              maxLength={100}
               type={passwordVisible ? "text" : "password"}
               {...register("password")}
             />

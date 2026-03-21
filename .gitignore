@@ -39,7 +39,7 @@ coverage/
 frontend/node_modules/
 frontend/build/
 frontend/dist/
-
+frontend/.heroui-docs
 # Vite
 vite.svg
 
@@ -57,6 +57,8 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+.npmrc
+AGENTS.md
 
 # =========================
 # MongoDB

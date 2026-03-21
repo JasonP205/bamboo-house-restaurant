@@ -8,9 +8,13 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const accessToken = useAuthStore.getState().accessToken;
+  const deviceId = useAuthStore.getState().deviceId;
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  if (deviceId) {
+    config.headers["X-Device-ID"] = deviceId;
   }
 
   return config;

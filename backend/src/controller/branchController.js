@@ -1,6 +1,7 @@
 import Branch from "../models/Branch.js";
 import bcrypt from "bcrypt";
 import { uploadBranchImageFromBuffer } from "../middleware/fileMiddleware.js";
+import mongoose from "mongoose";
 
 const fetchBranchs = async (req, res) => {
   try {
@@ -17,15 +18,124 @@ const fetchBranchs = async (req, res) => {
   }
 };
 const fetchBranchById = async (req, res) => {
-  const { branchId } = req?.body;
+  const { branchId } = req?.params;
+  if (!branchId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing branchId" });
+  }
+  const _id = new mongoose.Types.ObjectId(branchId);
   try {
-    const branch = await Branch.findById(branchId);
-    if (!branch) {
+    const branch = await Branch.aggregate([
+      {
+        $match: { _id },
+      },
+      // 📊 thống kê tables
+      {
+        $lookup: {
+          from: "tables",
+          let: { branchId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$branchId", "$$branchId"] },
+              },
+            },
+            {
+              $group: {
+                _id: "$location",
+                count: { $sum: 1 },
+              },
+            },
+          ],
+          as: "tableStats",
+        },
+      },
+
+      // 👨‍🍳 đếm staff
+      {
+        $lookup: {
+          from: "staffs",
+          let: { branchId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$branchId", "$$branchId"] },
+              },
+            },
+            {
+              $count: "total",
+            },
+          ],
+          as: "staffStats",
+        },
+      },
+
+      // 🧠 format lại data
+      {
+        $addFields: {
+          indoorTables: {
+            $ifNull: [
+              {
+                $first: {
+                  $map: {
+                    input: {
+                      $filter: {
+                        input: "$tableStats",
+                        as: "t",
+                        cond: { $eq: ["$$t._id", "indoor"] },
+                      },
+                    },
+                    as: "t",
+                    in: "$$t.count",
+                  },
+                },
+              },
+              0,
+            ],
+          },
+          outdoorTables: {
+            $ifNull: [
+              {
+                $first: {
+                  $map: {
+                    input: {
+                      $filter: {
+                        input: "$tableStats",
+                        as: "t",
+                        cond: { $eq: ["$$t._id", "outdoor"] },
+                      },
+                    },
+                    as: "t",
+                    in: "$$t.count",
+                  },
+                },
+              },
+              0,
+            ],
+          },
+          totalStaffs: {
+            $ifNull: [{ $arrayElemAt: ["$staffStats.total", 0] }, 0],
+          },
+        },
+      },
+
+      {
+        $project: {
+          imageId: 0,
+        },
+      },
+    ]);
+    if (!branch.length) {
       return res
         .status(404)
         .json({ success: false, message: "Branch not found" });
     }
-    res.status(200).json({ success: true, branch });
+
+    res.status(200).json({
+      success: true,
+      branch: branch[0]
+    });
   } catch (error) {
     console.error("Error fetching branch by ID:", error);
     return res.status(500).json({ success: false, message: error.message });

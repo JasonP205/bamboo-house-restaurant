@@ -12,8 +12,13 @@ import Layout from "./components/ui/Layout";
 import ManagerPanel from "./pages/auth/ManagerPanel";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BranchDetail from "./pages/branches/BranchDetail";
+import { useAuthStore } from "@/stores/useAuthStore"
 
 function App() {
+  const { getDeviceId, deviceId } = useAuthStore();
+  if (!deviceId) {
+    getDeviceId();
+  }
   return (
     <>
       <Toast.Provider placement="top" />

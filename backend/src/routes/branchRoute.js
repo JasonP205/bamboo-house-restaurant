@@ -18,7 +18,7 @@ router.post(
   uploadImage.single("image"),
   createBranch,
 );
-router.put("/:id", protectedRouteStaff, updateBranch);
-router.delete("/:id", protectedRouteStaff, deleteBranch);
+router.put("/:branchId", protectedRouteStaff, updateBranch);
+router.delete("/:branchId", protectedRouteStaff, deleteBranch);
 
 export default router;

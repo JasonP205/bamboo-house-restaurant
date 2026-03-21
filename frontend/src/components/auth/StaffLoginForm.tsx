@@ -41,9 +41,9 @@ const StaffLoginForm = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { t } = useTranslation(["auth"]);
 
-  const onSubmit = (data: StaffLoginFormData) => {
+  const onSubmit = async (data: StaffLoginFormData) => {
     try {
-      staffLogin(data);
+      await staffLogin(data);
       reset();
       navigate("/app");
       toast.success(t("auth:toast.staff.login.success.title"), {
@@ -84,6 +84,7 @@ const StaffLoginForm = () => {
               <HugeiconsIcon icon={Hashtag} className="size-4 text-muted" />
             </InputGroup.Prefix>
             <InputGroup.Input
+              maxLength={10}
               autoComplete="staff-number"
               className="w-full"
               placeholder={t("loginForm.staff.staffNumberLabel")}
@@ -107,6 +108,7 @@ const StaffLoginForm = () => {
             </InputGroup.Prefix>
             <InputGroup.Input
               className="w-full"
+              maxLength={50}
               placeholder={t("loginForm.staff.passwordLabel")}
               autoComplete="password"
               type={passwordVisible ? "text" : "password"}

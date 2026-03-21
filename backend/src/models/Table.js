@@ -4,7 +4,7 @@ const tableSchema = new mongoose.Schema(
   {
     location: {
       type: String,
-      enum: ["Indoor", "Outdoor"],
+      enum: ["indoor", "outdoor"],
       required: true,
     },
     number: { type: Number, required: true },
