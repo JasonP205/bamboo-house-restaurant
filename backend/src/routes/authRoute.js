@@ -7,6 +7,8 @@ import {
   logout,
   fetchMe,
   refresh,
+  googleAuth,
+  googleAuthCallback,
 } from "../controller/authController.js";
 import { managerMiddleware, protectedRoute } from "../middleware/authMiddleware.js";
 
@@ -19,5 +21,9 @@ router.post("/login/customer", customerLogin);
 router.post("/logout", logout);
 router.post("/refresh", refresh);
 router.get("/me", protectedRoute, fetchMe);
+
+
+router.get("/oauth2/google", googleAuth);
+router.get("/login/google/callback", googleAuthCallback);
 
 export default router;

@@ -24,7 +24,7 @@ const CreateBranchModal = ({ isFloating }: CreateBranchModalProps) => {
             </Tooltip.Content>
             <Button
               isIconOnly
-              variant="secondary"
+              variant="primary"
               className="rounded-full size-14 absolute bottom-16 right-16"
               onPress={() => setOpen(true)}
             >
@@ -43,9 +43,9 @@ const CreateBranchModal = ({ isFloating }: CreateBranchModalProps) => {
           </Button>
         </>
       )}
-      <Modal.Backdrop>
-        <Modal.Container>
-          <Modal.Dialog className="">
+      <Modal.Backdrop variant="blur">
+        <Modal.Container size="lg" className="scrollbar-hidden">
+          <Modal.Dialog className="scrollbar-hidden">
             <Modal.CloseTrigger />
             <Modal.Header>
               {/* <Modal.Icon className="bg-default text-foreground">

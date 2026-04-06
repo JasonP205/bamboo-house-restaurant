@@ -4,11 +4,16 @@ const branchSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, lowercase: true, maxLength: 100 },
     location: { type: String, required: true, maxLength: 200 },
+    mapCoordinates: { type: String, maxLength: 500 },
     contactNumber: { type: String, required: true, maxLength: 20 },
     openingHours: {
         open: { type: String, required: true },
         close: { type: String, required: true },
     },
+    isOpen: { type: Boolean, default: true },
+    floorSpace: { type: String, default: "0" },
+    totalTables: { type: Number, default: 0 },
+    lastTableNumber: { type: Number, default: 0 },
     imageUrl: { type: String },
     imageId: { type: String },
   },

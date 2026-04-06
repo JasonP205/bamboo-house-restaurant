@@ -6,10 +6,11 @@
         "menu": "Menu",
         "orders": "Orders",
         "settings": "Settings",
-        "logoutButton": "Logout"
+        "logoutButton": "Logout",
+        "advertise": "Advertise"
     },
     "toggleLangOptions": {
-        "en": "English",
-        "vi": "Vietnamese"
+        "en": "Switch to English",
+        "vi": "Switch to Vietnamese"
     }
 }

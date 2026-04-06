@@ -1,5 +1,5 @@
 import {Helmet} from "react-helmet-async";
-
+import { formatTitle } from "@/lib/utils";
 interface MetadataProps {
   title?: string;
   description?: string;
@@ -10,7 +10,7 @@ interface MetadataProps {
 const Metadata = ({ title, description, ogTitle, ogDescription, ogImage }: MetadataProps) => {
   return (
     <Helmet>
-      {title && <title>{title}</title>}
+      {title && <title>{formatTitle(title)}</title>}
       {description && <meta name="description" content={description} />}
       {ogTitle && <meta property="og:title" content={ogTitle} />}
       {ogDescription && <meta property="og:description" content={ogDescription} />}

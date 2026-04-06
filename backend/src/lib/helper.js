@@ -21,8 +21,7 @@ const calculateTier = (points) => {
   if (points < 8000) return "Grove";
   return "Legend";
 };
-
 export default {
     getPointPerCurrency,
-    calculateTier
+    calculateTier,
 }

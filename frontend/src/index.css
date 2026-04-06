@@ -6,14 +6,8 @@
 
 @theme {
   --font-playfair: "Playfair Display", serif;
+  --text: var(--text);
 }
-
-/*
- * HeroUI Theme Customization
- * Add this to your global.css after importing @heroui/styles
- * Only includes base variables from variables.css
- * @see https://v3.heroui.com/docs/react/getting-started/theming
- */
 
 :root,
 .light,
@@ -21,40 +15,41 @@
 [data-theme="light"],
 [data-theme="default"] {
   /* Theme Colors (Light Mode) */
-  --accent: oklch(50.16% 0.1492 136.03);
+  --accent: oklch(34.10% 0.0626 160.34);
+  --text: oklch(34.10% 0.0626 160.34);
   --accent-foreground: oklch(99.11% 0 0);
-  --background: oklch(97.02% 0.0200 136.03);
-  --border: oklch(90.00% 0.0200 136.03);
-  --danger: oklch(65.32% 0.2421 11.60);
+  --background: oklch(97.02% 0.0106 160.34);
+  --border: oklch(90.00% 0.0106 160.34);
+  --danger: oklch(65.32% 0.2377 14.52);
   --danger-foreground: oklch(99.11% 0 0);
-  --default: oklch(94.00% 0.0200 136.03);
-  --default-foreground: oklch(21.03% 0.0059 136.03);
-  --field-background: oklch(100.00% 0.0100 136.03);
-  --field-foreground: oklch(21.03% 0.0200 136.03);
-  --field-placeholder: oklch(55.17% 0.0400 136.03);
-  --focus: oklch(50.16% 0.1492 136.03);
-  --foreground: oklch(21.03% 0.0200 136.03);
-  --muted: oklch(55.17% 0.0400 136.03);
-  --overlay: oklch(100.00% 0.0060 136.03);
-  --overlay-foreground: oklch(21.03% 0.0200 136.03);
-  --scrollbar: oklch(87.10% 0.0200 136.03);
-  --segment: oklch(100.00% 0.0200 136.03);
-  --segment-foreground: oklch(21.03% 0.0200 136.03);
-  --separator: oklch(92.00% 0.0200 136.03);
-  --success: oklch(73.29% 0.2012 136.67);
-  --success-foreground: oklch(21.03% 0.0059 136.67);
-  --surface: oklch(100.00% 0.0100 136.03);
-  --surface-foreground: oklch(21.03% 0.0200 136.03);
-  --surface-secondary: oklch(95.24% 0.0160 136.03);
-  --surface-secondary-foreground: oklch(21.03% 0.0200 136.03);
-  --surface-tertiary: oklch(93.73% 0.0160 136.03);
-  --surface-tertiary-foreground: oklch(21.03% 0.0200 136.03);
-  --warning: oklch(78.19% 0.1648 58.19);
-  --warning-foreground: oklch(21.03% 0.0059 58.19);
-
+  --default: oklch(94.00% 0.0106 160.34);
+  --default-foreground: oklch(21.03% 0.0059 160.34);
+  --field-background: oklch(100.00% 0.0053 160.34);
+  --field-foreground: oklch(21.03% 0.0106 160.34);
+  --field-placeholder: oklch(55.17% 0.0212 160.34);
+  --focus: oklch(34.10% 0.0626 160.34);
+  --foreground: oklch(21.03% 0.0106 160.34);
+  --muted: oklch(55.17% 0.0212 160.34);
+  --overlay: oklch(100.00% 0.0032 160.34);
+  --overlay-foreground: oklch(21.03% 0.0106 160.34);
+  --scrollbar: oklch(87.10% 0.0106 160.34);
+  --segment: oklch(100.00% 0.0106 160.34);
+  --segment-foreground: oklch(21.03% 0.0106 160.34);
+  --separator: oklch(92.00% 0.0106 160.34);
+  --success: oklch(73.29% 0.1976 139.59);
+  --success-foreground: oklch(21.03% 0.0059 139.59);
+  --surface: oklch(100.00% 0.0053 160.34);
+  --surface-foreground: oklch(21.03% 0.0106 160.34);
+  --surface-secondary: oklch(95.24% 0.0085 160.34);
+  --surface-secondary-foreground: oklch(21.03% 0.0106 160.34);
+  --surface-tertiary: oklch(93.73% 0.0085 160.34);
+  --surface-tertiary-foreground: oklch(21.03% 0.0106 160.34);
+  --warning: oklch(78.19% 0.1619 61.11);
+  --warning-foreground: oklch(21.03% 0.0059 61.11);
+  --backdrop: rgba(0, 0, 0, 0.7);
   /* Border Radius */
   --radius: 0.5rem;
-  --field-radius: 0.75rem;
+  --field-radius: 0.5rem;
 
   /* Font Family */
   /* Make sure to load Be Vietnam Pro font in your app */
@@ -65,48 +60,48 @@
 [data-theme="dark"] {
   color-scheme: dark;
   /* Theme Colors (Dark Mode) */
-  --accent: oklch(50.16% 0.1492 136.03);
+  --accent: oklch(34.10% 0.0626 160.34);
+  --text: oklch(99.11% 0 0);
   --accent-foreground: oklch(99.11% 0 0);
-  --background: oklch(12.00% 0.0200 136.03);
-  --border: oklch(28.00% 0.0200 136.03);
-  --danger: oklch(59.40% 0.2046 10.49);
+  --background: oklch(12.00% 0.0106 160.34);
+  --border: oklch(28.00% 0.0106 160.34);
+  --danger: oklch(59.40% 0.2009 13.41);
   --danger-foreground: oklch(99.11% 0 0);
-  --default: oklch(27.40% 0.0200 136.03);
+  --default: oklch(27.40% 0.0106 160.34);
   --default-foreground: oklch(99.11% 0 0);
-  --field-background: oklch(21.03% 0.0400 136.03);
-  --field-foreground: oklch(99.11% 0.0200 136.03);
-  --field-placeholder: oklch(70.50% 0.0400 136.03);
-  --focus: oklch(50.16% 0.1492 136.03);
-  --foreground: oklch(99.11% 0.0200 136.03);
-  --muted: oklch(70.50% 0.0400 136.03);
-  --overlay: oklch(21.03% 0.0400 136.03);
-  --overlay-foreground: oklch(99.11% 0.0200 136.03);
-  --scrollbar: oklch(70.50% 0.0200 136.03);
-  --segment: oklch(39.64% 0.0200 136.03);
-  --segment-foreground: oklch(99.11% 0.0200 136.03);
-  --separator: oklch(25.00% 0.0200 136.03);
-  --success: oklch(73.29% 0.2012 136.67);
-  --success-foreground: oklch(21.03% 0.0059 136.67);
-  --surface: oklch(21.03% 0.0400 136.03);
-  --surface-foreground: oklch(99.11% 0.0200 136.03);
-  --surface-secondary: oklch(25.70% 0.0300 136.03);
-  --surface-secondary-foreground: oklch(99.11% 0.0200 136.03);
-  --surface-tertiary: oklch(27.21% 0.0300 136.03);
-  --surface-tertiary-foreground: oklch(99.11% 0.0200 136.03);
-  --warning: oklch(82.03% 0.1444 62.20);
-  --warning-foreground: oklch(21.03% 0.0059 62.20);
+  --field-background: oklch(21.03% 0.0212 160.34);
+  --field-foreground: oklch(99.11% 0.0106 160.34);
+  --field-placeholder: oklch(70.50% 0.0212 160.34);
+  --focus: oklch(34.10% 0.0626 160.34);
+  --foreground: oklch(99.11% 0.0106 160.34);
+  --muted: oklch(70.50% 0.0212 160.34);
+  --overlay: oklch(21.03% 0.0212 160.34);
+  --overlay-foreground: oklch(99.11% 0.0106 160.34);
+  --scrollbar: oklch(70.50% 0.0106 160.34);
+  --segment: oklch(39.64% 0.0106 160.34);
+  --segment-foreground: oklch(99.11% 0.0106 160.34);
+  --separator: oklch(25.00% 0.0106 160.34);
+  --success: oklch(73.29% 0.1976 139.59);
+  --success-foreground: oklch(21.03% 0.0059 139.59);
+  --surface: oklch(21.03% 0.0212 160.34);
+  --surface-foreground: oklch(99.11% 0.0106 160.34);
+  --surface-secondary: oklch(25.70% 0.0159 160.34);
+  --surface-secondary-foreground: oklch(99.11% 0.0106 160.34);
+  --surface-tertiary: oklch(27.21% 0.0159 160.34);
+  --surface-tertiary-foreground: oklch(99.11% 0.0106 160.34);
+  --warning: oklch(82.03% 0.1417 65.12);
+  --warning-foreground: oklch(21.03% 0.0059 65.12);
 }
 @layer base {
-  * {
-    font-family: var(--font-sans);
-    /* color: var(--default-foreground); */
+  html {
+    @apply bg-background
   }
 }
 @layer components {
   .bg-login {
     position: fixed;
     inset: -10px; /* thay cho top left width height */
-    background: url("/flycam-bamboo-house.png") center / cover no-repeat;
+    background: url("/img/flycam-bamboo-house.png") center / cover no-repeat;
     z-index: 0;
     pointer-events: none;
     filter: brightness(0.75) blur(2px);
@@ -135,6 +130,9 @@
   .date-input-group {
     @apply dark:bg-surface-secondary dark:text-surface-secondary-foreground;
   }
+  .number-field__group {
+    @apply dark:bg-surface-secondary dark:text-surface-secondary-foreground;
+  }
   .scrollbar-thin {
     -webkit-scrollbar: thin;
     scrollbar-width: thin;
@@ -158,4 +156,8 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .drawer__dialog[data-placement="right"] {
+    @apply min-w-150 max-w-full;
+  }
+
 }

@@ -14,6 +14,9 @@
     "branchNamePlaceholder": "Nhập tên chi nhánh",
     "branchAddressLabel": "Địa chỉ chi nhánh",
     "branchAddressPlaceholder": "Nhập địa chỉ chi nhánh",
+    "mapUrlLabel": "Tọa độ bản đồ",
+    "mapUrlPlaceholder": "Ví dụ: 11.9403049, 108.482322",
+    "floorSpaceLabel": "Diện tích sàn (m²)",
     "openingHoursLabel": "Giờ mở cửa",
     "openingHoursPlaceholder": "Ví dụ: 9:00",
     "closingHoursLabel": "Giờ đóng cửa",
@@ -27,12 +30,14 @@
       "imageRequired": "Vui lòng tải lên hình ảnh chi nhánh.",
       "nameRequired": "Vui lòng nhập tên chi nhánh.",
       "locationRequired": "Vui lòng nhập địa chỉ chi nhánh.",
+      "mapCoordinatesRequired": "Vui lòng nhập tọa độ bản đồ.",
       "contactNumberRequired": "Vui lòng nhập số điện thoại liên hệ.",
       "openingHoursRequired": "Vui lòng nhập giờ mở cửa.",
       "closingHoursRequired": "Vui lòng nhập giờ đóng cửa.",
       "invalidContactNumber": "Số điện thoại không hợp lệ.",
       "invalidOpeningHours": "Định dạng giờ mở cửa không hợp lệ (Ví dụ: 9:00 SA).",
-      "invalidClosingHours": "Định dạng giờ đóng cửa không hợp lệ (Ví dụ: 9:00 CH)."
+      "invalidClosingHours": "Định dạng giờ đóng cửa không hợp lệ (Ví dụ: 9:00 CH).",
+      "floorSpaceRequired": "Vui lòng nhập diện tích sàn."
     },
     "toast": {
       "success": {
@@ -56,15 +61,63 @@
     "openingHours": "Giờ mở cửa"
   },
   "branchDetail": {
-    "chip": "Chi nhánh",
     "notFound": "Không tìm thấy chi nhánh",
-    "contactTitle": "Liên hệ & Giờ hoạt động",
-    "contactDescription": "Cách tìm và liên lạc với chi nhánh này",
-    "metaTitle": "Thông tin hệ thống",
-    "metaDescription": "Chi tiết bản ghi hệ thống của chi nhánh",
-    "indoorTables": "Bàn trong nhà",
-    "outdoorTables": "Bàn ngoài trời",
-    "totalStaffs": "Tổng nhân viên",
-    "activeStatus": "Đang hoạt động"
+    "actionDescription": "Đăng ký nhân viên mới, cập nhật thông tin chi nhánh và quản lý bàn tại địa điểm này.",
+    "status": {
+      "title":"Trạng thái hiện tại",
+      "open": "Đang mở cửa & hoạt động",
+      "closed": "Đang đóng cửa tạm thời"
+    },
+    "tab": {
+      "overview": "Xem nhanh",
+      "staff": "Nhân viên",
+      "tables": "Bàn",
+      "menu": "Thực đơn",
+      "analytics": "Phân tích",
+      "config": "Cấu hình"
+    },
+    "overview": {
+      "title": "Chi tiết chi nhánh",
+      "address": "Địa chỉ",
+      "locationOnMap": "Vị trí trên bản đồ",
+      "contactNumber": "Số điện thoại",
+      "openingHours": "Giờ mở cửa",
+      "kitchenHours": "Bếp đóng cửa 30 phút trước giờ đóng cửa",
+      "tables": "Tổng số bàn",
+      "staffs": "Tổng nhân viên",
+      "keyInventory": "Thông số chính"
+    },
+    "tables": {
+      "tableNumber": "Số bàn",
+      "capacity": "Loại bàn",
+      "isInUse": "Trạng thái",
+      "isBooked": "Trạng thái đặt bàn",
+      "data": {
+        "small": "Bàn Lotus 4",
+        "medium": "Vườn Bamboo 6",
+        "large": "Vườn Lotus 8",
+        "grand": "Sảnh Bamboo 10"
+      },
+      "emptyState": {
+        "title": "Không tìm thấy bàn nào",
+        "description": "Chi nhánh này hiện tại không có bàn nào. Vui lòng thêm bàn để quản lý đặt chỗ và khách hàng đến trực tiếp một cách hiệu quả."
+      }
+    }
+  },
+  "editBranch" : {
+    "triggerButton": "Chỉnh sửa thông tin",
+    "title": "Chỉnh sửa thông tin chi nhánh", 
+    "submitButton": "Lưu thay đổi",
+    "submitButtonPending": "Đang lưu...",
+    "toast" : {
+      "success": {
+        "title": "Cập nhật chi nhánh thành công",
+        "message": "Thông tin chi nhánh đã được cập nhật thành công."
+      },
+      "error": {
+        "title": "Lỗi cập nhật chi nhánh",
+        "message": "Đã xảy ra lỗi trong quá trình cập nhật chi nhánh. Vui lòng thử lại sau hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn."
+      }
+    }
   }
 }

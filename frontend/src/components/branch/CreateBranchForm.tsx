@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { map, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect, useRef } from "react";
@@ -10,6 +10,7 @@ import {
   type TimeValue,
   Spinner,
   toast,
+  NumberField,
 } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useBranchStore } from "@/stores/useBranchStore";
@@ -24,6 +25,10 @@ const createBranchSchema = z.object({
     .string()
     .min(1, "Location is required")
     .max(200, "Location must be less than 200 characters"),
+  mapCoordinates: z
+    .string()
+    .min(1, "Map coordinates are required")
+    .max(500, "Map coordinates must be less than 500 characters"),
   contactNumber: z
     .string()
     .min(1, "Contact number is required")
@@ -32,6 +37,10 @@ const createBranchSchema = z.object({
     open: z.string().min(1, "Opening time is required"),
     close: z.string().min(1, "Closing time is required"),
   }),
+  floorSpace: z
+    .number()
+    .min(0, "Floor space cannot be negative")
+    .max(10000, "Floor space must be less than 10,000"),
   image: z
     .instanceof(File)
     .refine(
@@ -100,9 +109,22 @@ const CreateBranchForm = () => {
   };
 
   useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      console.error("Form Errors:", errors);
-    }
+    if (Object.keys(errors).length < 1) return;
+    if (errors.name) {
+      toast.danger(t("createBranchForm.validation.nameRequired"));
+    } else if (errors.location) {
+      toast.danger(t("createBranchForm.validation.locationRequired"));
+    } else if (errors.contactNumber) {
+      toast.danger(t("createBranchForm.validation.contactNumberRequired"));
+    } else if (errors.openingHours?.open) {
+      toast.danger(t("createBranchForm.validation.openingHoursRequired"));
+    } else if (errors.openingHours?.close) {
+      toast.danger(t("createBranchForm.validation.closingHoursRequired"));
+    } else if (errors.floorSpace) {
+      toast.danger(t("createBranchForm.validation.floorSpaceRequired"));
+    } else if (errors.image) {
+      toast.danger(t("createBranchForm.validation.imageRequired"));
+    } 
   }, [errors]);
 
   const { createBranch, loading } = useBranchStore();
@@ -190,6 +212,17 @@ const CreateBranchForm = () => {
             />
           </InputGroup>
         </div>
+        {/* Map URL */}
+        <div className="flex flex-col space-y-2">
+          <Label>{t("createBranchForm.mapUrlLabel")}</Label>
+          <InputGroup>
+            <InputGroup.Input
+              type="text"
+              placeholder={t("createBranchForm.mapUrlPlaceholder")}
+              {...register("mapCoordinates")}
+            />
+          </InputGroup>
+        </div>
         {/* Contact Number */}
         <div className="flex flex-col space-y-2">
           <Label>{t("createBranchForm.phoneNumberLabel")}</Label>
@@ -200,6 +233,16 @@ const CreateBranchForm = () => {
               {...register("contactNumber")}
             />
           </InputGroup>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <NumberField defaultValue={0} fullWidth name="floorSpace" step={50} minValue={0} maxValue={10000} onChange={(value) => setValue("floorSpace", value)}>
+            <Label>{t("createBranchForm.floorSpaceLabel")}</Label>
+            <NumberField.Group>
+              <NumberField.DecrementButton />
+              <NumberField.Input/>
+              <NumberField.IncrementButton />
+            </NumberField.Group>
+          </NumberField>
         </div>
         {/* Opening Hours */}
         <div className="flex flex-row gap-4">

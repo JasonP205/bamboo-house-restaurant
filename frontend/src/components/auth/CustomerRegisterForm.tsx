@@ -1,7 +1,14 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button, Label, InputGroup, Description, Spinner } from "@heroui/react";
+import {
+  Button,
+  Label,
+  InputGroup,
+  Description,
+  Spinner,
+  Separator,
+} from "@heroui/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   MailAccount02Icon,
@@ -15,6 +22,8 @@ import { toast } from "@heroui/react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Icon } from "@iconify/react";
+import SeparatorOpt from "../ui/SeparatorOpt";
 
 const customerRegisterSchema = z
   .object({
@@ -205,6 +214,16 @@ const CustomerRegisterForm = () => {
             </>
           )}
         </Button>
+        <SeparatorOpt value={t("loginForm.customer.or")} />
+        <a
+          href={`${import.meta.env.VITE_API_URL}/auth/oauth2/google`}
+          className="w-full"
+        >
+          <Button variant="outline" fullWidth>
+            <Icon icon="logos:google-icon" />
+            {t("loginForm.customer.loginWithGoogle")}
+          </Button>
+        </a>
         <span className="text-center text-sm text-muted">
           {t("registerForm.loginPrompt")}{" "}
           <a href="/auth/login" className="text-accent hover:underline">

@@ -1,10 +1,10 @@
+import "./lib/envConfig.js";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import chalk from "chalk";
 import { getLocalIP } from "./lib/network.js";
-import connectDB from "./lib/db.js";
+import {connectDB} from "./lib/db.js";
 import customerRoute from "./routes/customerRoute.js";
 import branchRoute from "./routes/branchRoute.js";
 import staffRoute from "./routes/staffRoute.js";
@@ -12,8 +12,8 @@ import authRoute from "./routes/authRoute.js";
 import { protectedRouteStaff } from "./middleware/authMiddleware.js";
 import { deviceIDMiddleware } from "./middleware/deviceIDMiddleware.js";
 import { v2 as cloudinary } from "cloudinary";
+import passport from "./lib/passportConfig.js";
 
-dotenv.config();
 const start = process.hrtime.bigint();
 
 const app = express();
@@ -25,6 +25,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(passport.initialize());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -34,8 +35,8 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-app.use(deviceIDMiddleware);
 app.use("/api/auth", authRoute);
+app.use(deviceIDMiddleware);
 app.use("/api/customers", customerRoute);
 app.use("/api/branches", branchRoute);
 app.use("/api/staff", protectedRouteStaff, staffRoute);
@@ -46,7 +47,7 @@ connectDB().then(() => {
     const time = Number(end - start) / 1e6;
 
     const localIP = getLocalIP();
-    console.clear();
+    
     console.log(`
 ${chalk.bold("EXPRESS")} ${chalk.green("v1.0.0")} ${chalk.gray(`ready in ${time.toFixed(0)} ms`)}
 

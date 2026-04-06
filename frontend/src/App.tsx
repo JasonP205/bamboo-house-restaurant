@@ -13,6 +13,7 @@ import ManagerPanel from "./pages/auth/ManagerPanel";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BranchDetail from "./pages/branches/BranchDetail";
 import { useAuthStore } from "@/stores/useAuthStore"
+import GoogleCallback from "./pages/auth/GoogleCallback";
 
 function App() {
   const { getDeviceId, deviceId } = useAuthStore();
@@ -21,11 +22,12 @@ function App() {
   }
   return (
     <>
-      <Toast.Provider placement="top" />
+      <Toast.Provider placement="top" className="z-100" />
       <Router>
         <div className="min-w-screen min-h-svh">
           <Routes>
             <Route path="/" element={<h1>Home</h1>} />
+            <Route path="login-success" element={<GoogleCallback />} />
 
             <Route element={<ProtectedRoute requireLogin />}>
               <Route path="app" element={<Outlet />}>
@@ -34,6 +36,10 @@ function App() {
                 <Route path="branches" element={<Layout />}>
                   <Route index element={<BranchesPage />} />
                   <Route path=":branchId" element={<BranchDetail />} />
+                </Route>
+
+                <Route path="orders" element={<Outlet />} >
+                  <Route path="place-order" element={<h1>Place Order</h1>} />
                 </Route>
 
               </Route>

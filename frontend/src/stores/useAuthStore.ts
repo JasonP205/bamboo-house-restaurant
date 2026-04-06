@@ -5,7 +5,6 @@ import { authService } from "@/services/authService";
 import { toast } from "@heroui/react";
 import { isAxiosError } from "axios";
 import i18n from "@/i18n";
-import { useBranchStore } from "./useBranchStore";
 import { v4 as uuid } from "uuid"
 
 export const useAuthStore = create<AuthState>()(
@@ -40,7 +39,6 @@ export const useAuthStore = create<AuthState>()(
               accessToken: accessToken,
             });
             await get().fetchMe();
-            await useBranchStore.getState().fetchBranches();
           }
         } catch (error) {
           console.error("Error logging in staff:", error);

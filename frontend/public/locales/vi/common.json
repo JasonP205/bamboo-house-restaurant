@@ -6,10 +6,11 @@
         "menu": "Thực Đơn",
         "orders": "Đơn Hàng",
         "settings": "Cài Đặt",
-        "logoutButton": "Đăng Xuất"
+        "logoutButton": "Đăng Xuất",
+        "advertise": "Quảng Cáo"
     },
     "toggleLangOptions": {
-        "en": "Tiếng Anh",
-        "vi": "Tiếng Việt"
+        "en": "Chuyển sang Tiếng Anh",
+        "vi": "Chuyển sang Tiếng Việt"
     }
 }

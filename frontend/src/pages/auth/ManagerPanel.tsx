@@ -27,7 +27,7 @@ const ManagerPanel = () => {
           property="og:description"
           content="Register for a Bamboo House account to manage your reservations, view your order history, and more!"
         />
-        <meta property="og:image" content="/bamboo-house-icon.png" />
+        <meta property="og:image" content="/img/bamboo-house-icon.png" />
         <meta
           property="og:url"
           content="https://www.bamboohouse.com/auth/register"
@@ -44,7 +44,7 @@ const ManagerPanel = () => {
             {/* Left Image */}
             <div className="relative hidden md:block md:w-1/2">
               <img
-                src="/indoor.png"
+                src="/img/indoor.png"
                 alt="Login Background"
                 className="absolute inset-0 h-full w-full object-cover"
               />
@@ -55,7 +55,7 @@ const ManagerPanel = () => {
               <div className="mb-6 flex flex-col items-center gap-2">
                 <div className="flex items-center justify-center gap-3">
                   <img
-                    src="/bamboo-house-icon.png"
+                    src="/img/bamboo-house-icon.png"
                     alt="Bamboo House Logo"
                     className="size-10 rounded-md"
                   />

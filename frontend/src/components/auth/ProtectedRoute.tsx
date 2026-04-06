@@ -14,7 +14,8 @@ const ProtectedRoute = ({
 
   // 🔥 check login
   if (requireLogin && !accessToken && !user) {
-    return <Navigate to="/auth/login" replace />;
+    const currentUrl = window.location.href;
+    return <Navigate to={`/auth/login?redirect=${encodeURIComponent(currentUrl)}`} replace />;
   }
 
   // 🔥 check branch

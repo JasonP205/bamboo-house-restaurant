@@ -1,12 +1,20 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button, Label, InputGroup, Description, Spinner } from "@heroui/react";
-import { HugeiconsIcon} from "@hugeicons/react"
-import {MailAccount02Icon, ViewIcon, ViewOffSlashIcon, LockKeyIcon, Login02Icon} from "@hugeicons/core-free-icons"
+import { Button, Label, InputGroup, Description, Spinner, Separator } from "@heroui/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  MailAccount02Icon,
+  ViewIcon,
+  ViewOffSlashIcon,
+  LockKeyIcon,
+  Login02Icon,
+} from "@hugeicons/core-free-icons";
 import { useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslation } from "react-i18next";
+import { Icon } from "@iconify/react";
+import SeparatorOpt from "@/components/ui/SeparatorOpt";
 
 const customerLoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -39,7 +47,10 @@ const CustomerLoginForm = () => {
           <Label>{t("loginForm.customer.emailLabel")}</Label>
           <InputGroup className="mt-2">
             <InputGroup.Prefix>
-              <HugeiconsIcon icon={MailAccount02Icon} className="size-4 text-muted" />
+              <HugeiconsIcon
+                icon={MailAccount02Icon}
+                className="size-4 text-muted"
+              />
             </InputGroup.Prefix>
             <InputGroup.Input
               autoComplete="email"
@@ -53,7 +64,9 @@ const CustomerLoginForm = () => {
             {t("loginForm.customer.emailDescription")}
           </Description>
           {errors.email && (
-            <p className="text-danger text-sm">{t("errors.login.customer.email")}</p>
+            <p className="text-danger text-sm">
+              {t("errors.login.customer.email")}
+            </p>
           )}
         </div>
         <div className="flex flex-col">
@@ -78,15 +91,23 @@ const CustomerLoginForm = () => {
                 onPress={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
-                  <HugeiconsIcon icon={ViewIcon} className="size-4 text-muted" />
+                  <HugeiconsIcon
+                    icon={ViewIcon}
+                    className="size-4 text-muted"
+                  />
                 ) : (
-                  <HugeiconsIcon icon={ViewOffSlashIcon} className="size-4 text-muted" />
+                  <HugeiconsIcon
+                    icon={ViewOffSlashIcon}
+                    className="size-4 text-muted"
+                  />
                 )}
               </Button>
             </InputGroup.Suffix>
           </InputGroup>
           {errors.password && (
-            <p className="text-danger text-sm">{t("errors.login.customer.password")}</p>
+            <p className="text-danger text-sm">
+              {t("errors.login.customer.password")}
+            </p>
           )}
           <div className="mt-2 flex justify-end">
             <a
@@ -105,12 +126,21 @@ const CustomerLoginForm = () => {
             </>
           ) : (
             <>
-              {t("loginForm.customer.submitButton")}
-              {" "}
+              {t("loginForm.customer.submitButton")}{" "}
               <HugeiconsIcon icon={Login02Icon} className="size-6 text-white" />
             </>
           )}
         </Button>
+        <SeparatorOpt value={t("loginForm.customer.or")} />
+        <a
+          href={`${import.meta.env.VITE_API_URL}/auth/oauth2/google`}
+          className="w-full"
+        >
+          <Button variant="outline" fullWidth>
+            <Icon icon="logos:google-icon" />
+            {t("loginForm.customer.loginWithGoogle")}
+          </Button>
+        </a>
         <span className="text-center text-sm text-muted">
           {t("loginForm.customer.registerPrompt")}{" "}
           <a href="/auth/register" className="text-accent hover:underline">

@@ -15,10 +15,9 @@ export const protectedRouteStaff = async (req, res, next) => {
     //Kiểm tra user
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedStaff) => {
       if (err) {
-        console.error("JWT verification error:", err);
         return res
           .status(401)
-          .json({ message: "Invalid or expired access token" });
+          .json({ message: "Invalid or expired access token", err });
       }
       const staff = await Staff.findById(decodedStaff.id)
         .select("-hashedPassword")
@@ -49,7 +48,6 @@ export const protectedRouteCustomer = async (req, res, next) => {
     //Kiểm tra user
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedCustomer) => {
       if (err) {
-        console.error("JWT verification error:", err);
         return res
           .status(401)
           .json({ message: "Invalid or expired access token" });
@@ -121,7 +119,6 @@ export const managerMiddleware = async (req, res, next) => {
     let decoded;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
-        console.error("JWT verification error:", err);
         return res.status(403).json({
           success: false,
           message: "Invalid or expired access token",
@@ -166,7 +163,6 @@ export const protectedRoute = async (req, res, next) => {
     }
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
-        console.error("JWT verification error:", err);
         return res
           .status(401)
           .json({ message: "Invalid or expired access token" });

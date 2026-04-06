@@ -44,7 +44,7 @@ const RegisterPage = () => {
             {/* Left Image */}
             <div className="relative hidden md:block md:w-1/2">
               <img
-                src="/indoor.png"
+                src="/img/indoor.png"
                 alt="Login Background"
                 className="absolute inset-0 h-full w-full object-cover"
               />
@@ -55,7 +55,7 @@ const RegisterPage = () => {
               <div className="mb-6 flex flex-col items-center gap-2">
                 <div className="flex items-center justify-center gap-3">
                   <img
-                    src="/bamboo-house-icon.png"
+                    src="/img/bamboo-house-icon.png"
                     alt="Bamboo House Logo"
                     className="size-10 rounded-md"
                   />

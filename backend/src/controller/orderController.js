@@ -8,7 +8,7 @@ import helper from "../utils/helper.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const {customerId} = req?.body;
+    const { customerId } = req?.body;
     const { orderList, tableId, type } = req.body;
     let branchId;
 
@@ -197,6 +197,7 @@ export const updateOrderStatus = async (req, res) => {
     }
 
     if (status === "Completed") {
+      order.isInUse = false;
       order.timeOut = new Date();
       const customerId = order?.customer;
       if (customerId) {
@@ -210,9 +211,12 @@ export const updateOrderStatus = async (req, res) => {
           customer.tiers = newTier;
           await customer.save();
         }
-      } 
+      }
     }
-
+    if (order.isInUse === false) {
+      order.isInUse = true;
+    }
+    order.status = status;
     order.servedBy = staffId;
     await order.save();
 
@@ -250,7 +254,9 @@ export const getOrderByBranchId = async (req, res) => {
 export const getOrdersByBranch = async (req, res) => {
   const { branchId } = req?.branchId;
   if (!branchId) {
-    return res.status(400).json({ success: false, message: "Missing branchId" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing branchId" });
   }
 
   try {
