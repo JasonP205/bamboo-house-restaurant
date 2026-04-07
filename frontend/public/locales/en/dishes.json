@@ -1,0 +1,61 @@
+{
+  "createDish": {
+    "title": "Create New Dish",
+    "state": {
+      "empty": "No dishes have been created for this branch yet."
+    },
+    "ctaButton": "Create First Dish for This Branch",
+    "form": {
+      "label": {
+        "name": {
+          "vi": "Vietnamese Name",
+          "en": "English Name"
+        },
+        "description": "Description",
+        "image": "Food Photography",
+        "category": "Category",
+        "categoryValues": {
+            "appetizer": "Appetizer",
+            "main": "Main Course",
+            "dessert": "Dessert",
+            "beverage": "Beverage"
+        },
+        "price": "Price",
+        "dietary": "Dietary Highlights",
+        "dietaryValues": {
+          "vegan": "Vegan",
+          "glutenFree": "Gluten-Free",
+          "nutFree": "Nut-Free"
+        },
+        "dietaryDescription": "Select up to 3 dietary highlights to help customers with dietary preferences easily identify suitable dishes."
+      },
+      "placeholder": {
+        "name": {
+          "vi": "Enter Vietnamese name",
+          "en": "Enter English name"
+        },
+        "description": "Enter dish description",
+        "image": "Upload dish image",
+        "category": "Select a category",
+        "price": "Enter price"
+      },
+      "submitButton": "Add Dish",
+      "submitButtonLoading": "Adding...",
+      "cancelButton": "Cancel",
+      "tip": {
+        "title":"Cura Tip",
+        "content":"Use warm natural light with soft shadows for a premium Bamboo House look. Choose 3:4 images with the dish centered."
+      },
+      "validation": {
+        "name": {
+          "en": "English name is required.",
+          "vi": "Vietnamese name is required."
+        },
+        "price": "A dish cannot be free. Please enter a price.",
+        "category": "Please select a category for the dish.",
+        "description": "Please describe the dish to entice customers.",
+        "image": "Please upload an image of the dish."
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useBranchStore } from "@/stores/useBranchStore";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Clock01Icon, Image02Icon } from "@hugeicons/core-free-icons";
+import ImageInput from "../common/ImageInput";
 const createBranchSchema = z.object({
   name: z
     .string()
@@ -154,42 +155,11 @@ const CreateBranchForm = () => {
         className="flex flex-col gap-4 p-2"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex flex-col space-y-2">
-          <Label>{t("createBranchForm.imageLabel")}</Label>
-
-          <div
-            onClick={handleImageClick}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={handleDrop}
-            className={`w-full aspect-video overflow-hidden rounded-lg flex items-center justify-center cursor-pointer transition 
-      ${isDragging ? "brightness-125 bg-surface-secondary" : ""}`}
-          >
-            <input
-              hidden
-              ref={inputImageRef}
-              type="file"
-              accept="image/*"
-              onChange={handlePreviewImage}
-            />
-
-            {previewUrl ? (
-              <img
-                src={previewUrl}
-                alt="Branch Preview"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            ) : (
-              <div className="flex w-full h-full justify-center rounded-xl flex-col border-3 border-dashed items-center gap-2 text-muted">
-                <HugeiconsIcon size={40} icon={Image02Icon} />
-                <p>{t("createBranchForm.imagePlaceholder")}</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <ImageInput
+          label={t("createBranchForm.imageLabel")}
+          placeholder={t("createBranchForm.imagePlaceholder")}
+          onChange={(file) => setValue("image", file)}
+        />
         {/* Branch Name */}
         <div className="flex flex-col space-y-2">
           <Label>{t("createBranchForm.branchNameLabel")}</Label>

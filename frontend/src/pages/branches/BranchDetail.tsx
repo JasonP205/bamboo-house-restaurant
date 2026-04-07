@@ -8,6 +8,7 @@ import Metadata from "@/components/Metadata";
 import { Store01Icon } from "@hugeicons/core-free-icons";
 import BranchOverViewTab from "@/components/branch/BranchOverViewTab";
 import BranchTableTab from "@/components/branch/BranchTableTab";
+import DishesTab from "@/components/branch/DishesTab";
 import BranchDetailSkeleton from "@/components/branch/BranchDetailSkeleton";
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -118,7 +119,7 @@ const BranchDetail = () => {
               <BranchOverViewTab branch={branch} />
             </Tabs.Panel>
             <Tabs.Panel className="pt-4" id="menu">
-              <p>View and manage your branch's menu items.</p>
+              <DishesTab />
             </Tabs.Panel>
             <Tabs.Panel className="pt-4" id="tables">
               <BranchTableTab branchId={branch._id} />

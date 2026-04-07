@@ -133,6 +133,9 @@
   .number-field__group {
     @apply dark:bg-surface-secondary dark:text-surface-secondary-foreground;
   }
+  .select__trigger {
+    @apply dark:bg-surface-secondary dark:text-surface-secondary-foreground;
+  }
   .scrollbar-thin {
     -webkit-scrollbar: thin;
     scrollbar-width: thin;
@@ -158,6 +161,12 @@
   }
   .drawer__dialog[data-placement="right"] {
     @apply min-w-150 max-w-full;
+  }
+  .text-text {
+    @apply text-accent dark:text-surface-secondary-foreground
+  }
+  .modal__dialog--lg[data-custom="add-dish"] {
+    max-width: var(--container-4xl);
   }
 
 }

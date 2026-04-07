@@ -32,7 +32,7 @@ const BranchTableTab = ({ branchId }: BranchTableTabProps) => {
   ];
 
   const ROWS_PER_PAGE = 8;
-  const { tableBranch, getTableOfBranch, deleteTable, loadingTables } =
+  const { tableBranch, getTableOfBranch, deleteTable, loadingDeleteTable } =
     useBranchStore();
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set());
   const [page, setPage] = useState(1);
@@ -240,6 +240,8 @@ const BranchTableTab = ({ branchId }: BranchTableTabProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <DeleteTableDialog
           state={deleteDialogState}
+          loading={loadingDeleteTable}
+          disabled={selectedIds.length === 0}
           onDelete={deleteSelectedTables}
         />
         <CreateTableModal />

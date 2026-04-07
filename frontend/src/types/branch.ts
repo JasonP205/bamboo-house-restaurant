@@ -1,5 +1,4 @@
-import { boolean } from "zod";
-
+import type { DishFormData } from "@/components/dishes/CreateDishForm";
 export interface Branch {
   _id: string;
   name: string;
@@ -27,12 +26,10 @@ export interface Table {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface BranchDetail extends Branch {
   tables: number;
   totalStaffs: number;
 }
-
 export interface BranchCreateData {
   name: string;
   location: string;
@@ -45,14 +42,27 @@ export interface BranchCreateData {
   floorSpace: number;
   image?: File;
 }
-
+export interface Dish {
+  _id: string;
+  name: {
+    en: string;
+    vi: string;
+  };
+  description?: string;
+  category: "appetizers" | "main" | "desserts" | "beverages";
+  price: number;
+  isAvailable?: boolean;
+  imageUrl?:string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export interface branchState {
   loading: boolean,
   loadingTables: boolean;
-  loadingDelete: boolean;
+  loadingDeleteTable: boolean;
   creatingTable: boolean;
-  loadingEdit: boolean;
+  loadingEditBranch: boolean;
   loadingChangeBranchStatus: {
     [key: string]: boolean; 
   };
@@ -69,4 +79,11 @@ export interface branchState {
   createBranch: (data: BranchCreateData) => Promise<void>;
   getBranchInfo: (id: string) => Promise<void>;
   editBranch: (data: BranchCreateData) => Promise<void>;
+
+  // Dish
+  dishesInBranch: Dish[];
+  loadingCreateDish: boolean;
+  loadingFetchDishes: boolean;
+  addDish: (dish: DishFormData) => Promise<void>;
+  fetchDishesInBranch: () => Promise<void>;
 }

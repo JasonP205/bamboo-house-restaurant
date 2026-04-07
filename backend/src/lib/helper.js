@@ -1,3 +1,5 @@
+import {francAll} from "franc";
+import * as deepl from 'deepl-node';
 const getPointPerCurrency = (tiers) => {
   switch (tiers) {
     case "Sprout":
@@ -21,7 +23,27 @@ const calculateTier = (points) => {
   if (points < 8000) return "Grove";
   return "Legend";
 };
+
+const langDetector = (text)=> {
+  const res = francAll(text, { only: ["eng", "vie"] });
+  const [topLang] = res[0] || [];
+  if (topLang === "eng") return "EN";
+  if (topLang === "vie") return "VI";
+  return "EN"; 
+};
+const deeplClient = new deepl.DeepLClient(process.env.DEEPL_API_KEY);
+const tralateText = async (text, currentLang) => {
+  let result
+  if (currentLang === "EN") {
+     result = await deeplClient.translateText(text, 'EN', 'VI');
+  } else {
+     result = await deeplClient.translateText(text, 'VI', 'EN');
+  }
+  return result.text;
+}
 export default {
     getPointPerCurrency,
     calculateTier,
+    langDetector,
+    tralateText
 }

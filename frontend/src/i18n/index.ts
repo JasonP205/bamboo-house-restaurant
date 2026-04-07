@@ -10,7 +10,7 @@ i18n
   .init({
     fallbackLng: "en",
 
-    ns: ["auth", "branch", "common"],
+    ns: ["auth", "branch", "common", "dishes"],
 
     detection: {
       order: ["localStorage", "navigator"],

@@ -70,7 +70,7 @@ const EditBranchForm = ({
   } = useForm<EditBranchFormData>({
     resolver: zodResolver(editBranchSchema),
   });
-  const { editBranch, loadingEdit, selectedBranch, selectedBranchId } =
+  const { editBranch, loadingEditBranch, selectedBranch, selectedBranchId } =
     useBranchStore();
   if (!selectedBranchId || !selectedBranch) return null;
 
@@ -343,8 +343,8 @@ const EditBranchForm = ({
           </TimeField>
         </div>
         <div className="flex flex-col space-y-2"></div>
-        <Button fullWidth type="submit" className="" isPending={loadingEdit}>
-          {loadingEdit ? (
+        <Button fullWidth type="submit" className="" isPending={loadingEditBranch}>
+          {loadingEditBranch ? (
             <>
               <Spinner size="sm" />
               {t("editBranch.submitButtonPending")}

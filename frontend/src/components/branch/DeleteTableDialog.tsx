@@ -3,14 +3,17 @@ import { useTranslation } from "react-i18next";
 interface DeleteTableDialogProps {
   onDelete: () => void;
   loading?: boolean;
+  disabled?: boolean;
   state: ReturnType<typeof useOverlayState>;
 }
 
-const DeleteTableDialog = ({ onDelete, loading, state }: DeleteTableDialogProps) => {
+const DeleteTableDialog = ({ onDelete, loading, disabled, state }: DeleteTableDialogProps) => {
   const { t } = useTranslation(["branch"]);
   return (
     <AlertDialog isOpen={state.isOpen} onOpenChange={state.setOpen}>
-      <Button fullWidth variant="danger-soft">Delete Table</Button>
+      <Button  fullWidth variant="danger-soft" isDisabled={disabled}>
+        Delete Table
+      </Button>
       <AlertDialog.Backdrop>
         <AlertDialog.Container>
           <AlertDialog.Dialog className="sm:max-w-[400px]">
@@ -30,7 +33,7 @@ const DeleteTableDialog = ({ onDelete, loading, state }: DeleteTableDialogProps)
               <Button slot="close" variant="tertiary">
                 {t("branchDetail.deleteTable.cancelButton")}
               </Button>
-              <Button isPending={loading} onClick={onDelete} variant="danger">
+              <Button isPending={loading} onClick={onDelete} variant="danger" isDisabled={disabled}>
                 {loading ? t("branchDetail.deleteTable.processing") : t("branchDetail.deleteTable.confirmButton")}
               </Button>
             </AlertDialog.Footer>
