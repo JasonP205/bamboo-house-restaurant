@@ -14,6 +14,7 @@ import { protectedRouteStaff } from "./middleware/authMiddleware.js";
 import { deviceIDMiddleware } from "./middleware/deviceIDMiddleware.js";
 import { v2 as cloudinary } from "cloudinary";
 import passport from "./lib/passportConfig.js";
+import menuRoute from "./routes/menuRoute.js";
 
 const start = process.hrtime.bigint();
 
@@ -39,6 +40,7 @@ cloudinary.config({
 app.use("/api/test", testRoute);
 app.use("/api/auth", authRoute);
 app.use(deviceIDMiddleware);
+app.use("/api/menu", menuRoute);
 app.use("/api/customers", customerRoute);
 app.use("/api/branches", branchRoute);
 app.use("/api/staff", protectedRouteStaff, staffRoute);

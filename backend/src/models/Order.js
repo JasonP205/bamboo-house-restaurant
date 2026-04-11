@@ -8,6 +8,12 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    orderCode:{
+      type: String,
+      required: true,
+      maxLength: 10,
+    },
+
     table: { type: mongoose.Schema.Types.ObjectId, ref: "Table" },
 
     branch: {

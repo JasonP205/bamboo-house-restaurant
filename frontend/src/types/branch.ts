@@ -42,20 +42,6 @@ export interface BranchCreateData {
   floorSpace: number;
   image?: File;
 }
-export interface Dish {
-  _id: string;
-  name: {
-    en: string;
-    vi: string;
-  };
-  description?: string;
-  category: "appetizers" | "main" | "desserts" | "beverages";
-  price: number;
-  isAvailable?: boolean;
-  imageUrl?:string;
-  createdAt?: string;
-  updatedAt?: string;
-}
 
 export interface branchState {
   loading: boolean,
@@ -80,10 +66,4 @@ export interface branchState {
   getBranchInfo: (id: string) => Promise<void>;
   editBranch: (data: BranchCreateData) => Promise<void>;
 
-  // Dish
-  dishesInBranch: Dish[];
-  loadingCreateDish: boolean;
-  loadingFetchDishes: boolean;
-  addDish: (dish: DishFormData) => Promise<void>;
-  fetchDishesInBranch: () => Promise<void>;
 }

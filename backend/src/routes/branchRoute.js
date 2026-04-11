@@ -11,11 +11,11 @@ import {
   updateStatus
 } from "../controller/branchController.js";
 import {
-  managerMiddleware,
   protectedRouteStaff,
 } from "../middleware/authMiddleware.js";
 import { uploadImage } from "../middleware/fileMiddleware.js";
-import dishRoute from "./dishRoute.js";
+
+
 const router = express.Router();
 
 router.get("/", fetchBranchs);
@@ -39,9 +39,6 @@ router.delete("/:branchId/tables", protectedRouteStaff, deleteTable);
 // Branch only 
 
 // Branch Table only
-
-// Branch Dish only
-router.use("/:branchId/dishes", protectedRouteStaff, dishRoute);
 
 // Branch Staff only
 

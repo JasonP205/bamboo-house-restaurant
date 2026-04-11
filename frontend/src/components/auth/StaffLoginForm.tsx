@@ -45,7 +45,6 @@ const StaffLoginForm = () => {
     try {
       await staffLogin(data);
       reset();
-      navigate("/app");
       toast.success(t("auth:toast.staff.login.success.title"), {
         description: t("auth:toast.staff.login.success.message"),
         timeout: 5000,
@@ -58,7 +57,7 @@ const StaffLoginForm = () => {
     }
   };
 
-  const { staffLogin, loading } = useAuthStore();
+  const { staffLogin, loading, role } = useAuthStore();
   useEffect(() => {
     const handleEnterKey = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
@@ -70,6 +69,11 @@ const StaffLoginForm = () => {
       window.removeEventListener("keydown", handleEnterKey);
     };
   }, []);
+  useEffect(() => {
+    if (role === "manager") {
+      navigate("/app/branches");
+    }
+  }, [role, navigate]);
 
   return (
     <div className="min-h-68">

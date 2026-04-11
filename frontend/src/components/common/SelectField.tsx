@@ -1,11 +1,12 @@
-import { Description, Header, Label, Select, ListBox, FieldError } from "@heroui/react";
+import { Description, Label, Select, ListBox, FieldError, type Key } from "@heroui/react";
 import { cn } from "@/lib/utils";
 interface SelectFieldProps {
   selectOptions: { value: string; label: string; description?: string }[];
   label: string;
   description?: string;
   placeholder?: string;
-  onSelect: (value: string) => void;
+  onSelect?: (value: string) => void;
+  onChange?:(value: Key | Key[] | null) => void;
   fullWidth?: boolean;
   defaultValue?: string;
   classNames?: {
@@ -14,6 +15,7 @@ interface SelectFieldProps {
   };
   isInvalid?: boolean;
   errorMessage?: string;
+  mode?: "single" | "multiple";
 }
 const SelectField = ({
   selectOptions,
@@ -23,12 +25,14 @@ const SelectField = ({
   placeholder,
   fullWidth = false,
   onSelect,
+  onChange,
   defaultValue,
   isInvalid,
   errorMessage,
+  mode = "single",
 }: SelectFieldProps) => {
   return (
-    <Select isInvalid={isInvalid} fullWidth={fullWidth} defaultValue={defaultValue} placeholder={placeholder}>
+    <Select aria-label="select" isInvalid={isInvalid} onChange={onChange} fullWidth={fullWidth} defaultValue={defaultValue} placeholder={placeholder} selectionMode={mode}>
       <Label className={cn(classNames?.label)}>{label}</Label>
       <Select.Trigger>
         <Select.Value />
@@ -36,14 +40,16 @@ const SelectField = ({
       </Select.Trigger>
       {description && <Description className={cn(classNames?.description)}>{description}</Description>}
       <Select.Popover>
-        <ListBox>
+        <ListBox selectionMode={mode}>
           {selectOptions.map((option) => (
             <ListBox.Item
+              aria-label={option.label}
               key={option.value}
-              onClick={() => onSelect(option.value)}
+              id={option.value}
+              onClick={() => onSelect?.(option.value)}
               textValue={option.value}
             >
-              <Label>{option.label}</Label>
+              <Label className="capitalize">{option.label}</Label>
               {option.description && (
                 <Description>{option.description}</Description>
               )}

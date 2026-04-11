@@ -1,7 +1,7 @@
 import api from "../lib/axios";
 import type {DishFormData} from "@/components/dishes/CreateDishForm";
 export const dishService = {
-    createDish: async (id:string, data: DishFormData) => {
+    createDish: async (data: DishFormData) => {
         const formData = new FormData();
         formData.append("name", JSON.stringify(data.name));
         formData.append("description", data.description);
@@ -13,11 +13,23 @@ export const dishService = {
         if (data.dietary) {
             formData.append("dietary", JSON.stringify(data.dietary));
         }
-        const response = await api.post(`/branches/${id}/dishes`, formData, {
+        const response = await api.post(`/menu`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         });
         return response.data.dish;
+    },
+    toggleDishStatus: async (dishId:string) => {
+        const res = await api.patch(`/menu/${dishId}/status`);
+        return res.data.result;
+    },
+    fetchMenu: async () => {
+        const res = await api.get("/menu");
+        return res.data.menu;
+    },
+    fetchSelectedDish: async (dishId:string) => {
+        const res = await api.get(`/menu/${dishId}`);
+        return res.data.dish;
     }
 };

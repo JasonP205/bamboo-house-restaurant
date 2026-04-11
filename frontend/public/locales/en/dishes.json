@@ -5,6 +5,7 @@
       "empty": "No dishes have been created for this branch yet."
     },
     "ctaButton": "Create First Dish for This Branch",
+    "createAnotherButton": "Create Another Dish",
     "form": {
       "label": {
         "name": {
@@ -12,13 +13,15 @@
           "en": "English Name"
         },
         "description": "Description",
+        "descriptionHelper": "You can write description in English or Vietnamese. The system will translated it to the other language automatically.",
         "image": "Food Photography",
         "category": "Category",
+        "branch": "Available at Branches",
         "categoryValues": {
-            "appetizer": "Appetizer",
-            "main": "Main Course",
-            "dessert": "Dessert",
-            "beverage": "Beverage"
+          "appetizer": "Appetizer",
+          "main": "Main Course",
+          "merchandise": "Merchandise",
+          "beverage": "Beverage"
         },
         "price": "Price",
         "dietary": "Dietary Highlights",
@@ -37,25 +40,53 @@
         "description": "Enter dish description",
         "image": "Upload dish image",
         "category": "Select a category",
+        "branch": "Select branches",
         "price": "Enter price"
       },
       "submitButton": "Add Dish",
       "submitButtonLoading": "Adding...",
       "cancelButton": "Cancel",
       "tip": {
-        "title":"Cura Tip",
-        "content":"Use warm natural light with soft shadows for a premium Bamboo House look. Choose 3:4 images with the dish centered."
+        "title": "Cura Tip",
+        "content": "Use warm natural light with soft shadows for a premium Bamboo House look. Choose 3:4 images with the dish centered."
       },
       "validation": {
         "name": {
           "en": "English name is required.",
           "vi": "Vietnamese name is required."
         },
+        "branch": "Please select at least one branch where the dish is available.",
         "price": "A dish cannot be free. Please enter a price.",
         "category": "Please select a category for the dish.",
         "description": "Please describe the dish to entice customers.",
         "image": "Please upload an image of the dish."
       }
     }
+  },
+  "toast": {
+    "createDishSuccess": "Dish added successfully!",
+    "createDishError": "Failed to add dish.",
+    "toggleStatusError": "Failed to change dish status."
+  },
+  "dish": {
+    "available": "In Stock",
+    "unavailable": "Sold Out",
+    "category": {
+      "all": "All",
+      "appetizer": "Appetizer",
+      "main": "Main Course",
+      "merchandise": "Merchandise",
+      "beverage": "Beverage"
+    },
+    "dietary": {
+      "all": "All",
+      "vegan": "Vegan",
+      "glutenFree": "Gluten-Free",
+      "nutFree": "Nut-Free"
+    }
+  },
+  "search": {
+    "placeholder": "Search dishes by name...",
+    "noResults": "Cannot find \"{{searchTerm}}\". Try searching with a different name or check your spelling."
   }
 }

@@ -8,6 +8,7 @@ import {
   TextField,
   FieldError,
   Description,
+  Spinner,
 } from "@heroui/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import SelectField from "../common/SelectField";
@@ -15,11 +16,13 @@ import { SparklesIcon } from "@hugeicons/core-free-icons";
 import { useTranslation } from "react-i18next";
 import ImageInput from "../common/ImageInput";
 import NumberInput from "../common/NumberInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useBranchStore } from "@/stores/useBranchStore";
 
 interface CreateDishFormProps {
-  onSubmit: (data: DishFormData) => void;
-  onCancel?: () => void;
+  onSubmit?: (data: DishFormData) => void;
+  onClose?: () => void;
+  loading: boolean;
 }
 
 const dishSchema = z.object({
@@ -35,14 +38,17 @@ const dishSchema = z.object({
     .refine(
       (file) => file.size <= 5 * 1024 * 1024,
       "Image must be less than 5MB",
-    )
-    .optional(),
+    ),
   dietary: z.array(z.string()).optional(),
 });
 
 export type DishFormData = z.infer<typeof dishSchema>;
 
-const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
+const CreateDishForm = ({
+  onSubmit,
+  onClose,
+  loading,
+}: CreateDishFormProps) => {
   const { t } = useTranslation(["dishes"]);
   const {
     register,
@@ -66,10 +72,13 @@ const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
   const handleDietaryChange = (values: string[]) => {
     setSelectedDietary(values);
-    setValue("dietary", values);
+    setValue("dietary", values, { shouldValidate: true, shouldDirty: true });
   };
   const onSubmitHandler = (data: DishFormData) => {
-    onSubmit(data);
+    if (errors) {
+      console.log("Validation errors:", errors);
+    }
+    onSubmit?.(data);
   };
   return (
     <div className="p-2 w-full">
@@ -81,9 +90,16 @@ const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
           <ImageInput
             label={t("createDish.form.label.image")}
             placeholder={t("createDish.form.placeholder.image")}
-            onChange={(file) => setValue("image", file)}
+            onChange={(file) =>
+              setValue("image", file, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
             className="max-w-xs"
-            ratio="portrait"
+            isInvalid={!!errors.image}
+            errorMessage={t("createDish.form.validation.image")}
+            ratio="square"
             classNames={{
               label: "uppercase text-text tracking-wider",
             }}
@@ -149,6 +165,7 @@ const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
               <InputGroup.TextArea
                 id="description"
                 className={`resize-none`}
+                maxLength={500}
                 rows={6}
                 placeholder={t("createDish.form.placeholder.description")}
                 {...register("description")}
@@ -157,18 +174,29 @@ const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
             <FieldError>
               {t("createDish.form.validation.description")}
             </FieldError>
+            <Description className="text-muted text-xs text-balance">
+              {t("createDish.form.label.descriptionHelper")}
+            </Description>
           </TextField>
           <div className="flex flex-col md:flex-row gap-4 w-full">
             <NumberInput
               label={t("createDish.form.label.price")}
-              onChange={(value) => setValue("price", value)}
-              step={10}
+              onChange={(value) =>
+                setValue("price", value, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
               value={0}
               min={0}
               fullWidth
               isInvalid={!!errors.price}
               errorMessage={t("createDish.form.validation.price")}
-              formatOptions={{ style: "currency", currency: "USD" }}
+              formatOptions={{
+                style: "currency",
+                currency: "USD",
+                currencySign: "accounting",
+              }}
               classNames={{
                 label: "uppercase text-text tracking-wider",
               }}
@@ -189,15 +217,20 @@ const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
                   label: t("createDish.form.label.categoryValues.main"),
                 },
                 {
-                  value: "dessert",
-                  label: t("createDish.form.label.categoryValues.dessert"),
-                },
-                {
                   value: "beverage",
                   label: t("createDish.form.label.categoryValues.beverage"),
                 },
+                {
+                  value: "merchandise",
+                  label: t("createDish.form.label.categoryValues.merchandise"),
+                }
               ]}
-              onSelect={(value) => setValue("category", value)}
+              onSelect={(value) =>
+                setValue("category", value, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
               classNames={{
                 label: "uppercase text-text tracking-wider",
               }}
@@ -230,10 +263,19 @@ const CreateDishForm = ({ onSubmit, onCancel }: CreateDishFormProps) => {
           </div>
         </div>
         <div className="w-full flex justify-end gap-2 col-span-3">
-          <Button variant="outline" onClick={onCancel}>
+          <Button isDisabled={loading} variant="outline" onClick={onClose}>
             {t("createDish.form.cancelButton")}
           </Button>
-          <Button type="submit">{t("createDish.form.submitButton")}</Button>
+          <Button type="submit" isPending={loading}>
+            {loading ? (
+              <>
+                <Spinner size="sm" className="text-current" />{" "}
+                {t("createDish.form.submitButtonLoading")}
+              </>
+            ) : (
+              t("createDish.form.submitButton")
+            )}
+          </Button>
         </div>
       </form>
     </div>

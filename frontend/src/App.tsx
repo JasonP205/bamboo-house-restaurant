@@ -12,8 +12,14 @@ import Layout from "./components/ui/Layout";
 import ManagerPanel from "./pages/auth/ManagerPanel";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BranchDetail from "./pages/branches/BranchDetail";
-import { useAuthStore } from "@/stores/useAuthStore"
+import { useAuthStore } from "@/stores/useAuthStore";
 import GoogleCallback from "./pages/auth/GoogleCallback";
+import DishDetail from "./pages/dishes/DishDetail";
+import MenuPage from "./pages/dishes/MenuPage";
+import SelectBranch from "./pages/orders/SelectBranch";
+import PlaceOrder from "./pages/orders/PlaceOrder";
+import PlaceOrderInTable from "./pages/orders/PlaceOrderInTable";
+import CustomerLayOut from "./components/ui/CustomerLayOut";
 
 function App() {
   const { getDeviceId, deviceId } = useAuthStore();
@@ -37,11 +43,17 @@ function App() {
                   <Route index element={<BranchesPage />} />
                   <Route path=":branchId" element={<BranchDetail />} />
                 </Route>
-
-                <Route path="orders" element={<Outlet />} >
-                  <Route path="place-order" element={<h1>Place Order</h1>} />
+                <Route path="menu" element={<Layout />}>
+                  <Route index element={<MenuPage />} />
+                  <Route path=":dishId" element={<DishDetail />} />
                 </Route>
-
+              </Route>
+            </Route>
+            <Route path="orders" element={<CustomerLayOut />}>
+              <Route index element={<SelectBranch />} />
+              <Route path=":branchId" element={<Outlet />}>
+                <Route index element={<PlaceOrder />} />
+                <Route path=":tableId" element={<PlaceOrderInTable />} />
               </Route>
             </Route>
 

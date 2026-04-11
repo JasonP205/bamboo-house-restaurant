@@ -8,7 +8,6 @@ import Metadata from "@/components/Metadata";
 import { Store01Icon } from "@hugeicons/core-free-icons";
 import BranchOverViewTab from "@/components/branch/BranchOverViewTab";
 import BranchTableTab from "@/components/branch/BranchTableTab";
-import DishesTab from "@/components/branch/DishesTab";
 import BranchDetailSkeleton from "@/components/branch/BranchDetailSkeleton";
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -93,10 +92,6 @@ const BranchDetail = () => {
                   {t("branchDetail.tab.overview")}
                   <Tabs.Indicator />
                 </Tabs.Tab>
-                <Tabs.Tab id="menu">
-                  {t("branchDetail.tab.menu")}
-                  <Tabs.Indicator />
-                </Tabs.Tab>
                 <Tabs.Tab id="tables">
                   {t("branchDetail.tab.tables")}
                   <Tabs.Indicator />
@@ -118,9 +113,9 @@ const BranchDetail = () => {
             <Tabs.Panel className="pt-4" id="overview">
               <BranchOverViewTab branch={branch} />
             </Tabs.Panel>
-            <Tabs.Panel className="pt-4" id="menu">
+            {/* <Tabs.Panel className="pt-4" id="menu">
               <DishesTab />
-            </Tabs.Panel>
+            </Tabs.Panel> */}
             <Tabs.Panel className="pt-4" id="tables">
               <BranchTableTab branchId={branch._id} />
             </Tabs.Panel>

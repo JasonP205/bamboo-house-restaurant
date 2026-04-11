@@ -7,11 +7,16 @@ interface DeleteTableDialogProps {
   state: ReturnType<typeof useOverlayState>;
 }
 
-const DeleteTableDialog = ({ onDelete, loading, disabled, state }: DeleteTableDialogProps) => {
+const DeleteTableDialog = ({
+  onDelete,
+  loading,
+  disabled,
+  state,
+}: DeleteTableDialogProps) => {
   const { t } = useTranslation(["branch"]);
   return (
     <AlertDialog isOpen={state.isOpen} onOpenChange={state.setOpen}>
-      <Button  fullWidth variant="danger-soft" isDisabled={disabled}>
+      <Button fullWidth variant="danger-soft" isDisabled={disabled}>
         Delete Table
       </Button>
       <AlertDialog.Backdrop>
@@ -25,16 +30,26 @@ const DeleteTableDialog = ({ onDelete, loading, disabled, state }: DeleteTableDi
               </AlertDialog.Heading>
             </AlertDialog.Header>
             <AlertDialog.Body>
-              <p>
-                {t("branchDetail.deleteTable.description")}
-              </p>
+              <p>{t("branchDetail.deleteTable.description")}</p>
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button slot="close" variant="tertiary">
                 {t("branchDetail.deleteTable.cancelButton")}
               </Button>
-              <Button isPending={loading} onClick={onDelete} variant="danger" isDisabled={disabled}>
-                {loading ? t("branchDetail.deleteTable.processing") : t("branchDetail.deleteTable.confirmButton")}
+              <Button
+                isPending={loading}
+                onClick={onDelete}
+                variant="danger"
+                isDisabled={disabled}
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" className="text-current" />{" "}
+                    {t("branchDetail.deleteTable.processing")}
+                  </>
+                ) : (
+                  t("branchDetail.deleteTable.confirmButton")
+                )}
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>

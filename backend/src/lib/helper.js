@@ -1,5 +1,5 @@
-import {francAll} from "franc";
-import * as deepl from 'deepl-node';
+import { francAll } from "franc";
+import * as deepl from "deepl-node";
 const getPointPerCurrency = (tiers) => {
   switch (tiers) {
     case "Sprout":
@@ -24,26 +24,31 @@ const calculateTier = (points) => {
   return "Legend";
 };
 
-const langDetector = (text)=> {
-  const res = francAll(text, { only: ["eng", "vie"] });
-  const [topLang] = res[0] || [];
-  if (topLang === "eng") return "EN";
-  if (topLang === "vie") return "VI";
-  return "EN"; 
+const langDetector = (text) => {
+  try {
+    const res = francAll(text, { only: ["eng", "vie"] });
+    const [topLang] = res[0] || [];
+    if (topLang === "eng") return "EN";
+    if (topLang === "vie") return "VI";
+    return "EN";
+  } catch (error) {
+    console.error("Error detecting language:", error);
+    throw error;
+  }
 };
 const deeplClient = new deepl.DeepLClient(process.env.DEEPL_API_KEY);
 const tralateText = async (text, currentLang) => {
-  let result
+  let result;
   if (currentLang === "EN") {
-     result = await deeplClient.translateText(text, 'EN', 'VI');
+    result = await deeplClient.translateText(text, "en", "VI");
   } else {
-     result = await deeplClient.translateText(text, 'VI', 'EN');
+    result = await deeplClient.translateText(text, "vi", "en-US");
   }
   return result.text;
-}
+};
 export default {
-    getPointPerCurrency,
-    calculateTier,
-    langDetector,
-    tralateText
-}
+  getPointPerCurrency,
+  calculateTier,
+  langDetector,
+  tralateText,
+};

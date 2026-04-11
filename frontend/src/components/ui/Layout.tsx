@@ -12,12 +12,12 @@ import {
   Store01Icon,
   UserGroupIcon,
   ServingFoodIcon,
-  Menu01Icon,
+  SpoonAndKnifeIcon,
   AdvertisimentIcon,
   User03Icon,
   ArrowDown01Icon,
 } from "@hugeicons/core-free-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type NavItem = {
   name: string;
@@ -34,6 +34,7 @@ const Layout = () => {
 
   const [collapsed, _setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activePage, setActivePage] = useState<string>("");
 
   const staffNavItems: NavItem[] = [
     {
@@ -59,6 +60,11 @@ const Layout = () => {
       icon: <HugeiconsIcon icon={Store01Icon} size={20} />,
     },
     {
+      name: t("staffNavItems.menu"),
+      path: "/app/menu",
+      icon: <HugeiconsIcon icon={SpoonAndKnifeIcon} size={20} />,
+    },
+    {
       name: t("staffNavItems.advertise"),
       path: "/app/advertise",
       icon: <HugeiconsIcon icon={AdvertisimentIcon} size={20} />,
@@ -70,6 +76,15 @@ const Layout = () => {
     await logout();
     navigate("/auth/login");
   };
+
+  useEffect(() => {
+    const currentItem = navItems.find((item) =>
+      location.pathname.includes(item.path),
+    );
+    if (currentItem) {
+      setActivePage(currentItem.name);
+    }
+  }, [location.pathname]);
 
   /* ───────────────────────── MOBILE ───────────────────────── */
   if (isMobile) {
@@ -86,7 +101,7 @@ const Layout = () => {
             variant="ghost"
             onPress={() => setMobileOpen(true)}
           >
-            <HugeiconsIcon icon={Menu01Icon} />
+            <HugeiconsIcon icon={SpoonAndKnifeIcon} />
           </Button>
         </header>
 
@@ -195,7 +210,6 @@ const Layout = () => {
         <nav className="flex-1 px-4 space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname.includes(item.path);
-
             return (
               <Link
                 key={item.path}
@@ -235,27 +249,33 @@ const Layout = () => {
           collapsed ? "md:left-20" : "md:left-64",
         )}
       >
-        <h2 className="text-2xl font-serif italic">Dashboard</h2>
+        <h2 className="text-2xl font-serif italic capitalize">{activePage}</h2>
 
         <div className="flex items-center gap-3">
           <ToggleTheme />
           <ToggleLang />
           <Separator orientation="vertical" />
-          <div className="flex items-center gap-2">
-            <div>
-              <Avatar size="sm" variant="soft">
-                <Avatar.Image alt={user?.displayName} src={user?.avatarUrl} />
-                <Avatar.Fallback color="accent">
-                  <HugeiconsIcon icon={User03Icon} />
-                </Avatar.Fallback>
-              </Avatar>
+          {user && (
+            <div className="flex items-center gap-2">
+              <div>
+                <Avatar size="sm" variant="soft">
+                  <Avatar.Image alt={user?.displayName} src={user?.avatarUrl} />
+                  <Avatar.Fallback className="text-text" color="accent">
+                    <HugeiconsIcon icon={User03Icon} />
+                  </Avatar.Fallback>
+                </Avatar>
+              </div>
+              <div>
+                <p className="text-sm font-serif font-medium">
+                  {user?.displayName}
+                </p>
+                <p className="text-[10px] font-light">
+                  {user.role !== "customer" ? user.staffId : null}
+                </p>
+              </div>
+              <HugeiconsIcon icon={ArrowDown01Icon} size={15} />
             </div>
-            <div>
-              <p className="text-sm font-serif font-medium">{user?.displayName}</p>
-              <p className="text-[10px] font-light">{user && user.role !== "customer" ? user.staffId : null}</p>
-            </div>
-            <HugeiconsIcon icon={ArrowDown01Icon} size={15} />
-          </div>
+          )}
         </div>
       </header>
 

@@ -5,7 +5,7 @@ import { Image02Icon } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
-  label: string;
+  label?: string;
   placeholder: string;
   isInvalid?: boolean;
   errorMessage?: string;
@@ -71,7 +71,7 @@ export default function ImageUpload({
 
   return (
     <div className={cn("flex flex-col space-y-2", className)}>
-      <Label className={cn(classNames?.label)}>{label}</Label>
+      {label && <Label className={cn(classNames?.label, isInvalid && "text-danger")}>{label}</Label>}
 
       <div
         onClick={handleClick}
@@ -97,9 +97,17 @@ export default function ImageUpload({
             <img
               src={previewUrl}
               alt="preview"
-              className={cn("w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500", classNames?.preview)}
+              className={cn(
+                "w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500",
+                classNames?.preview,
+              )}
             />
-            <div className={cn("absolute z-40 inset-0 w-full h-full flex items-center flex-col justify-center rounded-lg bg-black/30 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-smooth duration-300", classNames?.overlay)}>
+            <div
+              className={cn(
+                "absolute z-40 inset-0 w-full h-full flex items-center flex-col justify-center rounded-lg bg-black/30 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-smooth duration-300",
+                classNames?.overlay,
+              )}
+            >
               <HugeiconsIcon
                 size={32}
                 icon={Image02Icon}
@@ -109,7 +117,7 @@ export default function ImageUpload({
             </div>
           </>
         ) : (
-          <div className="flex relative group-hover:brightness-75 transition-smooth duration-300 w-full h-full justify-center rounded-xl flex-col border-3 border-dashed items-center gap-2 text-muted">
+          <div className={cn("flex relative group-hover:brightness-75 transition-smooth duration-300 w-full h-full justify-center rounded-xl flex-col border-3 border-dashed items-center gap-2 text-muted", isInvalid ? "border-danger text-danger" : "border-muted", classNames?.preview)}>
             <HugeiconsIcon size={40} icon={Image02Icon} />
             <p>{placeholder}</p>
             <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden rounded-xl">
@@ -123,9 +131,7 @@ export default function ImageUpload({
           </div>
         )}
       </div>
-      {isInvalid && errorMessage && (
-        <FieldError>{errorMessage}</FieldError>
-      )}
+      {isInvalid && errorMessage && <FieldError>{errorMessage}</FieldError>}
     </div>
   );
 }

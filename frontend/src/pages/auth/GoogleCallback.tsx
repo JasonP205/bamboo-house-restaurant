@@ -24,7 +24,7 @@ const GoogleCallback = () => {
       handleGoogleCallback();
   }, [fetchMe]);
 
-  if (loading) {
+  if (true) {
     return (
       <div className="relative w-full h-screen flex flex-col items-center justify-center gap-6 overflow-hidden">
         {/* Background */}

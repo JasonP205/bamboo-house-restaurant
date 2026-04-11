@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { branchService } from "@/services/branchService";
+import { dishService } from "@/services/menuService";
 import type { branchState } from "@/types/branch";
 import { isAxiosError } from "axios";
 import type { DishFormData } from "@/components/dishes/CreateDishForm";
@@ -19,7 +20,6 @@ export const useBranchStore = create<branchState>((set, get) => ({
     try {
       set({ loading: true });
       const branches = await branchService.getBranches();
-      console.log("Fetched branches:", branches);
       set({ branches });
     } catch (error) {
       if (isAxiosError(error)) {
@@ -227,11 +227,4 @@ export const useBranchStore = create<branchState>((set, get) => ({
   },
 
   // Dish
-  dishesInBranch: [],
-  loadingCreateDish: false,
-  loadingFetchDishes: false,
-  addDish: async (dish: DishFormData) => {
-    
-  },
-  fetchDishesInBranch: async () => {},
 }));
