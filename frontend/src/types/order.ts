@@ -3,7 +3,7 @@ import type { Dish } from "./menu";
 export interface Order {
   _id: string;
   orderCode: string;
-  table?:number
+  table?: number;
   branch?: string;
   servedBy?: string;
   timeIn?: string;
@@ -45,7 +45,7 @@ export interface OrderState {
   orderOfBranch: Order[] | null;
   currentBranchId: string | null;
   loadingOrderSubmit: boolean;
-  currentTableId: string | null;  
+  currentTableId: string | null;
   setCurrentTableId: (tableId: string | null) => void;
   getAllOrdersOfBranch: () => Promise<void>;
   setCurrentBranchId: (branchId: string | null) => void;
@@ -56,4 +56,5 @@ export interface OrderState {
   sendOrder: (branchId: string, tableId: string) => Promise<void>;
   revokeOrder: (orderId: string) => Promise<void>;
   updateOrderStatus: (orderId: string) => Promise<void>;
+  updateOrderItem: (branchId: string, tableId: string) => Promise<void>;
 }

@@ -82,12 +82,15 @@ const PlaceOrder = () => {
   if (!branch) {
     return <div>Branch not found</div>;
   }
-
+  const vat_percentage = parseFloat(import.meta.env.VITE_VAT_PERCENTAGE || "0");
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-  const totalPrice = cart.reduce(
+  const subtotalPrice = cart.reduce(
     (total, item) => total + item.quantity * item.price,
-    0,
+    0
   );
+  const vat_amount = subtotalPrice * vat_percentage;
+  const totalPrice = subtotalPrice + vat_amount;
+
 
   return (
     <div className="p-2 relative flex flex-col gap-4 h-full">
@@ -154,8 +157,8 @@ const PlaceOrder = () => {
         <div className="bg-surface/20 shink-0 w-12 aspect-square flex items-center justify-center rounded-full text-white text-2xl font-bold">
           <HugeiconsIcon strokeWidth={2} size={26} icon={ShoppingCart02Icon} />
         </div>
-        <div>
-          <p className="text-white font-serif font-medium">Current Order</p>
+        <div className="flex flex-col leading-tight items-start">
+          <p className="text-white font-serif font-medium">{t("order.currentOrder")}</p>
           <p className="text-white font-semibold text-sm">
             {totalItems} items - ${totalPrice.toFixed(2)}
           </p>

@@ -149,6 +149,36 @@ export const useOrderStore = create<OrderState>((set, get) => ({
           order: state.order?._id === orderId ? newOrder : state.order,
         }));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  },
+  updateOrderItem: async (branchId: string, tableId: string) => {
+    try {
+      set({ loadingOrderSubmit: true });
+      const { order } = get();
+      if (!order) {
+        console.warn("No order selected for updating items");
+        set({ loadingOrderSubmit: false });
+        return;
+      }
+      const orderId = order._id;
+      const { cart } = get();
+      const orderData = {
+        branchId,
+        tableId,
+        dishes: cart.map((item) => ({
+          dish: item.dish._id,
+          quantity: item.quantity,
+          note: item.note,
+        })),
+      };
+      await orderService.addDishToOrder(orderId, orderData);
+      set({ loadingOrderSubmit: false });
+    } catch (error) {
+      console.error("Error updating order items:", error);
+    } finally {
+      set({ loadingOrderSubmit: false });
+    }
   },
 }));

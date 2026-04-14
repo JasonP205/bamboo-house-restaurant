@@ -164,11 +164,11 @@ export const revokeOrder = async (req, res) => {
 export const addOrderItem = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { newOrderItemList } = req.body;
+    const { orderData } = req.body;
 
     const order = await Order.findById(orderId);
 
-    const dishIds = newOrderItemList.map((i) => i.dish._id);
+    const dishIds = orderData.dishes.map((i) => i.dish);
 
     const dishes = await Dish.find({
       _id: { $in: dishIds },
@@ -180,14 +180,14 @@ export const addOrderItem = async (req, res) => {
       dishMap.set(d._id.toString(), d.price);
     });
 
-    const newItems = newOrderItemList.map((item) => {
-      const price = dishMap.get(item.dish._id);
+    const newItems = orderData.dishes.map((item) => {
+      const price = dishMap.get(item.dish);
 
       return {
-        dishId: item.dish._id,
+        dishId: item.dish,
         price,
         quantity: item.quantity,
-        notes: item.notes || "",
+        notes: item.note || "",
       };
     });
 
@@ -208,59 +208,6 @@ export const addOrderItem = async (req, res) => {
       success: false,
       message: error.message,
     });
-  }
-};
-
-export const updateOrderItemStatus = async (req, res) => {
-  try {
-    const { orderId } = req?.params;
-    const { listItemStatus } = req?.body;
-
-    // listItemStatus = [
-    //     {
-    //         itemId: "64a1f2e5c9e7b2a1b2c3d4e",
-    //         status: "In Progress"
-    //     },
-    //     {
-    //         itemId: "64a1f2e5c9e7b2a1b2c3d4f",
-    //         status: "Served"
-    //     }
-    // ]
-
-    if (!orderId || !listItemStatus || listItemStatus.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing orderId or listItemStatus" });
-    }
-
-    const order = await Order.findById(orderId);
-
-    if (!order) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
-    }
-
-    // tạo map itemId -> status
-    const statusMap = new Map();
-
-    listItemStatus.forEach((item) => {
-      statusMap.set(item.itemId, item.status);
-    });
-
-    // cập nhật status cho từng item
-    order.items.forEach((item) => {
-      const newStatus = statusMap.get(item._id.toString());
-      if (newStatus) {
-        item.status = newStatus;
-      }
-    });
-
-    await order.save();
-
-    res.status(200).json({ success: true, order });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
   }
 };
 

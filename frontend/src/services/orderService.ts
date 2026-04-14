@@ -41,7 +41,7 @@ export const orderService = {
     } catch (error) {
       console.error("Error fetching orders of branch:", error);
       throw error;
-    } 
+    }
   },
   revokeOrder: async (orderId: string) => {
     try {
@@ -57,6 +57,26 @@ export const orderService = {
       return res.data.order;
     } catch (error) {
       console.error("Error updating order status:", error);
+      throw error;
+    }
+  },
+  addDishToOrder: async (
+    orderId: string,
+    orderData: {
+      branchId: string;
+      tableId: string;
+      dishes: {
+        dish: string;
+        quantity: number;
+        note?: string;
+      }[];
+    },
+  ) => {
+    try {
+      const response = await api.patch(`/orders/${orderId}`, orderData);
+      return response.data.order;
+    } catch (error) {
+      console.error("Error adding dish to order:", error);
       throw error;
     }
   },

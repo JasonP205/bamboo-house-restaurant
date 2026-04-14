@@ -8,6 +8,6 @@ router.delete('/:orderId', controller.revokeOrder);
 router.get('/branch/:branchId', controller.getAllOrdersOfBranch);
 router.post('/', controller.createOrder);
 router.patch('/:orderId/items', controller.addOrderItem);
-router.patch('/:orderId/status', controller.updateOrderStatus);
+router.patch('/:orderId', controller.updateOrderStatus);
 
 export default router;

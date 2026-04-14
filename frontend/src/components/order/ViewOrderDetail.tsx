@@ -19,9 +19,15 @@ const ViewOrderDetail = ({
 }: ViewOrderDetailProps) => {
   const { t } = useTranslation(["order"]);
   const { i18n } = useTranslation();
-  const { cart, sendOrder, loadingOrderSubmit, removeFromCart, order } =
-    useOrderStore();
-  
+  const {
+    cart,
+    sendOrder,
+    loadingOrderSubmit,
+    removeFromCart,
+    order,
+    updateOrderItem,
+  } = useOrderStore();
+
   const handleSendOrder = async () => {
     try {
       await sendOrder(branchId, tableId);
@@ -31,6 +37,15 @@ const ViewOrderDetail = ({
       const message =
         error instanceof Error ? error.message : t("order.sendFailed");
       toast(message, { variant: "danger" });
+    }
+  };
+  const handleUpdateOrderItem = async () => {
+    try {
+      await updateOrderItem(branchId, tableId);
+      toast.success(t("order.updateSuccess"));
+    } catch (error) {
+      console.error("Error updating order item:", error);
+      toast.danger(t("order.updateFailed"));
     }
   };
   const lang = i18n.language.split("-")[0] as "en" | "vi";
@@ -55,10 +70,15 @@ const ViewOrderDetail = ({
   }));
   const items = [...orderItems, ...cartItems];
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
-  const totalPrice = items.reduce(
+  const subtotalPrice = items.reduce(
     (total, item) => total + item.price * item.quantity,
     0,
   );
+  const vat_percentage = parseFloat(import.meta.env.VITE_VAT_PERCENTAGE || "0");
+  const vat_amount = subtotalPrice * vat_percentage;
+  const totalPrice = subtotalPrice + vat_amount;
+
+  console.log("Order items:", items);
   return (
     <Drawer>
       <Drawer.Trigger className={className}>{children}</Drawer.Trigger>
@@ -85,7 +105,11 @@ const ViewOrderDetail = ({
                         <p className="text-accent font-semibold font-serif">
                           {item.name} × {item.quantity}
                         </p>
-                        {item.note && <Description className="line-clamp-2 italic">{item.note}</Description>}
+                        {item.note && (
+                          <Description className="line-clamp-2 italic">
+                            {item.note}
+                          </Description>
+                        )}
                       </span>
                       <div className="flex items-center gap-2">
                         <span>${(item.price * item.quantity).toFixed(2)}</span>
@@ -105,26 +129,51 @@ const ViewOrderDetail = ({
                 </div>
               )}
             </Drawer.Body>
+            <Separator className="my-4" />
             <Drawer.Footer>
               <div className="w-full flex flex-col gap-4">
-                <Separator />
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">{t("order.total")}</span>
-                  <span className="text-lg font-bold">{totalItems}</span>
+                <div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium">{t("order.totalItems")}</span>
+                    <span className="text-sm font-semibold">{totalItems}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium">{t("order.subtotal")}</span>
+                    <span className="text-sm font-semibold">
+                      ${subtotalPrice.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium">{t("order.vat")}</span>
+                    <span className="text-xs italic">
+                      ${vat_amount.toFixed(2)} (
+                      {(vat_percentage * 100).toFixed(0)}%)
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium">{t("order.total")}</span>
+                    <span className="text-sm font-semibold">
+                      ${totalPrice.toFixed(2)}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">{t("order.total")}</span>
-                  <span className="text-lg font-bold">
-                    ${totalPrice.toFixed(2)}
-                  </span>
-                </div>
-                <Button
-                  isDisabled={cart.length === 0 || loadingOrderSubmit}
-                  className="w-full bg-accent text-white rounded-xl"
-                  onClick={handleSendOrder}
-                >
-                  {t("order.sendOrder")}
-                </Button>
+                {order ? (
+                  <Button
+                    onClick={handleUpdateOrderItem}
+                    isPending={loadingOrderSubmit}
+                    className="w-full"
+                  >
+                    {t("order.updateOrder")}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSendOrder}
+                    isPending={loadingOrderSubmit}
+                    className="w-full"
+                  >
+                    {t("order.sendOrder")}
+                  </Button>
+                )}
               </div>
             </Drawer.Footer>
           </Drawer.Dialog>

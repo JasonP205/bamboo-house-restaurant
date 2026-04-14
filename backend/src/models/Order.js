@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    orderCode:{
+    orderCode: {
       type: String,
       required: true,
       maxLength: 10,
@@ -47,6 +47,9 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+      },
+      {
+        _id: false,
       },
     ],
 
