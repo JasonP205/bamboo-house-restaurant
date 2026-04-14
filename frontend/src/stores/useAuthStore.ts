@@ -58,81 +58,6 @@ export const useAuthStore = create<AuthState>()(
           set({ loading: false });
         }
       },
-      customerLogin: async (data) => {
-        try {
-          get().clearSession();
-          set({ loading: true });
-          const accessToken = await authService.customerLogin(
-            data.email,
-            data.password,
-          );
-          console.log(accessToken);
-          if (accessToken) {
-            set({
-              accessToken: accessToken,
-            });
-            toast.success(i18n.t("auth:toast.customer.login.success.title"), {
-              description: i18n.t("auth:toast.customer.login.success.message"),
-              timeout: 5000,
-            });
-            await get().fetchMe();
-          }
-        } catch (error) {
-          if (isAxiosError(error)) {
-            toast.danger(i18n.t("auth:toast.customer.login.error.title"), {
-              description: i18n.t("auth:toast.customer.login.error.message"),
-              timeout: 5000,
-            });
-          } else {
-            toast.danger(i18n.t("auth:toast.customer.login.error.title"), {
-              description: i18n.t("auth:toast.unexpectedError"),
-              timeout: 5000,
-            });
-          }
-          console.error("Error logging in customer:", error);
-          get().clearSession();
-          throw error;
-        } finally {
-          set({ loading: false });
-        }
-      },
-      customerRegister: async (data) => {
-        try {
-          set({ loading: true });
-          const res = await authService.customerRegister(
-            data.firstName,
-            data.lastName,
-            data.email,
-            data.password,
-          );
-          console.log(res);
-          if (res.success) {
-            toast.success(
-              i18n.t("auth:toast.customer.register.success.title"),
-              {
-                description: i18n.t(
-                  "auth:toast.customer.register.success.message",
-                ),
-                timeout: 5000,
-              },
-            );
-          }
-        } catch (error) {
-          if (isAxiosError(error)) {
-            toast.danger(i18n.t("auth:toast.customer.register.error.title"), {
-              description: i18n.t("auth:toast.customer.register.error.message"),
-              timeout: 5000,
-            });
-          } else {
-            toast.danger(i18n.t("auth:toast.unexpectedError"), {
-              timeout: 5000,
-            });
-          }
-          console.error("Error registering customer:", error);
-        } finally {
-          set({ loading: false });
-        }
-      },
       staffRegister: async (data: AddStaffFormData) => {
         try {
           set({ loading: true });
@@ -229,9 +154,7 @@ export const useAuthStore = create<AuthState>()(
           const result = await staffService.updateAvatar(avatar);
           if (result) {
             set((state) => ({
-              user: state.user
-                ? { ...state.user, avatarUrl: result }
-                : null,
+              user: state.user ? { ...state.user, avatarUrl: result } : null,
             }));
           }
         } catch (error) {
@@ -239,7 +162,7 @@ export const useAuthStore = create<AuthState>()(
         } finally {
           set({ loading: false });
         }
-      }
+      },
     }),
     {
       name: "auth-storage",

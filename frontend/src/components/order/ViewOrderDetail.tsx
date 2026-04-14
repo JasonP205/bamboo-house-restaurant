@@ -78,6 +78,19 @@ const ViewOrderDetail = ({
   const vat_amount = subtotalPrice * vat_percentage;
   const totalPrice = subtotalPrice + vat_amount;
 
+  const statusClass = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-warning/20 text-warning border border-warning/50";
+      case "in-progress":
+        return "bg-blue/20 text-blue border border-blue/50";
+      case "served":
+        return "bg-success/20 text-success border border-success/50";
+      default:
+        return "";
+    }
+  };
+
   console.log("Order items:", items);
   return (
     <Drawer>
@@ -87,7 +100,16 @@ const ViewOrderDetail = ({
           <Drawer.Dialog>
             <Drawer.Handle />
             <Drawer.Header>
-              <Drawer.Heading>{t("order.yourOrder")}</Drawer.Heading>
+              <Drawer.Heading className="flex flex-col gap-1">
+                <span>{t("order:yourOrder")}</span>
+                {order && (
+                  <span
+                    className={`px-2 py-1 rounded-lg ${statusClass(order.status)}`}
+                  >
+                    {t(`order:status.${order.status}`)}
+                  </span>
+                )}
+              </Drawer.Heading>
             </Drawer.Header>
             <Drawer.Body className="scrollbar-hidden">
               {items.length === 0 ? (
@@ -134,24 +156,24 @@ const ViewOrderDetail = ({
               <div className="w-full flex flex-col gap-4">
                 <div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium">{t("order.totalItems")}</span>
+                    <span className="font-medium">{t("order:totalItems")}</span>
                     <span className="text-sm font-semibold">{totalItems}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium">{t("order.subtotal")}</span>
+                    <span className="font-medium">{t("order:subtotal")}</span>
                     <span className="text-sm font-semibold">
                       ${subtotalPrice.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium">{t("order.vat")}</span>
+                    <span className="font-medium">{t("order:vat")}</span>
                     <span className="text-xs italic">
                       ${vat_amount.toFixed(2)} (
                       {(vat_percentage * 100).toFixed(0)}%)
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium">{t("order.total")}</span>
+                    <span className="font-medium">{t("order:total")}</span>
                     <span className="text-sm font-semibold">
                       ${totalPrice.toFixed(2)}
                     </span>
@@ -161,6 +183,11 @@ const ViewOrderDetail = ({
                   <Button
                     onClick={handleUpdateOrderItem}
                     isPending={loadingOrderSubmit}
+                    isDisabled={
+                      cart.length === 0 ||
+                      loadingOrderSubmit ||
+                      order.status === "completed"
+                    }
                     className="w-full"
                   >
                     {t("order.updateOrder")}
@@ -169,6 +196,7 @@ const ViewOrderDetail = ({
                   <Button
                     onClick={handleSendOrder}
                     isPending={loadingOrderSubmit}
+                    isDisabled={cart.length === 0 || loadingOrderSubmit}
                     className="w-full"
                   >
                     {t("order.sendOrder")}

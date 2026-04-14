@@ -73,7 +73,7 @@ export const orderService = {
     },
   ) => {
     try {
-      const response = await api.patch(`/orders/${orderId}`, orderData);
+      const response = await api.patch(`/orders/${orderId}/items`, orderData);
       return response.data.order;
     } catch (error) {
       console.error("Error adding dish to order:", error);

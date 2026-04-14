@@ -1,11 +1,10 @@
 import Order from "../models/Order.js";
 import Branch from "../models/Branch.js";
 import Staff from "../models/Staff.js";
-import Customer from "../models/Customer.js";
 import Table from "../models/Table.js";
 import Dish from "../models/Dish.js";
 import helper from "../lib/helper.js";
-import { io } from "../socket/index.js";
+import { clearTableCart, io } from "../socket/index.js";
 import { formatOrder } from "../lib/formatOrder.js";
 
 export const getAllOrdersOfBranch = async (req, res) => {
@@ -18,7 +17,6 @@ export const getAllOrdersOfBranch = async (req, res) => {
   try {
     const orders = await Order.find({ branch: branchId })
       .populate("table", "number")
-      .populate("customer", "displayName")
       .populate("servedBy", "displayName")
       .populate("items.dishId", "name price imageUrl")
       .lean();
@@ -81,7 +79,7 @@ export const createOrder = async (req, res) => {
     });
 
     // 6. Map items + tính tiền
-    let totalPrice = 0;
+    let subTotal = 0;
 
     const items = dishes.map((item) => {
       const dish = dbDishes.find((d) => d._id.toString() === item.dish);
@@ -92,7 +90,7 @@ export const createOrder = async (req, res) => {
 
       const price = dish.price;
 
-      totalPrice += price * item.quantity;
+      subTotal += price * item.quantity;
 
       return {
         dishId: dish._id,
@@ -104,6 +102,9 @@ export const createOrder = async (req, res) => {
 
     // 7. Generate orderCode
     const orderCode = "ORD" + Date.now().toString().slice(-6);
+    const vat_percentage = parseFloat(process.env.VAT_PERCENTAGE || "0");
+    const vatAmount = subTotal * vat_percentage;
+    const totalPrice = subTotal + vatAmount;
 
     // 8. Create order
     const newOrder = await Order.create({
@@ -111,6 +112,8 @@ export const createOrder = async (req, res) => {
       table: tableId,
       branch: branchId,
       items,
+      subTotal,
+      vatAmount,
       totalPrice,
       status: "pending",
       timeIn: new Date(),
@@ -134,6 +137,16 @@ export const createOrder = async (req, res) => {
       status: "pending",
     });
 
+    const orderCreatedPayload = {
+      order: formattedOrder,
+      tableId: tableId.toString(),
+      branchId: branchId.toString(),
+    };
+
+    io.to(branchId.toString()).emit("order-created", orderCreatedPayload);
+    io.to(tableId.toString()).emit("order-created", orderCreatedPayload);
+    clearTableCart(tableId);
+
     // 12. Response
     return res.status(201).json({
       success: true,
@@ -155,18 +168,34 @@ export const revokeOrder = async (req, res) => {
   }
   try {
     await Order.findByIdAndDelete(orderId);
-    res.status(200).json({ success: true, message: "Order revoked successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Order revoked successfully" });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
 export const addOrderItem = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { orderData } = req.body;
+    const orderData = req.body?.orderData || req.body;
+
+    if (!orderData?.dishes?.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing dishes payload",
+      });
+    }
 
     const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
 
     const dishIds = orderData.dishes.map((i) => i.dish);
 
@@ -199,9 +228,31 @@ export const addOrderItem = async (req, res) => {
 
     await order.save();
 
+    const populatedOrder = await Order.findById(order._id)
+      .populate("table", "number")
+      .populate("servedBy", "displayName")
+      .populate("items.dishId", "name price imageUrl")
+      .lean();
+
+    const formattedOrder = formatOrder(populatedOrder);
+    const tableId = order.table?.toString();
+    const branchId = order.branch?.toString();
+    const orderItemsPayload = {
+      order: formattedOrder,
+      tableId,
+      branchId,
+    };
+
+    if (branchId) {
+      io.to(branchId).emit("order-items-added", orderItemsPayload);
+    }
+    if (tableId) {
+      io.to(tableId).emit("order-items-added", orderItemsPayload);
+    }
+
     res.status(200).json({
       success: true,
-      order,
+      order: formattedOrder,
     });
   } catch (error) {
     res.status(500).json({
@@ -212,12 +263,18 @@ export const addOrderItem = async (req, res) => {
 };
 
 export const updateOrderStatus = async (req, res) => {
-  const { staffId } = req?.staff._id;
+  const staffId = req?.staff?._id;
   const { orderId } = req?.params;
-  if (!orderId ) {
+  if (!orderId) {
     return res
       .status(400)
       .json({ success: false, message: "Missing orderId or status" });
+  }
+
+  if (!staffId) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Staff authentication is required" });
   }
 
   try {
@@ -240,25 +297,14 @@ export const updateOrderStatus = async (req, res) => {
         status = "completed";
         break;
       default:
-        return res.status(400).json({ success: false, message: "Invalid order status transition" });
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid order status transition" });
     }
 
     if (status === "completed") {
-      order.isInUse = false;
+      await Table.updateOne({ _id: order.table }, { $set: { isInUse: false } });
       order.timeOut = new Date();
-      const customerId = order?.customer;
-      if (customerId) {
-        const customer = await Customer.findById(customerId);
-        if (customer) {
-          const pointsPerCurrency = helper.getPointPerCurrency(customer.tiers);
-          const earnedPoints = Math.floor(order.totalPrice * pointsPerCurrency);
-          const newPoints = customer.points + earnedPoints;
-          const newTier = helper.calculateTier(newPoints);
-          customer.points = newPoints;
-          customer.tiers = newTier;
-          await customer.save();
-        }
-      }
     }
     order.status = status;
     order.servedBy = staffId;
@@ -266,12 +312,32 @@ export const updateOrderStatus = async (req, res) => {
 
     const populatedOrder = await Order.findById(order._id)
       .populate("table", "number")
-      .populate("customer", "displayName")
       .populate("servedBy", "displayName")
       .populate("items.dishId", "name price imageUrl")
       .lean();
 
     const formattedOrder = formatOrder(populatedOrder);
+
+    const tableId = order.table?.toString();
+    const branchId = order.branch?.toString();
+    const statusPayload = {
+      order: formattedOrder,
+      tableId,
+      branchId,
+    };
+
+    if (branchId) {
+      io.to(branchId).emit("order-status-updated", statusPayload);
+      io.to(branchId).emit("tableUpdated", {
+        tableId,
+        orderId: order._id,
+        status,
+      });
+    }
+    if (tableId) {
+      io.to(tableId).emit("order-status-updated", statusPayload);
+    }
+
     res.status(200).json({ success: true, order: formattedOrder });
   } catch (error) {
     console.error("Error updating order status:", error);
@@ -287,7 +353,6 @@ export const getOrderDetails = async (req, res) => {
   try {
     const order = await Order.findById(orderId)
       .populate("table", "number")
-      .populate("customer", "name email")
       .populate("servedBy", "name email")
       .populate("items.dishId", "name price");
 

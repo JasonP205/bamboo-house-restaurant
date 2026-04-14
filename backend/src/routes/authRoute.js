@@ -1,9 +1,7 @@
 import express from "express";
 import {
-  registerCustomer,
   registerStaff,
   staffLogin,
-  customerLogin,
   logout,
   fetchMe,
   refresh,
@@ -15,10 +13,8 @@ import { uploadImage } from "../middleware/fileMiddleware.js";
 
 const router = express.Router();
 
-router.post("/register/customer", registerCustomer);
 router.post("/register/staff", managerMiddleware, uploadImage.single("avatar"), registerStaff);
 router.post("/login/staff", staffLogin);
-router.post("/login/customer", customerLogin);
 router.post("/logout", logout);
 router.post("/refresh", refresh);
 router.get("/me", protectedRoute, fetchMe);

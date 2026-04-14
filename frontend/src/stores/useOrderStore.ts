@@ -173,10 +173,11 @@ export const useOrderStore = create<OrderState>((set, get) => ({
           note: item.note,
         })),
       };
-      await orderService.addDishToOrder(orderId, orderData);
-      set({ loadingOrderSubmit: false });
+      const updatedOrder = await orderService.addDishToOrder(orderId, orderData);
+      set({ order: updatedOrder, cart: [], loadingOrderSubmit: false });
     } catch (error) {
       console.error("Error updating order items:", error);
+      throw error;
     } finally {
       set({ loadingOrderSubmit: false });
     }

@@ -275,20 +275,27 @@ export const useBranchStore = create<branchState>((set, get) => ({
 
   handleUpdateTableStatus: (data) => {
     const { tableId, status, orderId } = data;
+    if (!tableId || !status) return;
+
     set((state) => ({
       tableBranch: state.tableBranch.map((table) =>
         table._id === tableId
           ? {
               ...table,
-              currentOrder: {
-                _id: orderId,
-                status: status,
-              },
-              isInUse: true,
+              currentOrder:
+                status === "completed"
+                  ? undefined
+                  : {
+                      _id: orderId,
+                      status: status,
+                    },
+              isInUse: status !== "completed",
             }
           : table,
       ),
     }));
-    useOrderStore.getState().getOrderDetails(orderId);
+    if (orderId) {
+      useOrderStore.getState().getOrderDetails(orderId);
+    }
   },
 }));

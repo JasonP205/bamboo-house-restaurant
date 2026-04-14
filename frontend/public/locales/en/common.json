@@ -24,7 +24,11 @@
     "noNotifications": "No notifications yet.",
     "newOrder": "New order received",
     "orderUpdate": "Order #{{orderId}} status updated to {{status}}",
-    "mobileNotSupported": "Mobile view is not supported. Please use a desktop or laptop continue"
+    "mobileNotSupported": "Mobile view is not supported. Please use a desktop or laptop continue",
+    "noTablesFoundForBranch": "No tables found for this branch."
+  },
+  "errors": {
+    "notFound": "Not Found"
   },
   "staff":{
     "title": "Staff Profile",

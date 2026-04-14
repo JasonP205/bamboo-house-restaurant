@@ -12,5 +12,11 @@
     "toggleLangOptions": {
         "en": "Chuyển sang Tiếng Anh",
         "vi": "Chuyển sang Tiếng Việt"
+    },
+    "notifications": {
+        "noTablesFoundForBranch": "Không tìm thấy bàn nào cho chi nhánh này."
+    },
+    "errors": {
+        "notFound": "Không tìm thấy trang"
     }
 }

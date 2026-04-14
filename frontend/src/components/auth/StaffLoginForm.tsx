@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import SeparatorOpt from "../ui/SeparatorOpt";
+import { Icon } from "@iconify/react";
 
 const staffLoginSchema = z.object({
   staffId: z.string().min(3, "Staff number is required"),
@@ -80,7 +82,7 @@ const StaffLoginForm = () => {
   return (
     <div className="min-h-68">
       <form
-        className="w-full flex flex-col space-y-3"
+        className="w-full flex flex-col space-y-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col">
@@ -146,14 +148,6 @@ const StaffLoginForm = () => {
               {t("errors.login.staff.password")}
             </p>
           )}
-          <div className="mt-2 flex justify-end">
-            <a
-              href="/auth/staff-forgot-password"
-              className="text-sm text-accent hover:underline"
-            >
-              {t("loginForm.staff.forgotPassword")}
-            </a>
-          </div>
         </div>
         <Button fullWidth type="submit" isPending={loading}>
           {loading ? (
@@ -168,11 +162,18 @@ const StaffLoginForm = () => {
             </>
           )}
         </Button>
-        <span className="text-center text-sm text-muted">
-          <Link to="/auth/manager" className="text-accent hover:underline">
-            {t("loginForm.staff.managerLink")}
-          </Link>
-        </span>
+        <SeparatorOpt value={t("loginForm.staff.or")} />
+        <Button
+          variant="outline"
+          fullWidth
+          onPress={() =>
+            (window.location.href = `${import.meta.env.VITE_API_URL}/auth/oauth2/google`)
+          }
+          className="text-white"
+        >
+          <Icon icon="devicon:google" />
+          <span>{t("loginForm.staff.loginWithGoogle")}</span>
+        </Button>
       </form>
     </div>
   );

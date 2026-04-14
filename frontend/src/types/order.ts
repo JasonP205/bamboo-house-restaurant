@@ -26,6 +26,8 @@ export interface Order {
     note?: string;
   }[];
   discount: number;
+  vatAmount: number;
+  subTotal: number;
   totalPrice: number;
   status: "pending" | "in-progress" | "served" | "completed" | "cancelled";
   createdAt: string;

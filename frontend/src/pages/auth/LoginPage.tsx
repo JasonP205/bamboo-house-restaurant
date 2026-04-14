@@ -1,14 +1,10 @@
 import { Helmet } from "react-helmet-async";
-import { Tabs } from "@heroui/react";
-import { useState } from "react";
 import ToggleTheme from "@/components/ui/toggleTheme";
 import ToggleLang from "@/components/ui/toggleLang";
-import CustomerLoginForm from "@/components/auth/CustomerLoginForm";
 import StaffLoginForm from "@/components/auth/StaffLoginForm";
 import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
-  const [activeTab, setActiveTab] = useState<any>("Customer");
   const { t } = useTranslation("auth");
   return (
     <div className="relative isolate min-h-screen overflow-hidden">
@@ -66,42 +62,11 @@ const LoginPage = () => {
                 </div>
 
                 <p className="text-center text-muted text-xs md:text-sm leading-relaxed text-balance">
-                  {activeTab === "Customer"
-                    ? t("greeting.login.customer")
-                    : t("greeting.login.staff")}
+                  {t("greeting.login.staff")}
                 </p>
               </div>
 
-              <Tabs
-                selectedKey={activeTab}
-                onSelectionChange={(key) => setActiveTab(key)}
-                className="mt-4 w-full"
-              >
-                <Tabs.ListContainer>
-                  <Tabs.List
-                    aria-label="Login type"
-                    className="bg-background/50 backdrop-blur-md"
-                  >
-                    <Tabs.Tab id="Customer">
-                      {t("loginTab.customer")}
-                      <Tabs.Indicator />
-                    </Tabs.Tab>
-
-                    <Tabs.Tab id="Staff">
-                      {t("loginTab.staff")}
-                      <Tabs.Indicator />
-                    </Tabs.Tab>
-                  </Tabs.List>
-                </Tabs.ListContainer>
-
-                <Tabs.Panel id="Customer" className="pt-4">
-                  <CustomerLoginForm />
-                </Tabs.Panel>
-
-                <Tabs.Panel id="Staff" className="pt-4">
-                  <StaffLoginForm />
-                </Tabs.Panel>
-              </Tabs>
+              <StaffLoginForm />
             </div>
           </div>
         </div>

@@ -30,7 +30,6 @@ const OrderMonitor = () => {
   const viewDetailState = useOverlayState();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -46,8 +45,6 @@ const OrderMonitor = () => {
     if (!table.currentOrder) return;
 
     const orderId = table.currentOrder._id;
-
-    setSelectedOrderId(orderId);
 
     const foundOrder = orderOfBranch?.find((order) => order._id === orderId);
 
@@ -87,7 +84,7 @@ const OrderMonitor = () => {
   if (!tableBranch || tableBranch.length === 0) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-muted">
-        <p className="text-2xl">No tables found for this branch.</p>
+        <p className="text-2xl">{t("notifications.noTablesFoundForBranch")}</p>
       </div>
     );
   }

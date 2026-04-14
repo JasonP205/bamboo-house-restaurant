@@ -5,10 +5,8 @@ import {
   Outlet,
 } from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
 import { Toast } from "@heroui/react";
 import BranchesPage from "./pages/branches/BranchesPage";
-import ManagerPanel from "./pages/auth/ManagerPanel";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BranchDetail from "./pages/branches/BranchDetail";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -18,11 +16,12 @@ import MenuPage from "./pages/dishes/MenuPage";
 import PlaceOrder from "./pages/orders/customer/PlaceOrder";
 import CustomerLayOut from "./components/ui/CustomerLayOut";
 import { useEffect } from "react";
-import { useSocketStore } from "./stores/useSocketStore";
 import OrderMonitor from "./pages/orders/staff/OrderMonitor";
 import LandingPage from "./pages/LandingPage";
+import { useTranslation } from "react-i18next";
 
 function App() {
+  const { t } = useTranslation(["common"]);
   const { getDeviceId, deviceId } = useAuthStore();
   useEffect(() => {
     if (!deviceId) {
@@ -36,7 +35,7 @@ function App() {
         <div className="min-w-screen min-h-svh">
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="login-success" element={<GoogleCallback />} />
+            <Route path="login-callback" element={<GoogleCallback />} />
 
             <Route element={<ProtectedRoute requireLogin />}>
               <Route path="branches" element={<Outlet />}>
@@ -56,11 +55,9 @@ function App() {
 
             <Route path="auth" element={<Outlet />}>
               <Route path="login" element={<LoginPage />} />
-              <Route path="register" element={<RegisterPage />} />
-              <Route path="manager" element={<ManagerPanel />} />
             </Route>
 
-            <Route path="*" element={<h1>Not Found</h1>} />
+            <Route path="*" element={<h1>{t("errors.notFound")}</h1>} />
           </Routes>
         </div>
       </Router>

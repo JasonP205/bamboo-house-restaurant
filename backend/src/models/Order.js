@@ -17,8 +17,6 @@ const orderSchema = new mongoose.Schema(
 
     servedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Staff" },
 
-    customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
-
     items: [
       {
         dishId: {
@@ -53,10 +51,14 @@ const orderSchema = new mongoose.Schema(
       },
     ],
 
-    discount: {
+    subTotal: {
       type: Number,
-      default: 0,
-      min: 0,
+      required: true,
+    },
+
+    vatAmount: {
+      type: Number,
+      required: true,
     },
 
     totalPrice: {
@@ -66,7 +68,7 @@ const orderSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "in-progress", "served", "completed", "cancelled"],
+      enum: ["pending", "in-progress", "served", "completed"],
       default: "pending",
     },
 

@@ -1,12 +1,11 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useBranchStore } from "@/stores/useBranchStore";
 import { useMenuStore } from "@/stores/useMenuStore";
 import { useOrderStore } from "@/stores/useOrderStore";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUp03Icon, ShoppingCart02Icon } from "@hugeicons/core-free-icons";
+import { ShoppingCart02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import DishUI from "@/components/order/DishUI";
-import { Button } from "@heroui/react";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import ViewOrderDetail from "@/components/order/ViewOrderDetail";
@@ -17,7 +16,7 @@ const PlaceOrder = () => {
   const [searchParams] = useSearchParams();
   const branchId = searchParams.get("b") || "";
   const tableId = searchParams.get("t") || "";
-  const { t } = useTranslation(["dishes"]);
+  const { t } = useTranslation(["dishes", "order"]);
 
   const { menu, loadingFetchDishes, getMenu } = useMenuStore();
   const { branches, fetchBranches, loading } = useBranchStore();
@@ -25,8 +24,7 @@ const PlaceOrder = () => {
     setCurrentBranchId,
     currentBranchId,
     cart,
-    sendOrder,
-    loadingOrderSubmit,
+    order
   } = useOrderStore();
   const [selectedCategory, setSelectedCategory] = useState<
     "all" | "appetizer" | "main" | "beverage" | "merchandise"
@@ -43,8 +41,13 @@ const PlaceOrder = () => {
   }, [menu, branchId, selectedCategory]);
 
   if (!branchId || !tableId) {
-    return <div>Invalid branch or table ID</div>;
+    return <div>{t("order:messages.invalidBranchOrTable")}</div>;
   }
+  useEffect(() => {
+    if (order && order.status === "completed") {
+      useOrderStore.setState({ cart: [], order: null });
+    }
+  }, [order]);
   useEffect(() => {
     const init = async () => {
       if (!branches.length) await fetchBranches();
@@ -76,11 +79,11 @@ const PlaceOrder = () => {
   }, [deviceId]);
 
   if (loading || loadingFetchDishes) {
-    return <div>Loading...</div>;
+    return <div>{t("order:messages.loading")}</div>;
   }
 
   if (!branch) {
-    return <div>Branch not found</div>;
+    return <div>{t("order:messages.branchNotFound")}</div>;
   }
   const vat_percentage = parseFloat(import.meta.env.VITE_VAT_PERCENTAGE || "0");
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
@@ -96,13 +99,12 @@ const PlaceOrder = () => {
     <div className="p-2 relative flex flex-col gap-4 h-full">
       <div>
         <h1 className="font-serif flex-col text-2xl italic text-accent flex gap-1 items-start">
-          <span className="font-light">Order for </span>
+          <span className="font-light">{t("order:messages.orderFor")}</span>
           <span className="capitalize">{branch.name}</span>
         </h1>
 
         <p className="text-xs text-muted leading-relaxed text-balance">
-          Select dishes from the menu and place your order. Then we will prepare
-          your food and deliver it to you as soon as possible.
+          {t("order:messages.placeOrderHelp")}
         </p>
       </div>
       <nav className="mb-6">
@@ -158,13 +160,16 @@ const PlaceOrder = () => {
           <HugeiconsIcon strokeWidth={2} size={26} icon={ShoppingCart02Icon} />
         </div>
         <div className="flex flex-col leading-tight items-start">
-          <p className="text-white font-serif font-medium">{t("order.currentOrder")}</p>
+          <p className="text-white font-serif font-medium">{t("order:currentOrder")}</p>
           <p className="text-white font-semibold text-sm">
-            {totalItems} items - ${totalPrice.toFixed(2)}
+            {t("order:messages.itemCountAndTotal", {
+              count: totalItems,
+              total: totalPrice.toFixed(2),
+            })}
           </p>
         </div>
         <div className="ml-auto bg-warning text-white rounded-xl px-2 py-1 flex items-center justify-center">
-          {t("order.preview")}
+          {t("order:preview")}
         </div>
       </ViewOrderDetail>
     </div>

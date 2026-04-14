@@ -100,6 +100,11 @@
 }
 @layer components {
   @media print {
+    @page {
+      size: 80mm auto;
+      margin: 0;
+    }
+
     body * {
       visibility: hidden;
     }
@@ -114,6 +119,16 @@
       left: 0;
       top: 0;
       width: 100%;
+    }
+
+    .print-area.print-80mm {
+      width: 80mm;
+      max-width: 80mm;
+      margin: 0 auto;
+      padding: 3mm;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
     }
   }
 

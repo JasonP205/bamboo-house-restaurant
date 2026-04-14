@@ -1,5 +1,4 @@
 import Staff from "../models/Staff.js";
-import Customer from "../models/Customer.js";
 import Session from "../models/Session.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -28,78 +27,17 @@ const googleAuthCallback = async (req, res, next) => {
         .json({ success: false, message: "Google authentication failed" });
     }
 
-    const isExistingCustomer = await Customer.findOne({
+    const isExistingCustomer = await Staff.findOne({
       email: user.emails?.[0]?.value,
     });
     if (!isExistingCustomer) {
-      const newCustomer = new Customer({
-        email: user.emails?.[0]?.value,
-        displayName: user.displayName,
-        provider: "google",
-        providerId: user.id,
-        avatarUrl: user.photos?.[0]?.value,
-      });
-      await newCustomer.save();
-
-      const refreshToken = crypto.randomBytes(64).toString("hex");
-
-      const session = new Session({
-        userId: newCustomer._id,
-        userType: "Customer",
-        refreshToken,
-        expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL.customer),
-      });
-      await session.save();
-
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: REFRESH_TOKEN_TTL.customer,
-      });
-
       return res.redirect(
-        `${process.env.CLIENT_URL || "http://localhost:2303"}/login-success?m=${encodeURIComponent(user.emails?.[0]?.value)}&a=${encodeURIComponent(user.photos?.[0]?.value)}`,
+        `${process.env.CLIENT_URL || "http://localhost:2303"}/login-callback?error=${encodeURIComponent("This Google account is not registered as staff. Please contact your manager.")}`,
       );
     }
     const refreshToken = crypto.randomBytes(64).toString("hex");
     await Session.create({
       userId: isExistingCustomer._id,
-      userType: "Customer",
-      refreshToken,
-      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL.customer),
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: REFRESH_TOKEN_TTL.customer,
-    });
-
-    return res.redirect(
-      `${process.env.CLIENT_URL || "http://localhost:2303"}/login-success?m=${encodeURIComponent(user.emails?.[0]?.value)}&a=${encodeURIComponent(user.photos?.[0]?.value)}`,
-    );
-  })(req, res, next);
-};
-
-const googleAuthCallbackStaff = async (req, res, next) => {
-  passport.authenticate("google", { session: false }, async (err, user) => {
-    if (err || !user) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Google authentication failed" });
-    }
-
-    const staff = await Staff.findOne({ email: user.emails?.[0]?.value });
-    if (!staff) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Staff not found" });
-    }
-    const refreshToken = crypto.randomBytes(64).toString("hex");
-    await Session.create({
-      userId: staff._id,
       userType: "Staff",
       refreshToken,
       expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL.staff),
@@ -113,45 +51,11 @@ const googleAuthCallbackStaff = async (req, res, next) => {
     });
 
     return res.redirect(
-      `${process.env.CLIENT_URL || "http://localhost:2303"}/login-success?m=${encodeURIComponent(user.emails?.[0]?.value)}&a=${encodeURIComponent(user.photos?.[0]?.value)}`,
+      `${process.env.CLIENT_URL || "http://localhost:2303"}/login-callback?m=${encodeURIComponent(user.emails?.[0]?.value)}&a=${encodeURIComponent(user.photos?.[0]?.value)}`,
     );
   })(req, res, next);
 };
 
-const registerCustomer = async (req, res) => {
-  try {
-    const { email, password, firstName, lastName } = req.body;
-
-    if (!email || !password || !firstName || !lastName) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
-
-    const existingCustomer = await Customer.findOne({ email });
-    if (existingCustomer) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email already in use" });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
-    const newCustomer = new Customer({
-      email,
-      passwordHash,
-      displayName: `${firstName} ${lastName}`,
-    });
-    await newCustomer.save();
-    return res.json({
-      success: true,
-      message:
-        "Yay! You're officially a member. We can't wait to serve you soon!. Sign In now!!",
-    });
-  } catch (error) {
-    console.error("Error registering customer:", error);
-    return res.status(500).json({ success: false, message: error.message });
-  }
-};
 const registerStaff = async (req, res) => {
   try {
     const { email, firstName, lastName, gender, branchId } = req.body;
@@ -398,7 +302,6 @@ const refresh = async (req, res) => {
 };
 
 export {
-  registerCustomer,
   registerStaff,
   staffLogin,
   customerLogin,

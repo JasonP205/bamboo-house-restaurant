@@ -1,12 +1,17 @@
 
 export const formatOrder = (order) => {
+  const servedBy =
+    order?.servedBy && typeof order.servedBy === "object"
+      ? order.servedBy.displayName || ""
+      : order?.servedBy || "";
+
   return {
     _id: order._id,
     orderCode: order.orderCode,
     table: order.table.number,
     branch: order.branch,
     timeIn: order.timeIn,
-    servedBy: order.servedBy,
+    servedBy,
     customerName: order.customerName || null,
     note: order.notes || "",
     deviceId: order.deviceId || null,
@@ -23,7 +28,8 @@ export const formatOrder = (order) => {
       note: item.notes || "",
     })),
 
-    discount: order.discount || 0,
+    subTotal: order.subTotal,
+    vatAmount: order.vatAmount,    
     totalPrice: order.totalPrice,
     status: order.status,
     createdAt: order.createdAt,

@@ -32,6 +32,35 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     socket.on("tableUpdated", (data) => {
       useBranchStore.getState().handleUpdateTableStatus(data);
     });
+
+    const syncRealtimeOrderForStaff = (data: any) => {
+      const realtimeOrder = data?.order;
+      if (!realtimeOrder) return;
+
+      useOrderStore.setState((state) => {
+        const currentOrders = state.orderOfBranch || [];
+        const exists = currentOrders.some((order) => order._id === realtimeOrder._id);
+
+        return {
+          orderOfBranch: exists
+            ? currentOrders.map((order) =>
+                order._id === realtimeOrder._id ? realtimeOrder : order,
+              )
+            : [realtimeOrder, ...currentOrders],
+        };
+      });
+    };
+
+    socket.on("order-created", syncRealtimeOrderForStaff);
+    socket.on("order-items-added", syncRealtimeOrderForStaff);
+    socket.on("order-status-updated", (data) => {
+      syncRealtimeOrderForStaff(data);
+      useBranchStore.getState().handleUpdateTableStatus({
+        tableId: data?.tableId,
+        orderId: data?.order?._id,
+        status: data?.order?.status,
+      });
+    });
   },
   connectSocketCustomer: (tableId) => {
     const exitsingSocket = get().socket;
@@ -54,19 +83,40 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       socket.emit("join-TableRoom", tableId);
     });
 
-    socket.on("current-cart",(data)=>{
-      console.log("Received current cart from server:", data);
-      data.forEach((item: any) => {
-        useOrderStore.getState().updateCartItem(item.dish, item.quantity, item.note);
-      });
-      // useOrderStore.getState().updateCartItem(data.dish, data.quantity, data.note);
-    })
+    socket.on("current-cart", (data) => {
+      const incomingCart = Array.isArray(data)
+        ? data.map((item: any) => ({
+            dish: item.dish,
+            quantity: item.quantity,
+            note: item.note,
+            price: item.dish?.price || 0,
+          }))
+        : [];
+
+      useOrderStore.setState({ cart: incomingCart });
+    });
+
     socket.on("remove-from-cart", (data) => {
       const dishId = data.dishId;
       useOrderStore.setState((state) => ({
         cart: state.cart.filter((item) => item.dish._id !== dishId),
-       }));
-    })
+      }));
+    });
+
+    const syncRealtimeOrderForTable = (data: any, shouldClearCart = false) => {
+      if (!data?.order) return;
+      const currentTableId = useOrderStore.getState().currentTableId;
+      if (data.tableId !== currentTableId) return;
+
+      useOrderStore.setState((state) => ({
+        order: data.order,
+        cart: shouldClearCart ? [] : state.cart,
+      }));
+    };
+
+    socket.on("order-created", (data) => syncRealtimeOrderForTable(data, true));
+    socket.on("order-items-added", (data) => syncRealtimeOrderForTable(data, true));
+    socket.on("order-status-updated", (data) => syncRealtimeOrderForTable(data, false));
   },
   disconnectSocket: () => {
     const socket = get().socket;

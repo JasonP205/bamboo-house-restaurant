@@ -14,6 +14,13 @@ const io = new Server(server, {
 io.use(socketMiddleware);
 const currentOrders = new Map();
 
+export const clearTableCart = (tableId) => {
+  if (!tableId) return;
+  const tableKey = tableId.toString();
+  currentOrders.set(tableKey, []);
+  io.to(tableKey).emit("current-cart", []);
+};
+
 io.on("connection", (socket) => {
   console.log("Socket connected: " + socket.id);
 
