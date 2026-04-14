@@ -35,3 +35,21 @@ export const getDistance = (targetCoord: string): Promise<number> => {
     );
   });
 };
+export function formatTime(dateString:string, type = "full") {
+  const date = new Date(dateString);
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+
+  const day = pad(date.getDate());
+  const month = pad(date.getMonth() + 1);
+  const year = date.getFullYear();
+
+  if (type === "time") return `${hours}:${minutes}`;
+  if (type === "date") return `${day}/${month}/${year}`;
+  if (type === "full") return `${hours}:${minutes} ${day}/${month}/${year}`;
+
+  return date.toString(); // fallback
+}

@@ -6,24 +6,64 @@ import { socketMiddleware } from "../middleware/socketMiddleware.js";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: process.env.CLIENT_URL,
-        credentials: true
-    }
+  cors: {
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  },
 });
 io.use(socketMiddleware);
-io.on("connection",async (socket) => {
-    console.log("Socket connected: " + socket.id);
+const currentOrders = new Map();
 
-    socket.on("joinBranchRoom", (branchId) => {
-        socket.join(branchId);
-        console.log(`Socket ${socket.id} joined branch room ${branchId}`);
-    });
+io.on("connection", (socket) => {
+  console.log("Socket connected: " + socket.id);
 
-    socket.on("disconnect", () => {
-        console.log("Socket disconnected: " + socket.id);
-    });
+  socket.on("joinBranchRoom", (branchId) => {
+    socket.join(branchId);
+    console.log(`Socket ${socket.id} joined branch room ${branchId}`);
+  });
+
+  socket.on("join-TableRoom", (tableId) => {
+    socket.join(tableId);
+    console.log(`Socket ${socket.id} joined table room ${tableId}`);
+
+    if (!currentOrders.has(tableId)) {
+      currentOrders.set(tableId, []);
+    }
+    socket.emit("current-cart", currentOrders.get(tableId));
+  });
+
+  socket.on("cart-updated", ({ dish, quantity, note, tableId }) => {
+    const currentCart = currentOrders.get(tableId) || [];
+    const index = currentCart.findIndex(
+      (item) => item.dish._id === dish._id
+    );
+
+    if (index !== -1) {
+      currentCart[index].quantity += quantity;
+      currentCart[index].note = note;
+    } else {
+      currentCart.push({ dish, quantity, note });
+    }
+
+    currentOrders.set(tableId, currentCart);
+    io.to(tableId).emit("current-cart", currentCart);
+  });
+
+  socket.on("remove-from-cart", ({ dishId, tableId }) => {
+    const currentCart = currentOrders.get(tableId) || [];
+
+    const updatedCart = currentCart.filter(
+      (item) => item.dish._id !== dishId
+    );
+
+    currentOrders.set(tableId, updatedCart);
+
+    io.to(tableId).emit("remove-from-cart", { dishId });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected: " + socket.id);
+  });
 });
 
-
-export {io, app, server}
+export { io, app, server };

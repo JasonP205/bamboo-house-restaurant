@@ -8,11 +8,12 @@ import helper from "../lib/helper.js";
 import { io } from "../socket/index.js";
 import { formatOrder } from "../lib/formatOrder.js";
 
-
 export const getAllOrdersOfBranch = async (req, res) => {
   const { branchId } = req?.params;
   if (!branchId) {
-    return res.status(400).json({ success: false, message: "Missing branchId" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing branchId" });
   }
   try {
     const orders = await Order.find({ branch: branchId })
@@ -121,6 +122,7 @@ export const createOrder = async (req, res) => {
     // 🔥 10. Populate để trả đúng format
     const populatedOrder = await Order.findById(newOrder._id)
       .populate("items.dishId", "name imageUrl")
+      .populate("table", "number")
       .lean();
 
     const formattedOrder = formatOrder(populatedOrder);
@@ -129,7 +131,7 @@ export const createOrder = async (req, res) => {
     io.to(branchId.toString()).emit("tableUpdated", {
       tableId,
       orderId: newOrder._id,
-      status: "pending"
+      status: "pending",
     });
 
     // 12. Response
@@ -145,6 +147,19 @@ export const createOrder = async (req, res) => {
     });
   }
 };
+
+export const revokeOrder = async (req, res) => {
+  const { orderId } = req?.params;
+  if (!orderId) {
+    return res.status(400).json({ success: false, message: "Missing orderId" });
+  }
+  try {
+    await Order.findByIdAndDelete(orderId);
+    res.status(200).json({ success: true, message: "Order revoked successfully" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+}
 
 export const addOrderItem = async (req, res) => {
   try {
@@ -251,8 +266,8 @@ export const updateOrderItemStatus = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   const { staffId } = req?.staff._id;
-  const { orderId, status } = req?.params;
-  if (!orderId || !status) {
+  const { orderId } = req?.params;
+  if (!orderId ) {
     return res
       .status(400)
       .json({ success: false, message: "Missing orderId or status" });
@@ -266,8 +281,22 @@ export const updateOrderStatus = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Order not found" });
     }
+    let status;
+    switch (order.status) {
+      case "pending":
+        status = "in-progress";
+        break;
+      case "in-progress":
+        status = "served";
+        break;
+      case "served":
+        status = "completed";
+        break;
+      default:
+        return res.status(400).json({ success: false, message: "Invalid order status transition" });
+    }
 
-    if (status === "Completed") {
+    if (status === "completed") {
       order.isInUse = false;
       order.timeOut = new Date();
       const customerId = order?.customer;
@@ -284,14 +313,19 @@ export const updateOrderStatus = async (req, res) => {
         }
       }
     }
-    if (order.isInUse === false) {
-      order.isInUse = true;
-    }
     order.status = status;
     order.servedBy = staffId;
     await order.save();
 
-    res.status(200).json({ success: true, order });
+    const populatedOrder = await Order.findById(order._id)
+      .populate("table", "number")
+      .populate("customer", "displayName")
+      .populate("servedBy", "displayName")
+      .populate("items.dishId", "name price imageUrl")
+      .lean();
+
+    const formattedOrder = formatOrder(populatedOrder);
+    res.status(200).json({ success: true, order: formattedOrder });
   } catch (error) {
     console.error("Error updating order status:", error);
     return res.status(500).json({ success: false, message: error.message });
@@ -315,8 +349,8 @@ export const getOrderDetails = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Order not found" });
     }
-
-    res.status(200).json({ success: true, order });
+    const formattedOrder = formatOrder(order);
+    res.status(200).json({ success: true, order: formattedOrder });
   } catch (error) {
     console.error("Error fetching order details:", error);
     return res.status(500).json({ success: false, message: error.message });

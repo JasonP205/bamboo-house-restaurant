@@ -3,8 +3,10 @@ import type { Dish } from "./menu";
 export interface Order {
   _id: string;
   orderCode: string;
-  table?: string;
+  table?:number
   branch?: string;
+  servedBy?: string;
+  timeIn?: string;
   customerName?: {
     displayName: string;
     tiers: "sprout" | "shoot" | "stem" | "grove" | "legend";
@@ -43,10 +45,15 @@ export interface OrderState {
   orderOfBranch: Order[] | null;
   currentBranchId: string | null;
   loadingOrderSubmit: boolean;
+  currentTableId: string | null;  
+  setCurrentTableId: (tableId: string | null) => void;
   getAllOrdersOfBranch: () => Promise<void>;
   setCurrentBranchId: (branchId: string | null) => void;
   getOrderDetails: (orderId: string) => Promise<void>;
   addToCart: (dish: Dish, quantity: number, note?: string) => void;
+  updateCartItem: (dish: Dish, quantity: number, note?: string) => void;
   removeFromCart: (dishId: string) => void;
   sendOrder: (branchId: string, tableId: string) => Promise<void>;
+  revokeOrder: (orderId: string) => Promise<void>;
+  updateOrderStatus: (orderId: string) => Promise<void>;
 }

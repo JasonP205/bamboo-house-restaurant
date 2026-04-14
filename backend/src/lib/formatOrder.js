@@ -1,10 +1,12 @@
+
 export const formatOrder = (order) => {
   return {
     _id: order._id,
     orderCode: order.orderCode,
-    table: order.table,
+    table: order.table.number,
     branch: order.branch,
-
+    timeIn: order.timeIn,
+    servedBy: order.servedBy,
     customerName: order.customerName || null,
     note: order.notes || "",
     deviceId: order.deviceId || null,
@@ -24,7 +26,6 @@ export const formatOrder = (order) => {
     discount: order.discount || 0,
     totalPrice: order.totalPrice,
     status: order.status,
-
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
   };

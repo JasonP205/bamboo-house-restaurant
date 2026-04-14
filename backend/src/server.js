@@ -19,12 +19,12 @@ import menuRoute from "./routes/menuRoute.js";
 import { app, server } from "./socket/index.js";
 
 const start = process.hrtime.bigint();
-
+const localIP = getLocalIP();
 const PORT = process.env.PORT || 5002;
 
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL, "http://localhost:2303"],
+    origin: [process.env.CLIENT_URL, "http://localhost:2303", `http://${localIP}:2303`],
     credentials: true,
   }),
 );
@@ -52,7 +52,6 @@ connectDB().then(() => {
     const end = process.hrtime.bigint();
     const time = Number(end - start) / 1e6;
 
-    const localIP = getLocalIP();
     
     console.log(`
 ${chalk.bold("EXPRESS")} ${chalk.green("v1.0.0")} ${chalk.gray(`ready in ${time.toFixed(0)} ms`)}

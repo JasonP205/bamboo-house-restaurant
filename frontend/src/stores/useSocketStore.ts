@@ -33,7 +33,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       useBranchStore.getState().handleUpdateTableStatus(data);
     });
   },
-  connectSocketCustomer: () => {
+  connectSocketCustomer: (tableId) => {
     const exitsingSocket = get().socket;
     if (exitsingSocket) {
       console.warn("Socket customer already connected");
@@ -51,7 +51,22 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     socket.on("connect", () => {
       console.log("Socket customer connected");
       socket.emit("joinBranchRoom", branchId);
+      socket.emit("join-TableRoom", tableId);
     });
+
+    socket.on("current-cart",(data)=>{
+      console.log("Received current cart from server:", data);
+      data.forEach((item: any) => {
+        useOrderStore.getState().updateCartItem(item.dish, item.quantity, item.note);
+      });
+      // useOrderStore.getState().updateCartItem(data.dish, data.quantity, data.note);
+    })
+    socket.on("remove-from-cart", (data) => {
+      const dishId = data.dishId;
+      useOrderStore.setState((state) => ({
+        cart: state.cart.filter((item) => item.dish._id !== dishId),
+       }));
+    })
   },
   disconnectSocket: () => {
     const socket = get().socket;
@@ -60,5 +75,6 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       set({ socket: null });
       console.log("Socket disconnected");
     }
+
   },
 }));

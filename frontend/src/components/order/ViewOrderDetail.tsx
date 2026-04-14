@@ -1,21 +1,7 @@
 import { useOrderStore } from "@/stores/useOrderStore";
-import {
-  Drawer,
-  ScrollShadow,
-  TextField,
-  InputGroup,
-  Label,
-  Button,
-  Separator,
-  toast,
-} from "@heroui/react";
-import { useState } from "react";
+import { Drawer, Button, Separator, toast, Description } from "@heroui/react";
 import { useTranslation } from "react-i18next";
-import {
-  MinusSignIcon,
-  PlusSignIcon,
-  Delete02Icon,
-} from "@hugeicons/core-free-icons";
+import { Delete02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 interface ViewOrderDetailProps {
@@ -25,24 +11,54 @@ interface ViewOrderDetailProps {
   branchId: string;
 }
 
-const ViewOrderDetail = ({ children, className, tableId, branchId }: ViewOrderDetailProps) => {
+const ViewOrderDetail = ({
+  children,
+  className,
+  tableId,
+  branchId,
+}: ViewOrderDetailProps) => {
   const { t } = useTranslation(["order"]);
   const { i18n } = useTranslation();
   const { cart, sendOrder, loadingOrderSubmit, removeFromCart, order } =
     useOrderStore();
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-  const totalPrice = cart.reduce(
-    (total, item) => total + item.dish.price * item.quantity,
-    0,
-  );
+  
   const handleSendOrder = async () => {
     try {
       await sendOrder(branchId, tableId);
       toast.success(t("order.sendSuccess"));
     } catch (error) {
       console.error("Error sending order:", error);
+      const message =
+        error instanceof Error ? error.message : t("order.sendFailed");
+      toast(message, { variant: "danger" });
     }
   };
+  const lang = i18n.language.split("-")[0] as "en" | "vi";
+
+  const orderItems =
+    order?.dishes?.map((item) => ({
+      id: item._id || item.dishName.en, // fallback
+      name: item.dishName[lang] || item.dishName.en,
+      quantity: item.quantity,
+      price: item.price,
+      note: item.note,
+      isCart: false,
+    })) || [];
+
+  const cartItems = cart.map((cartItem) => ({
+    id: cartItem.dish._id,
+    name: cartItem.dish.name[lang] || cartItem.dish.name.en,
+    quantity: cartItem.quantity,
+    price: cartItem.price,
+    note: cartItem.note,
+    isCart: true,
+  }));
+  const items = [...orderItems, ...cartItems];
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+  const totalPrice = items.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
   return (
     <Drawer>
       <Drawer.Trigger className={className}>{children}</Drawer.Trigger>
@@ -54,51 +70,35 @@ const ViewOrderDetail = ({ children, className, tableId, branchId }: ViewOrderDe
               <Drawer.Heading>{t("order.yourOrder")}</Drawer.Heading>
             </Drawer.Header>
             <Drawer.Body className="scrollbar-hidden">
-              {cart.length === 0 ? (
+              {items.length === 0 ? (
                 <div className="text-center text-muted py-10">
                   {t("orderEmpty")}
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
-                  {
-                    order && order.dishes.map((item) => (
-                      <div
-                      key={item.dishName[i18n.language as "en" | "vi"]}
-                      className="flex gap-4 items-center justify-between"
-                    >
-                      <span className="font-medium capitalize">
-                        {item.dishName[i18n.language as "en" | "vi"]} * {item.quantity}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                    ))
-                  }
-                  {cart.map((cartItem) => (
+                <div className="flex flex-col gap-3">
+                  {items.map((item) => (
                     <div
-                      key={cartItem.dish._id}
-                      className="flex gap-4 items-center justify-between"
+                      key={item.id}
+                      className="flex items-center justify-between"
                     >
-                      <span className="font-medium capitalize">
-                        {cartItem.dish.name[i18n.language as "en" | "vi"]} * {cartItem.quantity}
+                      <span className="capitalize">
+                        <p className="text-accent font-semibold font-serif">
+                          {item.name} × {item.quantity}
+                        </p>
+                        {item.note && <Description className="line-clamp-2 italic">{item.note}</Description>}
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted">
-                          ${(cartItem.price * cartItem.quantity).toFixed(2)}
-                        </span>
-                        <div className="ml-auto flex items-center gap-2">
+                        <span>${(item.price * item.quantity).toFixed(2)}</span>
+                        {item.isCart && (
                           <Button
                             variant="danger-soft"
                             isIconOnly
                             size="sm"
-                            onClick={() => removeFromCart(cartItem.dish._id)}
+                            onClick={() => removeFromCart(item.id)}
                           >
                             <HugeiconsIcon size={12} icon={Delete02Icon} />
                           </Button>
-                        </div>
+                        )}
                       </div>
                     </div>
                   ))}

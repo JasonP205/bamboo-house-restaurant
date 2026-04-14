@@ -13,41 +13,68 @@ import OrderDetail from "@/components/order/OrderDetail";
 
 const OrderMonitor = () => {
   const { branchId } = useAuthStore();
+
   const { tableBranch, getTableOfBranch, loadingTables } = useBranchStore();
-  const { loading, getAllOrdersOfBranch } = useOrderStore();
+  useEffect(() => {
+    const init = async () => {
+      if (branchId) {
+        await getTableOfBranch(branchId);
+      }
+    };
+    init();
+  }, [getTableOfBranch]);
+  const { loading, getAllOrdersOfBranch, orderOfBranch } = useOrderStore();
+
   const { t } = useTranslation(["common"]);
-  const { orderOfBranch } = useOrderStore();
+
   const viewDetailState = useOverlayState();
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const init = async () => {
+      if (orderOfBranch?.length === 0 && branchId) {
+        await getAllOrdersOfBranch();
+      }
+    };
+    init();
+  }, [getAllOrdersOfBranch]);
+
+  // ✅ FIX: handle click table
   const handleViewOrder = (table: Table) => {
-    if (table.currentOrder) {
-      setSelectedOrderId(table.currentOrder._id);
-    }
-    const selectedOrder = orderOfBranch?.find(
-      (order) => order._id === selectedOrderId,
-    );
-    if (selectedOrder) {
-      setSelectedOrder(selectedOrder);
-      viewDetailState.open();
-    } else {
+    if (!table.currentOrder) return;
+
+    const orderId = table.currentOrder._id;
+
+    setSelectedOrderId(orderId);
+
+    const foundOrder = orderOfBranch?.find((order) => order._id === orderId);
+
+    if (!foundOrder) {
+      console.warn("Order not found in store");
       return;
     }
+
+    setSelectedOrder(foundOrder);
+    viewDetailState.open();
   };
 
   const gridClassName =
     "grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-3 sm:gap-4 p-3 sm:p-4 scrollbar-hidden";
 
+  // ✅ FIX: dependency + truyền branchId
   useEffect(() => {
-    const init = async () => {
-      if (branchId) {
-        await getTableOfBranch(branchId);
-        await getAllOrdersOfBranch();
-      }
-    };
-    init();
-  }, []);
+    if (!branchId) return;
 
+    const init = async () => {
+      await Promise.all([getTableOfBranch(branchId), getAllOrdersOfBranch()]);
+    };
+
+    init();
+  }, [branchId]);
+
+  // ⛔ loading
   if (loadingTables || loading) {
     return (
       <div className={gridClassName}>
@@ -55,6 +82,8 @@ const OrderMonitor = () => {
       </div>
     );
   }
+
+  // ⛔ no tables
   if (!tableBranch || tableBranch.length === 0) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-muted">
@@ -66,6 +95,7 @@ const OrderMonitor = () => {
   return (
     <>
       <Metadata title={`${t("pageTitles.orders")} - Bamboo House`} />
+
       <OrderDetail state={viewDetailState} selectedOrder={selectedOrder} />
 
       <div className={gridClassName}>

@@ -38,7 +38,7 @@ const PlaceOrder = () => {
   const filteredMenu = useMemo(() => {
     return menu.filter(
       (dish) =>
-        dish.category === selectedCategory || selectedCategory === "all",
+        dish.category === selectedCategory || selectedCategory === "all" && dish.isAvailable,
     );
   }, [menu, branchId, selectedCategory]);
 
@@ -53,6 +53,10 @@ const PlaceOrder = () => {
   }, [branches.length]);
 
   useEffect(() => {
+    useOrderStore.getState().setCurrentTableId(tableId);
+  }, [tableId]);
+
+  useEffect(() => {
     if (!menu.length) getMenu();
   }, [menu.length]);
 
@@ -65,7 +69,7 @@ const PlaceOrder = () => {
     }
   }, [branch?._id]);
   useEffect(() => {
-    connectSocketCustomer();
+    connectSocketCustomer(tableId);
     return () => {
       disconnectSocket();
     };

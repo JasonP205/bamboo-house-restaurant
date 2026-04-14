@@ -1,4 +1,5 @@
 import api from "@/lib/axios";
+import { isAxiosError } from "axios";
 
 export const orderService = {
   getOrderDetails: async (orderId: string) => {
@@ -24,6 +25,12 @@ export const orderService = {
       return response.data.order;
     } catch (error) {
       console.error("Error sending order:", error);
+      if (isAxiosError(error)) {
+        const message =
+          (error.response?.data as { message?: string } | undefined)?.message ||
+          "Failed to send order";
+        throw new Error(message);
+      }
       throw error;
     }
   },
@@ -35,5 +42,22 @@ export const orderService = {
       console.error("Error fetching orders of branch:", error);
       throw error;
     } 
-  }
+  },
+  revokeOrder: async (orderId: string) => {
+    try {
+      await api.delete(`/orders/${orderId}`);
+    } catch (error) {
+      console.error("Error revoking order:", error);
+      throw error;
+    }
+  },
+  updateOrderStatus: async (orderId: string) => {
+    try {
+      const res = await api.patch(`/orders/${orderId}/status`);
+      return res.data.order;
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      throw error;
+    }
+  },
 };
