@@ -14,16 +14,17 @@ import { protectedRouteStaff } from "./middleware/authMiddleware.js";
 import { deviceIDMiddleware } from "./middleware/deviceIDMiddleware.js";
 import { v2 as cloudinary } from "cloudinary";
 import passport from "./lib/passportConfig.js";
+import orderRoute from "./routes/orderRoute.js";
 import menuRoute from "./routes/menuRoute.js";
+import { app, server } from "./socket/index.js";
 
 const start = process.hrtime.bigint();
 
-const app = express();
 const PORT = process.env.PORT || 5002;
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:2303",
+    origin: [process.env.CLIENT_URL, "http://localhost:2303"],
     credentials: true,
   }),
 );
@@ -39,14 +40,15 @@ cloudinary.config({
 });
 app.use("/api/test", testRoute);
 app.use("/api/auth", authRoute);
-app.use(deviceIDMiddleware);
+// app.use(deviceIDMiddleware);
 app.use("/api/menu", menuRoute);
 app.use("/api/customers", customerRoute);
 app.use("/api/branches", branchRoute);
-app.use("/api/staff", protectedRouteStaff, staffRoute);
+app.use("/api/orders", orderRoute);
+app.use("/api/staffs", protectedRouteStaff, staffRoute);
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     const end = process.hrtime.bigint();
     const time = Number(end - start) / 1e6;
 

@@ -1,4 +1,5 @@
 import api from "../lib/axios";
+import type { AddStaffFormData } from "@/components/branch/AddStaffForm";
 
 export const authService = {
   customerLogin: async (email: string, password: string) => {
@@ -29,25 +30,20 @@ export const authService = {
     });
     return response.data;
   },
-  staffRegister: async (
-    email: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    gender: "male" | "female" | "other",
-    securityCode: string,
-    branchId?: string,
-  ) => {
-    const response = await api.post("/auth/register/staff", {
-      email,
-      firstName,
-      lastName,
-      phoneNumber,
-      gender,
-      securityCode,
-      branchId,
+  staffRegister: async (data: AddStaffFormData, branchId: string) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    formData.append("gender", data.gender);
+    formData.append("avatar", data.avatar);
+    formData.append("branchId", branchId);
+    const response = await api.post("/auth/register/staff", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-    return response.data;
+    return response.data.staff;
   },
   refresh: async () => {
     const response = await api.post("/auth/refresh");

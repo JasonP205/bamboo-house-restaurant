@@ -1,10 +1,11 @@
 import Branch from "../models/Branch.js";
 import Table from "../models/Table.js";
 import bcrypt from "bcrypt";
+import Order from "../models/Order.js";
 import { uploadBranchImageFromBuffer } from "../middleware/fileMiddleware.js";
 import mongoose, { get } from "mongoose";
 
-const fetchBranchs = async (req, res) => {
+export const fetchBranchs = async (req, res) => {
   try {
     const branches = await Branch.find().sort({ createdAt: -1 }).lean();
     if (!branches || branches.length === 0) {
@@ -18,7 +19,7 @@ const fetchBranchs = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const fetchBranchById = async (req, res) => {
+export const fetchBranchById = async (req, res) => {
   const { branchId } = req?.params;
   if (!branchId) {
     return res
@@ -80,9 +81,16 @@ const fetchBranchById = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const createBranch = async (req, res) => {
+export const createBranch = async (req, res) => {
   try {
-    let { name, location, contactNumber, openingHours, floorSpace, mapCoordinates } = req.body;
+    let {
+      name,
+      location,
+      contactNumber,
+      openingHours,
+      floorSpace,
+      mapCoordinates,
+    } = req.body;
 
     // 🔥 parse từ string → object
     if (typeof openingHours === "string") {
@@ -111,7 +119,7 @@ const createBranch = async (req, res) => {
       contactNumber,
       openingHours,
       floorSpace,
-      mapCoordinates
+      mapCoordinates,
     });
 
     if (req.file) {
@@ -136,9 +144,16 @@ const createBranch = async (req, res) => {
     });
   }
 };
-const updateBranch = async (req, res) => {
+export const updateBranch = async (req, res) => {
   const { branchId } = req?.params;
-  let { name, location, contactNumber, openingHours, floorSpace, mapCoordinates } = req?.body;
+  let {
+    name,
+    location,
+    contactNumber,
+    openingHours,
+    floorSpace,
+    mapCoordinates,
+  } = req?.body;
   if (!branchId) {
     return res
       .status(400)
@@ -155,16 +170,21 @@ const updateBranch = async (req, res) => {
       openingHours = JSON.parse(openingHours);
     }
     if (name !== undefined && name.trim() !== "") branch.name = name;
-    if (location !== undefined && location.trim() !== "") branch.location = location;
-    if (contactNumber !== undefined && contactNumber.trim() !== "") branch.contactNumber = contactNumber;
-    if (openingHours !== undefined && openingHours !== null) branch.openingHours = openingHours;
-    if (floorSpace !== undefined && floorSpace.trim() !== "") branch.floorSpace = floorSpace;
-    if (mapCoordinates !== undefined && mapCoordinates.trim() !== "") branch.mapCoordinates = mapCoordinates;
+    if (location !== undefined && location.trim() !== "")
+      branch.location = location;
+    if (contactNumber !== undefined && contactNumber.trim() !== "")
+      branch.contactNumber = contactNumber;
+    if (openingHours !== undefined && openingHours !== null)
+      branch.openingHours = openingHours;
+    if (floorSpace !== undefined && floorSpace.trim() !== "")
+      branch.floorSpace = floorSpace;
+    if (mapCoordinates !== undefined && mapCoordinates.trim() !== "")
+      branch.mapCoordinates = mapCoordinates;
     if (req.file) {
       const result = await uploadBranchImageFromBuffer(req.file.buffer, {
         public_id: `branch_${branch._id}`,
         overwrite: true,
-        invalidate: true
+        invalidate: true,
       });
       branch.imageUrl = result.secure_url;
     }
@@ -175,7 +195,7 @@ const updateBranch = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const updateStatus = async (req, res) => {
+export const updateStatus = async (req, res) => {
   const { branchId } = req?.params;
   if (!branchId) {
     return res
@@ -196,8 +216,8 @@ const updateStatus = async (req, res) => {
     console.error("Error updating branch status:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
-}
-const deleteBranch = async (req, res) => {
+};
+export const deleteBranch = async (req, res) => {
   const { branchId } = req?.params;
   if (!branchId) {
     return res
@@ -220,24 +240,45 @@ const deleteBranch = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const fetchTableOfBranch = async (req, res) => {
+export const fetchTableOfBranch = async (req, res) => {
   const { branchId } = req?.params;
+
   if (!branchId) {
     return res
       .status(400)
       .json({ success: false, message: "Missing branchId" });
   }
+
   try {
     const tables = await Table.find({ branch: branchId })
       .select("-branch")
       .lean();
-    res.status(200).json({ success: true, tables });
+
+    const tableIds = tables.map((t) => t._id);
+
+    const activeOrders = await Order.find({
+      table: { $in: tableIds },
+      status: { $in: ["pending", "in-progress", "served"] }, // 👈 bàn còn đang dùng
+    }).select("table status");
+
+    const orderMap = {};
+    activeOrders.forEach((order) => {
+      orderMap[order.table.toString()] = order;
+    });
+
+    const result = tables.map((table) => ({
+      ...table,
+      isInUse: !!orderMap[table._id.toString()],
+      currentOrder: orderMap[table._id.toString()] || null,
+    }));
+
+    res.status(200).json({ success: true, tables: result });
   } catch (error) {
     console.error("Error fetching tables of branch:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const createTableForBranch = async (req, res) => {
+export const createTableForBranch = async (req, res) => {
   const { branchId } = req?.params;
   const { tables } = req?.body;
   if (!branchId) {
@@ -274,7 +315,7 @@ const createTableForBranch = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-const deleteTable = async (req, res) => {
+export const deleteTable = async (req, res) => {
   const { branchId } = req.params;
   const { tables: tableIds } = req.body;
 
@@ -321,16 +362,4 @@ const deleteTable = async (req, res) => {
       message: error.message,
     });
   }
-};
-
-export {
-  fetchBranchs,
-  updateStatus,
-  fetchBranchById,
-  createBranch,
-  updateBranch,
-  deleteBranch,
-  fetchTableOfBranch,
-  createTableForBranch,
-  deleteTable,
 };

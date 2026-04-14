@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    type: {
-      type: String,
-      enum: ["Dine-In", "Takeaway", "Delivery"],
-      required: true,
-    },
-
     orderCode:{
       type: String,
       required: true,
@@ -19,10 +13,7 @@ const orderSchema = new mongoose.Schema(
     branch: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Branch",
-      required: true,
     },
-
-    deviceId: [{ id: String }],
 
     servedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Staff" },
 
@@ -47,18 +38,23 @@ const orderSchema = new mongoose.Schema(
           min: 1,
         },
 
-        status: {
-          type: String,
-          enum: ["Pending", "In Progress", "Served", "Cancelled"],
-          default: "Pending",
-        },
-
         notes: {
           type: String,
           maxLength: 200,
         },
+
+        price: {
+          type: Number,
+          required: true,
+        },
       },
     ],
+
+    discount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
 
     totalPrice: {
       type: Number,
@@ -67,8 +63,8 @@ const orderSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["Pending", "In Progress", "Served", "Completed", "Cancelled"],
-      default: "Pending",
+      enum: ["pending", "in-progress", "served", "completed", "cancelled"],
+      default: "pending",
     },
 
     timeIn: { type: Date, default: Date.now },

@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { nanoid } from "nanoid";
 import passport from "../lib/passportConfig.js";
+import { uploadStaffImageFromBuffer } from "../middleware/fileMiddleware.js";
 
 const ACCESS_TOKEN_TTL = "40m";
 const REFRESH_TOKEN_TTL = {
@@ -22,10 +23,14 @@ const googleAuth = async (req, res, next) => {
 const googleAuthCallback = async (req, res, next) => {
   passport.authenticate("google", { session: false }, async (err, user) => {
     if (err || !user) {
-      return res.status(500).json({ success: false, message: "Google authentication failed" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Google authentication failed" });
     }
 
-    const isExistingCustomer = await Customer.findOne({ email: user.emails?.[0]?.value });
+    const isExistingCustomer = await Customer.findOne({
+      email: user.emails?.[0]?.value,
+    });
     if (!isExistingCustomer) {
       const newCustomer = new Customer({
         email: user.emails?.[0]?.value,
@@ -81,12 +86,16 @@ const googleAuthCallback = async (req, res, next) => {
 const googleAuthCallbackStaff = async (req, res, next) => {
   passport.authenticate("google", { session: false }, async (err, user) => {
     if (err || !user) {
-      return res.status(500).json({ success: false, message: "Google authentication failed" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Google authentication failed" });
     }
 
     const staff = await Staff.findOne({ email: user.emails?.[0]?.value });
     if (!staff) {
-      return res.status(404).json({ success: false, message: "Staff not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Staff not found" });
     }
     const refreshToken = crypto.randomBytes(64).toString("hex");
     await Session.create({
@@ -145,10 +154,9 @@ const registerCustomer = async (req, res) => {
 };
 const registerStaff = async (req, res) => {
   try {
-    const { email, firstName, lastName, phoneNumber, gender, branchId } =
-      req.body;
+    const { email, firstName, lastName, gender, branchId } = req.body;
 
-    if (!email || !firstName || !lastName || !phoneNumber || !gender) {
+    if (!email || !firstName || !lastName || !gender || !branchId) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -174,15 +182,20 @@ const registerStaff = async (req, res) => {
       email,
       passwordHash,
       displayName: `${firstName} ${lastName}`,
-      phoneNumber,
       gender,
       branchId,
     });
+    if (req.file) {
+      const uploadResult = await uploadStaffImageFromBuffer(req.file.buffer, {
+        public_id: `staff_${newStaff._id}`,
+      });
+      newStaff.avatarUrl = uploadResult.secure_url;
+      newStaff.avatarId = uploadResult.public_id;
+    }
     await newStaff.save();
     return res.json({
       success: true,
-      message: "Staff registered successfully",
-      staffId,
+      staff: newStaff,
     });
   } catch (error) {
     console.error("Error registering staff:", error);
@@ -214,7 +227,7 @@ const staffLogin = async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-      { id: staff._id, role: "staff" },
+      { id: staff._id, role: staff.role.toLowerCase() },
       process.env.JWT_SECRET,
       { expiresIn: ACCESS_TOKEN_TTL },
     );

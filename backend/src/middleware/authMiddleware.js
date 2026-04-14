@@ -119,33 +119,32 @@ export const managerMiddleware = async (req, res, next) => {
     let decoded;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
-        return res.status(403).json({
+        return res.status(401).json({
           success: false,
           message: "Invalid or expired access token",
         });
       }
       decoded = decoded;
+      staff = await Staff.findById(decoded.id).select("-hashedPassword").exec();
+
+      if (!staff) {
+        return res.status(404).json({
+          success: false,
+          message: "Staff not found",
+        });
+      }
+
+      if (staff.role !== "manager") {
+        return res.status(403).json({
+          success: false,
+          message: "Forbidden: Manager access required",
+        });
+      }
+
+      req.staff = staff;
+
+      next();
     });
-
-    staff = await Staff.findById(decoded.id).select("-hashedPassword").exec();
-
-    if (!staff) {
-      return res.status(404).json({
-        success: false,
-        message: "Staff not found",
-      });
-    }
-
-    if (staff.role !== "Manager") {
-      return res.status(403).json({
-        success: false,
-        message: "Forbidden: Manager access required",
-      });
-    }
-
-    req.staff = staff;
-
-    next();
   } catch (error) {
     console.error("Error in manager middleware:", error);
     return res.status(500).json({
@@ -167,7 +166,7 @@ export const protectedRoute = async (req, res, next) => {
           .status(401)
           .json({ message: "Invalid or expired access token" });
       }
-      if (decoded.role === "staff") {
+      if (decoded.role === "staff" || decoded.role === "manager") {
         const staff = await Staff.findById(decoded.id)
           .select("-passwordHash")
           .exec();

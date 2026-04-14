@@ -22,7 +22,7 @@ const BranchCard = ({ branch, className }: BranchCardProps) => {
   return (
     <Link
       onClick={() => setSelectedBranchId(branch._id)}
-      to={`/app/branches/${branch._id}`}
+      to={`/branches/${branch._id}`}
       className={cn("w-full", className)}
     >
       <div className="group relative w-full max-w-md bg-surface-secondary rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-1">

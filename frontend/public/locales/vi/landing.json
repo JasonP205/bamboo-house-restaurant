@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "menu": "Thực đơn",
+    "gallery": "Bộ sưu tập",
+    "login": "Đăng nhập"
+  },
+  "hero": {
+    "badge": "Trải nghiệm ẩm thực Botanical",
+    "title1": "Nơi thiên nhiên giao thoa",
+    "title2": "Hương vị tinh tế",
+    "subtitle": "Trải nghiệm sự hài hòa của ẩm thực truyền thống Việt Nam trong không gian xanh mát lấy cảm hứng từ tre. Một hành trình cho mọi giác quan.",
+    "cta": "Xem thực đơn"
+  },
+  "about": {
+    "badge": "Câu chuyện của chúng tôi",
+    "title": "Thánh đường của Tre & Nghệ thuật ẩm thực",
+    "p1": "Được xây dựng trên nguyên tắc bền vững và hương vị nguyên bản, Bamboo House không chỉ là một nhà hàng. Đó là một lối thoát thực vật được thiết kế để kết nối lại bạn với vẻ đẹp tự nhiên của trái đất.",
+    "p2": "Kiến trúc của chúng tôi sử dụng tre bền vững, tạo ra một không gian hữu cơ, thoáng đãng bổ sung cho triết lý từ trang trại đến bàn ăn. Mỗi món ăn là một sự tôn vinh di sản ẩm thực phong phú của Việt Nam.",
+    "stat1": "Nguyên liệu hữu cơ",
+    "stat2": "Đầu bếp đạt giải thưởng",
+    "quote": "\"Không gian ẩm thực đẹp nhất mà tôi từng trải nghiệm.\""
+  },
+  "menu": {
+    "title": "Lựa chọn đặc trưng",
+    "subtitle": "Những món ăn được tuyển chọn kỹ lưỡng đại diện cho tâm hồn của Bamboo House.",
+    "categories": {
+      "all": "Tất cả",
+      "appetizers": "Khai vị",
+      "main": "Món chính",
+      "seafood": "Hải sản",
+      "desserts": "Tráng miệng"
+    },
+    "cta": "Xem toàn bộ thực đơn",
+    "items": {
+      "springRolls": {
+        "name": "Chả giò chiên",
+        "desc": "Cuốn giòn rụm với rau tươi và thảo mộc."
+      },
+      "tilapia": {
+        "name": "Cá điêu hồng nướng",
+        "desc": "Cá tươi nướng với sả và ớt."
+      },
+      "beefPeppercorn": {
+        "name": "Bò xào tiêu xanh",
+        "desc": "Thịt bò mềm xào với tiêu xanh thơm lừng."
+      },
+      "papayaSalad": {
+        "name": "Gỏi đu đủ bò & tôm",
+        "desc": "Gỏi tươi mát với đu đủ xanh, thịt bò và tôm."
+      }
+    }
+  },
+  "gallery": {
+    "title": "Khoảnh khắc tại Bamboo",
+    "subtitle": "Một cái nhìn thoáng qua về thánh đường thực vật của chúng tôi.",
+    "follow": "Theo dõi @bamboohouse"
+  },
+  "newsletter": {
+    "title": "Tham gia vòng tròn Botanical",
+    "subtitle": "Đăng ký để nhận lời mời độc quyền đến các sự kiện nếm thử theo mùa và hội thảo thực vật của chúng tôi.",
+    "placeholder": "Địa chỉ email của bạn",
+    "button": "Đăng ký"
+  },
+  "footer": {
+    "desc": "Tạo ra những trải nghiệm ẩm thực thực vật tôn vinh sự hài hòa giữa thiên nhiên và hương vị.",
+    "location": "Địa điểm",
+    "address": "123 Bamboo Grove, Quận Botanical, VN",
+    "hours": "Giờ mở cửa",
+    "lunch": "Bữa trưa",
+    "dinner": "Bữa tối",
+    "links": "Liên kết nhanh",
+    "reservations": "Đặt bàn",
+    "events": "Sự kiện riêng",
+    "careers": "Tuyển dụng",
+    "sustainability": "Bền vững",
+    "rights": "© 2026 Bamboo House. Bảo lưu mọi quyền.",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ"
+  }
+}

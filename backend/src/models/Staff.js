@@ -8,14 +8,13 @@ const staffSchema = new mongoose.Schema(
     passwordHash: { type: String },
     role: {
       type: String,
-      enum: ["manager", "chef", "staff"],
+      enum: ["manager", "staff"],
       default: "staff",
       required: true,
     },
     branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch"},
     avatarUrl: { type: String },
     avatarId: { type: String },
-    phoneNumber: { type: String, required: true, maxLength: 12, unique: true },
     dateOfJoining: { type: Date, default: Date.now },
     gender: {
       type: String,

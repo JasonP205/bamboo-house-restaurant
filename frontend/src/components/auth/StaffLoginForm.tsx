@@ -71,7 +71,9 @@ const StaffLoginForm = () => {
   }, []);
   useEffect(() => {
     if (role === "manager") {
-      navigate("/app/branches");
+      navigate("/branches");
+    } else if (role === "staff") {
+      navigate("/orders");
     }
   }, [role, navigate]);
 

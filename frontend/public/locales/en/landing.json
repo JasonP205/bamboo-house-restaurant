@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "menu": "Menu",
+    "gallery": "Gallery",
+    "login": "Login"
+  },
+  "hero": {
+    "badge": "Botanical Dining Experience",
+    "title1": "Where Nature Meets",
+    "title2": "Exquisite Flavor",
+    "subtitle": "Experience the harmony of traditional Vietnamese cuisine in our lush, bamboo-inspired sanctuary. A journey for all your senses.",
+    "cta": "View Menu"
+  },
+  "about": {
+    "badge": "Our Story",
+    "title": "A Sanctuary of Bamboo & Culinary Art",
+    "p1": "Founded on the principles of sustainability and authentic flavor, Bamboo House is more than just a restaurant. It's a botanical escape designed to reconnect you with the earth's natural beauty.",
+    "p2": "Our architecture utilizes sustainable bamboo, creating a breathable, organic space that complements our farm-to-table philosophy. Every dish is a tribute to the rich culinary heritage of Vietnam.",
+    "stat1": "Organic Ingredients",
+    "stat2": "Award Winning Chefs",
+    "quote": "\"The most beautiful dining space I've ever experienced.\""
+  },
+  "menu": {
+    "title": "Signature Selection",
+    "subtitle": "Carefully curated dishes that represent the soul of Bamboo House.",
+    "categories": {
+      "all": "All",
+      "appetizers": "Appetizers",
+      "main": "Main Course",
+      "seafood": "Seafood",
+      "desserts": "Desserts"
+    },
+    "cta": "View Full Menu",
+    "items": {
+      "springRolls": {
+        "name": "Fried Spring Rolls",
+        "desc": "Crispy rolls filled with fresh vegetables and herbs."
+      },
+      "tilapia": {
+        "name": "Grilled Red Tilapia",
+        "desc": "Fresh tilapia grilled with lemongrass and chili."
+      },
+      "beefPeppercorn": {
+        "name": "Beef w/ Green Peppercorn",
+        "desc": "Tender beef sautéed with aromatic green peppercorns."
+      },
+      "papayaSalad": {
+        "name": "Beef & Shrimp Papaya Salad",
+        "desc": "Refreshing salad with green papaya, beef, and shrimp."
+      }
+    }
+  },
+  "gallery": {
+    "title": "Moments at Bamboo",
+    "subtitle": "A glimpse into our botanical sanctuary.",
+    "follow": "Follow us @bamboohouse"
+  },
+  "newsletter": {
+    "title": "Join Our Botanical Circle",
+    "subtitle": "Subscribe to receive exclusive invitations to our seasonal tasting events and botanical workshops.",
+    "placeholder": "Your email address",
+    "button": "Subscribe"
+  },
+  "footer": {
+    "desc": "Crafting botanical dining experiences that celebrate the harmony between nature and flavor.",
+    "location": "Location",
+    "address": "123 Bamboo Grove, Botanical District, VN",
+    "hours": "Hours",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "links": "Quick Links",
+    "reservations": "Reservations",
+    "events": "Private Events",
+    "careers": "Careers",
+    "sustainability": "Sustainability",
+    "rights": "© 2026 Bamboo House. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

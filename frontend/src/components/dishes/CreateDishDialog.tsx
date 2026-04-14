@@ -34,7 +34,7 @@ const CreateDishDialog = ({ state, title, children, className }: CreateDishDialo
       </Modal.Trigger>
       <Modal.Backdrop variant="blur">
         <Modal.Container size="lg">
-          <Modal.Dialog data-custom="add-dish">
+          <Modal.Dialog data-custom="lg-expanded">
             <Modal.CloseTrigger /> {/* Optional: Close button */}
             <Modal.Header className="flex flex-row items-center">
               <Modal.Icon className="p-2 bg-surface-secondary rounded-full text-text">

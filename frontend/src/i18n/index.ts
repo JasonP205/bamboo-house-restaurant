@@ -9,12 +9,16 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
+    
+    supportedLngs: ["vi", "en"],
+    load: "languageOnly",
 
-    ns: ["auth", "branch", "common", "dishes"],
+    ns: ["auth", "branch", "common", "dishes", "order", "landing"],
 
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
+      convertDetectedLanguage: (lng) => lng.split("-")[0], 
     },
 
     backend: {

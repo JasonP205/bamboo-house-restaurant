@@ -95,10 +95,28 @@
 @layer base {
   html {
     @apply bg-background;
+    scroll-behavior: smooth;
   }
 }
 @layer components {
-  
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    .print-area,
+    .print-area * {
+      visibility: visible;
+    }
+
+    .print-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+  }
+
   .bg-login {
     position: fixed;
     inset: -10px; /* thay cho top left width height */
@@ -166,7 +184,7 @@
   .text-text {
     @apply text-accent dark:text-surface-secondary-foreground;
   }
-  .modal__dialog--lg[data-custom="add-dish"] {
+  .modal__dialog--lg[data-custom="lg-expanded"] {
     max-width: var(--container-4xl);
   }
   /* TAG SOLD OUT */

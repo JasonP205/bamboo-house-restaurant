@@ -140,7 +140,7 @@ const MenuPage = () => {
             })}
           </ul>
         </nav>
-        <SearchField value={searchTerm} onChange={setSearchTerm}>
+        <SearchField aria-label="search-food" value={searchTerm} onChange={setSearchTerm}>
           <SearchField.Group>
             <SearchField.SearchIcon />
             <SearchField.Input className="w-70" placeholder="Search by Name" />

@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { branchService } from "@/services/branchService";
-import { dishService } from "@/services/menuService";
+import { staffService } from "@/services/staffService";
 import type { branchState } from "@/types/branch";
 import { isAxiosError } from "axios";
 import type { DishFormData } from "@/components/dishes/CreateDishForm";
+import { useOrderStore } from "./useOrderStore";
 
 export const useBranchStore = create<branchState>((set, get) => ({
   // Branch
@@ -226,5 +227,68 @@ export const useBranchStore = create<branchState>((set, get) => ({
     }
   },
 
-  // Dish
+  //staff
+  staffs: [],
+  loadingFetchStaffs: false,
+  loadingStaffAction: {},
+  getStaffsOfBranch: async () => {
+    try {
+      set({ loadingFetchStaffs: true });
+      const staffs = await staffService.fetchStaffOfBranch(
+        get().selectedBranchId!,
+      );
+      if (staffs) {
+        set({ staffs });
+      }
+    } catch (error) {
+      console.error("Error fetching staffs of branch:", error);
+      throw error;
+    } finally {
+      set({ loadingFetchStaffs: false });
+    }
+  },
+  deleteStaff: async (staffIds: string[]) => {
+    try {
+      set({
+        loadingStaffAction: {
+          ...get().loadingStaffAction,
+          delete: true,
+        },
+      });
+      await staffService.deleteStaff(staffIds);
+      const deletedSet = new Set(staffIds);
+      set((state) => ({
+        staffs: state.staffs.filter((staff) => !deletedSet.has(staff._id)),
+      }));
+    } catch (error) {
+      console.error("Error deleting staff:", error);
+      throw error;
+    } finally {
+      set({
+        loadingStaffAction: {
+          ...get().loadingStaffAction,
+          delete: false,
+        },
+      });
+    }
+  },
+
+  handleUpdateTableStatus: (data) => {
+    const { tableId, status, orderId } = data;
+    set((state) => ({
+      tableBranch: state.tableBranch.map((table) =>
+        table._id === tableId
+          ? {
+              ...table,
+              currentOrder: {
+                _id: orderId,
+                status: status,
+              },
+              isInUse: true,
+            }
+          : table,
+      ),
+    }));
+    useOrderStore.getState().getOrderDetails(orderId);
+  },
 }));

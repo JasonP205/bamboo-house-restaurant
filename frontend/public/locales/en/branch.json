@@ -159,5 +159,53 @@
         "message": "An error occurred while updating the branch. Please try again later or contact support if the problem persists."
       }
     }
+  },
+  "staffTab":{
+    "addStaffButton": "Add New Staff",
+    "addStaffButtonPending": "Adding...",
+    "deleteStaffButton": "Delete Staff",
+    "emptyState": {
+      "title": "No staff members found",
+      "description": "This branch currently has no staff members. Please add staff to manage operations effectively."
+    },
+    "addStaffModal": {
+      "title": "Add New Staff Member",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Enter full name",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter email address",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "Enter phone number",
+      "positionLabel": "Position",
+      "positionPlaceholder": "Enter job position (e.g., Waiter, Chef, Manager)",
+      "submitButton": "Add Staff Member",
+      "submitButtonPending": "Adding...",
+      "validation": {
+        "nameRequired": "Full name is required.",
+        "emailRequired": "Email address is required.",
+        "phoneRequired": "Phone number is required.",
+        "positionRequired": "Position is required.",
+        "invalidEmail": "Please enter a valid email address.",
+        "invalidPhone": "Please enter a valid phone number."
+      },
+      "toast": {
+        "success": {
+          "title": "Staff Member Added Successfully",
+          "description": "{{name}} has been added to the branch staff list."
+        },
+        "error": {
+          "title": "Failed to Add Staff Member",
+          "description": "{{name}} could not be added. Please try again later or contact support if the problem persists."
+        }
+      }
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "avatar": "Avatar",
+      "dateOfJoined": "Date of Joined",
+      "gender": "Gender",
+      "action": "Action"
+    }
   }
 }

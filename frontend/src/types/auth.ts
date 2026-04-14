@@ -1,3 +1,5 @@
+import type { AddStaffFormData } from "@/components/branch/AddStaffForm";
+
 export interface Customer {
   _id: string;
   displayName: string;
@@ -10,13 +12,13 @@ export interface Customer {
 export interface Staff {
   _id: string;
   staffId: string;
+  email: string;
   displayName: string;
   role: "staff" | "manager";
-  branchId: string;
+  branchId?: string;
   avatarUrl?: string;
-  phoneNumber: string;
-  dateOfJoining: string;
-  gender: "male" | "female" | "other";
+  dateOfJoining?: string;
+  gender?: "male" | "female" | "other";
 }
 export interface CustomerRegisterData {
   firstName: string;
@@ -59,9 +61,10 @@ export interface AuthState {
     data: CustomerRegisterData
   ) => Promise<void>;
   staffRegister: (
-    data: StaffRegisterData
-  ) => Promise<void>;
+    data: AddStaffFormData
+  ) => Promise<string>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
   fetchMe: () => Promise<void>;
+  uploadAvatar: (avatar: File) => Promise<void>;
 }

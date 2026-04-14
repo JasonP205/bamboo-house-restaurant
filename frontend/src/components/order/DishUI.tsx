@@ -1,9 +1,68 @@
-import React from 'react'
-
-const DishUI = () => {
-  return (
-    <div>DishUI</div>
-  )
+import React from "react";
+import type { Dish } from "@/types/menu";
+import { Card, Avatar, Button } from "@heroui/react";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { useOrderStore } from "@/stores/useOrderStore";
+import { Add01Icon, MinusSignIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import ViewDishDetail from "./ViewDishDetail";
+interface DishUIProps {
+  dish: Dish;
 }
 
-export default DishUI
+const DishUI = ({ dish }: DishUIProps) => {
+  const { i18n } = useTranslation();
+  const { addToCart, cart, removeFromCart } = useOrderStore();
+  const currentQuantity =
+    cart.find((item) => item.dish._id === dish._id)?.quantity || 0;
+  return (
+    <ViewDishDetail dish={dish} className="w-full">
+      <Card className="w-full p-2 rounded-lg shadow-none items-center border-none flex flex-row gap-2">
+        <div className="shrink-0">
+          <img
+            src={dish.imageUrl}
+            alt={dish.name[i18n.language as keyof typeof dish.name]}
+            className="w-16 h-16 rounded-md object-cover"
+          />
+        </div>
+        <div className="flex-1 flex flex-col">
+          <h3 className="text-sm self-start font-semibold capitalize line-clamp-1">
+            {dish.name[i18n.language as keyof typeof dish.name]}
+          </h3>
+          <div className="flex items-center gap-1 mt-1">
+            {dish.dietary.map((diet) => (
+              <span
+                key={diet}
+                className="text-xs text-white bg-warning/80 px-2 capitalize rounded-full py-1"
+              >
+                {diet}
+              </span>
+            ))}
+          </div>
+          <span className="text-sm self-end font-medium mt-1">
+            ${dish.price.toFixed(2)}
+          </span>
+          {/* <div className="ml-auto flex items-center gap-2">
+              <button
+                className="p-2 bg-accent-soft rounded-full"
+                disabled={currentQuantity <= 0}
+                onClick={() => removeFromCart(dish._id)}
+              >
+                <HugeiconsIcon size={12} icon={MinusSignIcon} />
+              </button>
+              <span className="mx-2">{currentQuantity}</span>
+              <button
+                className="p-2 bg-accent-soft rounded-full"
+                onClick={() => addToCart(dish)}
+              >
+                <HugeiconsIcon size={12} icon={Add01Icon} />
+              </button>
+            </div> */}
+        </div>
+      </Card>
+    </ViewDishDetail>
+  );
+};
+
+export default DishUI;

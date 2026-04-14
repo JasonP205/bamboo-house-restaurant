@@ -1,5 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Layout from "../ui/Layout";
 
 interface ProtectedRouteProps {
   requireLogin?: boolean;
@@ -23,7 +24,7 @@ const ProtectedRoute = ({
     return <Navigate to="/auth/select-branch" replace />;
   }
 
-  return <Outlet />;
+  return <Layout/>;
 };
 
 export default ProtectedRoute;

@@ -5,7 +5,10 @@ import { authService } from "@/services/authService";
 import { toast } from "@heroui/react";
 import { isAxiosError } from "axios";
 import i18n from "@/i18n";
-import { v4 as uuid } from "uuid"
+import type { AddStaffFormData } from "@/components/branch/AddStaffForm";
+import { useBranchStore } from "./useBranchStore";
+import { v4 as uuid } from "uuid";
+import { staffService } from "@/services/staffService";
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -18,10 +21,17 @@ export const useAuthStore = create<AuthState>()(
       branchId: null,
       getDeviceId: () => {
         const deviceId = uuid().toString();
-        set({ deviceId })
+        console.log("Generated device ID:", deviceId);
+        set({ deviceId });
       },
       clearSession: () => {
-        set({ accessToken: null, user: null, branchId: null, loading: false, role: null });
+        set({
+          accessToken: null,
+          user: null,
+          branchId: null,
+          loading: false,
+          role: null,
+        });
       },
       setAccessToken: (token: string) => {
         set({ accessToken: token });
@@ -123,37 +133,20 @@ export const useAuthStore = create<AuthState>()(
           set({ loading: false });
         }
       },
-      staffRegister: async (data) => {
+      staffRegister: async (data: AddStaffFormData) => {
         try {
           set({ loading: true });
-          const res = await authService.staffRegister(
-            data.email,
-            data.firstName,
-            data.lastName,
-            data.phoneNumber,
-            data.gender,
-            data.securityCode,
-            data?.branchId,
-          );
-          console.log(res);
-          if (res.success) {
-            toast.success(i18n.t("auth:managerPanel.toast.success.title"), {
-              description: i18n.t("auth:managerPanel.toast.success.message"),
-              timeout: 5000,
+          const branchId = useBranchStore.getState().selectedBranchId!;
+          const res = await authService.staffRegister(data, branchId);
+          if (res) {
+            const currentStaffList = useBranchStore.getState().staffs;
+            useBranchStore.setState({
+              staffs: [res, ...currentStaffList],
             });
+            return res.staffId;
           }
         } catch (error) {
-          if (isAxiosError(error)) {
-            toast.danger(i18n.t("auth:toast.staff.register.error.title"), {
-              description: i18n.t("auth:toast.staff.register.error.message"),
-              timeout: 5000,
-            });
-          } else {
-            toast.danger(i18n.t("auth:toast.unexpectedError"), {
-              timeout: 5000,
-            });
-          }
-          console.error("Error registering staff:", error);
+          throw error;
         } finally {
           set({ loading: false });
         }
@@ -169,7 +162,7 @@ export const useAuthStore = create<AuthState>()(
               timeout: 5000,
             });
           } else {
-            toast.danger(i18n.t("auth.unexpectedError"));
+            toast.danger(i18n.t("auth:toast.unexpectedError"));
           }
           console.error("Error logging out:", error);
         } finally {
@@ -230,6 +223,23 @@ export const useAuthStore = create<AuthState>()(
           set({ loading: false });
         }
       },
+      uploadAvatar: async (avatar: File) => {
+        try {
+          set({ loading: true });
+          const result = await staffService.updateAvatar(avatar);
+          if (result) {
+            set((state) => ({
+              user: state.user
+                ? { ...state.user, avatarUrl: result }
+                : null,
+            }));
+          }
+        } catch (error) {
+          console.error("Error uploading avatar:", error);
+        } finally {
+          set({ loading: false });
+        }
+      }
     }),
     {
       name: "auth-storage",

@@ -3,21 +3,22 @@ import ToggleLang from "./toggleLang";
 import ToggleTheme from "./toggleTheme";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Avatar, Button, Drawer, Separator } from "@heroui/react";
+import { Avatar, Button, Separator, Card } from "@heroui/react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 import {
   Logout02Icon,
   Store01Icon,
-  UserGroupIcon,
+  TransactionHistoryIcon,
+  PhoneOff01Icon,
   ServingFoodIcon,
   SpoonAndKnifeIcon,
-  AdvertisimentIcon,
   User03Icon,
   ArrowDown01Icon,
 } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
+import { useSocketStore } from "@/stores/useSocketStore";
 
 type NavItem = {
   name: string;
@@ -26,55 +27,60 @@ type NavItem = {
 };
 
 const Layout = () => {
+  const { getDeviceId, deviceId, role, user, logout } = useAuthStore();
+  useEffect(() => {
+    if (!deviceId) {
+      getDeviceId();
+    }
+  }, [deviceId]);
+  const { connectSocketStaff, disconnectSocket } = useSocketStore();
+  useEffect(() => {
+    connectSocketStaff();
+    return () => {
+      disconnectSocket();
+    };
+  }, [deviceId]);
   const isMobile = useIsMobile();
   const { t } = useTranslation(["common"]);
-  const { logout, role, user } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [collapsed, _setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [activePage, setActivePage] = useState<string>("");
 
   const staffNavItems: NavItem[] = [
     {
       name: t("staffNavItems.orders"),
-      path: "/app/orders",
+      path: "/orders",
       icon: <HugeiconsIcon icon={ServingFoodIcon} size={20} />,
     },
     {
-      name: t("staffNavItems.branches"),
-      path: "/app/branches",
-      icon: <HugeiconsIcon icon={Store01Icon} size={20} />,
-    },
-    {
-      name: t("staffNavItems.staff"),
-      path: "/app/staffs",
-      icon: <HugeiconsIcon icon={UserGroupIcon} size={20} />,
+      name: t("staffNavItems.history"),
+      path: "/history",
+      icon: <HugeiconsIcon icon={TransactionHistoryIcon} size={20} />,
     },
   ];
   const managerNavItems: NavItem[] = [
     {
       name: t("staffNavItems.branches"),
-      path: "/app/branches",
+      path: "/branches",
       icon: <HugeiconsIcon icon={Store01Icon} size={20} />,
     },
     {
       name: t("staffNavItems.menu"),
-      path: "/app/menu",
+      path: "/menu",
       icon: <HugeiconsIcon icon={SpoonAndKnifeIcon} size={20} />,
-    },
-    {
-      name: t("staffNavItems.advertise"),
-      path: "/app/advertise",
-      icon: <HugeiconsIcon icon={AdvertisimentIcon} size={20} />,
     },
   ];
   const navItems = role === "manager" ? managerNavItems : staffNavItems;
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/auth/login");
+    try {
+      await logout();
+      navigate("/auth/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   useEffect(() => {
@@ -84,91 +90,19 @@ const Layout = () => {
     if (currentItem) {
       setActivePage(currentItem.name);
     }
-  }, [location.pathname]);
+  }, [location.pathname, navItems]);
 
   /* ───────────────────────── MOBILE ───────────────────────── */
   if (isMobile) {
     return (
-      <div className="min-h-screen bg-surface text-on-surface">
-        {/* Header */}
-        <header className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 py-4 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
-          <h1 className="font-serif italic text-lg text-primary">
-            Bamboo House
-          </h1>
-
-          <Button
-            isIconOnly
-            variant="ghost"
-            onPress={() => setMobileOpen(true)}
-          >
-            <HugeiconsIcon icon={SpoonAndKnifeIcon} />
-          </Button>
-        </header>
-
-        {/* Drawer */}
-        <Drawer.Backdrop isOpen={mobileOpen} onOpenChange={setMobileOpen}>
-          <Drawer.Content placement="left" className="w-64">
-            <Drawer.Dialog className="h-full bg-surface p-6 flex flex-col">
-              <h2 className="font-serif italic text-xl mb-6">Menu</h2>
-
-              <nav className="flex flex-col gap-2 flex-1">
-                {navItems.map((item) => {
-                  const isActive = location.pathname.includes(item.path);
-
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "px-4 py-3 rounded-xl text-sm uppercase tracking-widest font-medium",
-                        isActive
-                          ? "bg-accent text-white"
-                          : "text-on-surface/60 hover:bg-primary/10 hover:text-primary",
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </nav>
-
-              <Button
-                onPress={handleLogout}
-                className="mt-auto uppercase tracking-widest"
-                variant="ghost"
-              >
-                Logout
-              </Button>
-            </Drawer.Dialog>
-          </Drawer.Content>
-        </Drawer.Backdrop>
-
-        {/* Content */}
-        <main className="pt-20 pb-20 px-4">
-          <Outlet />
-        </main>
-
-        {/* Bottom Nav */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t flex justify-around py-3">
-          {navItems.map((item) => {
-            const isActive = location.pathname.includes(item.path);
-
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={cn(
-                  "flex flex-col items-center text-[10px] uppercase tracking-tighter font-bold",
-                  isActive ? "text-primary" : "text-on-surface/60",
-                )}
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
+      <div className="flex flex-col items-center justify-center gap-4 p-2 h-screen text-center bg-background">
+        <Card className="bg-danger-soft text-danger p-4 flex items-center gap-1 flex-col border border-danger/70">
+          <HugeiconsIcon icon={PhoneOff01Icon} size={48} />
+          <p className="text-2xl font-serif italic">Oops...!</p>
+          <p className="text-sm text-balance leading relaxed">
+            {t("notifications.mobileNotSupported")}
+          </p>
+        </Card>
       </div>
     );
   }

@@ -160,7 +160,7 @@ const CreateTableForm = ({ action }: CreateTableFormProps) => {
       >
         {creatingTable ? (
           <>
-            <Spinner />
+            <Spinner className="text-muted" size="sm" />
             {t("branchDetail.tables.addTable.creating")}
           </>
         ) : (

@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
   label?: string;
-  placeholder: string;
+  placeholder?: string;
   isInvalid?: boolean;
   errorMessage?: string;
   onChange: (file: File) => void;
+  disabled?: boolean; 
   value?: string | null;
   className?: string;
   ratio?: "landscape" | "portrait" | "square";
@@ -26,6 +27,7 @@ export default function ImageUpload({
   onChange,
   value = null,
   className,
+  disabled = false,
   ratio = "landscape",
   isInvalid,
   errorMessage,
@@ -81,7 +83,7 @@ export default function ImageUpload({
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`w-full relative ${aspect} overflow-hidden rounded-lg group flex items-center justify-center cursor-pointer transition 
+        className={`w-full relative ${aspect} overflow-hidden rounded-lg group ${disabled ? "opacity-50 cursor-not-allowed" : "hover:brightness-125"} flex items-center justify-center cursor-pointer transition 
         ${isDragging ? "brightness-125" : ""}`}
       >
         <input

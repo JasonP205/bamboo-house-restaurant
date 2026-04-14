@@ -46,3 +46,22 @@ export const uploadDishImageFromBuffer = (buffer, options) => {
     uploadStream.end(buffer);
   });
 };
+export const uploadStaffImageFromBuffer = (buffer, options) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "bamboo_house/staff",
+        resource_type: "image",
+        ...options,
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      },
+    );
+    uploadStream.end(buffer);
+  });
+};

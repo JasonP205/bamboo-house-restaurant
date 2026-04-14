@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@heroui/react";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -9,13 +9,12 @@ import { Store01Icon } from "@hugeicons/core-free-icons";
 import BranchOverViewTab from "@/components/branch/BranchOverViewTab";
 import BranchTableTab from "@/components/branch/BranchTableTab";
 import BranchDetailSkeleton from "@/components/branch/BranchDetailSkeleton";
-// ── Helpers ───────────────────────────────────────────────────────────────────
+import StaffTab from "@/components/branch/StaffTab";
+import { Breadcrumbs } from "@heroui/react";
 
-// ── Sub-component: labelled info row inside a card ───────────────────────────
-
-// ── Page ─────────────────────────────────────────────────────────────────────
 const BranchDetail = () => {
   const { t } = useTranslation(["branch"]);
+  const { t: tCommon } = useTranslation(["common"]);
   const { branchId } = useParams();
   const {
     getBranchInfo,
@@ -31,7 +30,9 @@ const BranchDetail = () => {
     }
   }, [selectedBranchId, branchId]);
   if (loading) {
-    return <BranchDetailSkeleton title={branch?.name || t("branchDetail.title")} />;
+    return (
+      <BranchDetailSkeleton title={branch?.name || t("branchDetail.title")} />
+    );
   }
   /* ── Empty state ── */
   if (!branch) {
@@ -48,6 +49,18 @@ const BranchDetail = () => {
       <div className="mx-auto flex flex-col gap-6">
         {/* ── 1. Hero image ─────────────────────────────────────── */}
         <div className="relative w-full aspect-21/9 overflow-hidden shadow-lg bg-surface-secondary">
+          <div className="absolute top-4 left-4 backdrop-blur-2xl bg-surface/70 rounded-full px-3 py-1">
+            <Breadcrumbs>
+              <Breadcrumbs.Item>
+                <Link to="/app/branches">
+                  {tCommon("staffNavItems.branches")}
+                </Link>
+              </Breadcrumbs.Item>
+              <Breadcrumbs.Item>
+                <span className="capitalize text-accent">{branch.name}</span>
+              </Breadcrumbs.Item>
+            </Breadcrumbs>
+          </div>
           {branch.imageUrl ? (
             <img
               src={branch.imageUrl}
@@ -74,9 +87,13 @@ const BranchDetail = () => {
                 {t("branchDetail.status.title")}
               </p>
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 ${branch.isOpen ? "bg-emerald-400" : "bg-red-400"} rounded-full`} />
+                <span
+                  className={`w-2 h-2 ${branch.isOpen ? "bg-emerald-400" : "bg-red-400"} rounded-full`}
+                />
                 <span className="text-base font-light line-clamp-1">
-                  {t(`branchDetail.status.${branch.isOpen ? "open" : "closed"}`)}
+                  {t(
+                    `branchDetail.status.${branch.isOpen ? "open" : "closed"}`,
+                  )}
                 </span>
               </div>
             </div>
@@ -104,10 +121,6 @@ const BranchDetail = () => {
                   {t("branchDetail.tab.analytics")}
                   <Tabs.Indicator />
                 </Tabs.Tab>
-                <Tabs.Tab id="configuration">
-                  {t("branchDetail.tab.config")}
-                  <Tabs.Indicator />
-                </Tabs.Tab>
               </Tabs.List>
             </Tabs.ListContainer>
             <Tabs.Panel className="pt-4" id="overview">
@@ -120,13 +133,10 @@ const BranchDetail = () => {
               <BranchTableTab branchId={branch._id} />
             </Tabs.Panel>
             <Tabs.Panel className="pt-4" id="staff">
-              <p>View and manage your staff members.</p>
+              <StaffTab />
             </Tabs.Panel>
             <Tabs.Panel className="pt-4" id="analytics">
               <p>View detailed analytics and reports for your branch.</p>
-            </Tabs.Panel>
-            <Tabs.Panel className="pt-4" id="configuration">
-              <p>Configure branch settings and preferences.</p>
             </Tabs.Panel>
           </Tabs>
         </div>

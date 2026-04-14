@@ -4,71 +4,142 @@ import Staff from "../models/Staff.js";
 import Customer from "../models/Customer.js";
 import Table from "../models/Table.js";
 import Dish from "../models/Dish.js";
-import helper from "../utils/helper.js";
+import helper from "../lib/helper.js";
+import { io } from "../socket/index.js";
+import { formatOrder } from "../lib/formatOrder.js";
 
+
+export const getAllOrdersOfBranch = async (req, res) => {
+  const { branchId } = req?.params;
+  if (!branchId) {
+    return res.status(400).json({ success: false, message: "Missing branchId" });
+  }
+  try {
+    const orders = await Order.find({ branch: branchId })
+      .populate("table", "number")
+      .populate("customer", "displayName")
+      .populate("servedBy", "displayName")
+      .populate("items.dishId", "name price imageUrl")
+      .lean();
+
+    const formattedOrders = orders.map(formatOrder);
+
+    res.status(200).json({ success: true, orders: formattedOrders });
+  } catch (error) {
+    console.error("Error fetching orders of branch:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
 export const createOrder = async (req, res) => {
   try {
-    const { customerId } = req?.body;
-    const { orderList, tableId, type } = req.body;
-    let branchId;
+    const { branchId, tableId, dishes } = req.body;
 
-    if (!orderList || orderList.length === 0) {
+    // 1. Validate
+    if (!branchId || !tableId || !dishes?.length) {
       return res.status(400).json({
         success: false,
-        message: "Order list is empty",
+        message: "Missing required fields",
       });
     }
 
-    // lấy tất cả dishId
-    const dishIds = orderList.map((item) => item.dish._id);
+    // 2. Check table
+    const table = await Table.findById(tableId);
+    if (!table) {
+      return res.status(404).json({
+        success: false,
+        message: "Table not found",
+      });
+    }
 
-    // query 1 lần
-    const dishes = await Dish.find({
-      _id: { $in: dishIds },
-    }).select("price");
+    // 3. Check branch
+    if (table.branch.toString() !== branchId) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid branch for this table",
+      });
+    }
 
-    // tạo map dishId -> price
-    const dishMap = new Map();
-
-    dishes.forEach((dish) => {
-      dishMap.set(dish._id.toString(), dish.price);
+    // 4. Check bàn đang dùng
+    const existingOrder = await Order.findOne({
+      table: tableId,
+      status: { $in: ["pending", "in-progress", "served"] },
     });
 
-    // tạo items với snapshot price
-    const items = orderList.map((item) => {
-      const price = dishMap.get(item.dish._id);
+    if (existingOrder) {
+      return res.status(400).json({
+        success: false,
+        message: "Table is already in use",
+      });
+    }
+
+    // 5. Lấy dish từ DB
+    const dishIds = dishes.map((d) => d.dish);
+
+    const dbDishes = await Dish.find({
+      _id: { $in: dishIds },
+    });
+
+    // 6. Map items + tính tiền
+    let totalPrice = 0;
+
+    const items = dishes.map((item) => {
+      const dish = dbDishes.find((d) => d._id.toString() === item.dish);
+
+      if (!dish) {
+        throw new Error(`Dish not found: ${item.dish}`);
+      }
+
+      const price = dish.price;
+
+      totalPrice += price * item.quantity;
 
       return {
-        dishId: item.dish._id,
-        price: price, // snapshot
+        dishId: dish._id,
+        price,
         quantity: item.quantity,
-        notes: item.notes || "",
+        notes: item.note || "",
       };
     });
 
-    // tính total
-    const totalPrice = items.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
+    // 7. Generate orderCode
+    const orderCode = "ORD" + Date.now().toString().slice(-6);
 
-    const newOrder = new Order({
-      type,
+    // 8. Create order
+    const newOrder = await Order.create({
+      orderCode,
       table: tableId,
       branch: branchId,
-      customer: customerId,
       items,
       totalPrice,
+      status: "pending",
+      timeIn: new Date(),
     });
 
-    await newOrder.save();
+    // 9. Update table
+    await Table.updateOne({ _id: tableId }, { $set: { isInUse: true } });
 
-    res.status(201).json({
+    // 🔥 10. Populate để trả đúng format
+    const populatedOrder = await Order.findById(newOrder._id)
+      .populate("items.dishId", "name imageUrl")
+      .lean();
+
+    const formattedOrder = formatOrder(populatedOrder);
+
+    // 🔥 11. SOCKET REALTIME
+    io.to(branchId.toString()).emit("tableUpdated", {
+      tableId,
+      orderId: newOrder._id,
+      status: "pending"
+    });
+
+    // 12. Response
+    return res.status(201).json({
       success: true,
-      order: newOrder,
+      order: formattedOrder,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Create order error:", error);
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -227,42 +298,27 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-export const getOrderByBranchId = async (req, res) => {
-  const { orderId, branchId } = req?.body;
+export const getOrderDetails = async (req, res) => {
+  const { orderId } = req?.params;
   if (!orderId) {
     return res.status(400).json({ success: false, message: "Missing orderId" });
   }
-
   try {
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId)
+      .populate("table", "number")
+      .populate("customer", "name email")
+      .populate("servedBy", "name email")
+      .populate("items.dishId", "name price");
+
     if (!order) {
       return res
         .status(404)
         .json({ success: false, message: "Order not found" });
     }
-    if (order.branch.toString() !== branchId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Access denied for this order" });
-    }
 
     res.status(200).json({ success: true, order });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
-};
-export const getOrdersByBranch = async (req, res) => {
-  const { branchId } = req?.branchId;
-  if (!branchId) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing branchId" });
-  }
-
-  try {
-    const orders = await Order.find({ branch: branchId });
-    res.status(200).json({ success: true, orders });
-  } catch (error) {
+    console.error("Error fetching order details:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -5,7 +5,6 @@ const tableSchema = new mongoose.Schema(
     number: { type: Number, required: true },
     branch: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
     capacity: { type: Number, required: true, min: 1 },
-    isInUse: { type: Boolean, default: false },
     isBooked: { type: Boolean, default: false },
   },
   { timestamps: true },

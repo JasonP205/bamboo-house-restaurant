@@ -1,16 +1,49 @@
 {
-    "staffNavItems": {
-        "dashboard": "Dashboard",
-        "branches": "Branches",
-        "staff": "Staff",
-        "menu": "Menu",
-        "orders": "Orders",
-        "settings": "Settings",
-        "logoutButton": "Logout",
-        "advertise": "Advertise"
-    },
-    "toggleLangOptions": {
-        "en": "Switch to English",
-        "vi": "Switch to Vietnamese"
+  "staffNavItems": {
+    "dashboard": "Dashboard",
+    "branches": "Branches",
+    "staff": "Staff",
+    "menu": "Menu",
+    "orders": "Orders",
+    "settings": "Settings",
+    "logoutButton": "Logout",
+    "history": "History",
+    "home": "Home"
+  },
+  "pageTitles": {
+    "branches": "Branches",
+    "menu": "Menu",
+    "orders": "Orders",
+    "history": "History"
+  },
+  "toggleLangOptions": {
+    "en": "Switch to English",
+    "vi": "Switch to Vietnamese"
+  },
+  "notifications": {
+    "noNotifications": "No notifications yet.",
+    "newOrder": "New order received",
+    "orderUpdate": "Order #{{orderId}} status updated to {{status}}",
+    "mobileNotSupported": "Mobile view is not supported. Please use a desktop or laptop continue"
+  },
+  "staff":{
+    "title": "Staff Profile",
+    "staffAvatar": "Staff Avatar",
+    "staffName": "Staff Name",
+    "staffNumber": "Staff Number",
+    "dateOfJoining": "Date of Joining",
+    "gender": "Gender",
+    "genderValue": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
     }
+  },
+  "table": {
+    "qrcodeTitle": "QR Code for Table {{tableNumber}}",
+    "qrcodeDescription": "Place this QR on the table for customers to scan and order directly from their phones.",
+    "downloadButton": "Download QR Code",
+    "preparing": "Creating Image...",
+    "printButton": "Print QR Code"
+  }
 }

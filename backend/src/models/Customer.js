@@ -12,15 +12,15 @@ const customerSchema = new mongoose.Schema(
     },
     tiers:{
       type: String,
-      enum: ["Sprout", "Shoot", "Stem", "Grove", "Legend"],
-      default: "Sprout",
+      enum: ["sprout", "shoot", "stem", "grove", "legend"],
+      default: "sprout",
     },
     points: { type: Number, default: 0 },
     avatarUrl: { type: String },
     avatarId: { type: String },
     provider: {
         type: String,
-        enum: ["local", "google", "facebook"],
+        enum: ["local", "google"],
         default: "local",
     },
     providerId: {

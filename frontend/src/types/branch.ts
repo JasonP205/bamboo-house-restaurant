@@ -1,4 +1,5 @@
 import type { DishFormData } from "@/components/dishes/CreateDishForm";
+import type { Staff } from "./auth";
 export interface Branch {
   _id: string;
   name: string;
@@ -21,6 +22,10 @@ export interface Table {
   _id: string;
   number: number;
   capacity: number;
+  currentOrder?:{
+    _id: string;
+    status: string;
+  }
   isInUse: boolean;
   isBooked: boolean;
   createdAt: string;
@@ -65,5 +70,12 @@ export interface branchState {
   createBranch: (data: BranchCreateData) => Promise<void>;
   getBranchInfo: (id: string) => Promise<void>;
   editBranch: (data: BranchCreateData) => Promise<void>;
-
+  handleUpdateTableStatus:(data: { tableId: string; status: string, orderId: string })=>void;
+  staffs: Staff[];
+  loadingFetchStaffs: boolean;
+  loadingStaffAction: {
+    [key: string]: boolean; 
+  };
+  getStaffsOfBranch: () => Promise<void>;
+  deleteStaff: (staffIds: string[]) => Promise<void>;
 }

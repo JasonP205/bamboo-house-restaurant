@@ -20,7 +20,7 @@ const DishCard = ({ dish }: DishCardProps) => {
     }
   };
   return (
-    <Link to={`/app/menu/${dish._id}`}>
+    <Link to={`/menu/${dish._id}`}>
       <div className="group relative bg-surface md:min-h-140 lg:min-h-125 rounded-xl overflow-hidden transition-all duration-300">
         {!dish.isAvailable && <div className="sold-out-tag"></div>}
         <div className="aspect-square overflow-hidden relative">
