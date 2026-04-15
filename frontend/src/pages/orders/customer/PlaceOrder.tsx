@@ -20,12 +20,7 @@ const PlaceOrder = () => {
 
   const { menu, loadingFetchDishes, getMenu } = useMenuStore();
   const { branches, fetchBranches, loading } = useBranchStore();
-  const {
-    setCurrentBranchId,
-    currentBranchId,
-    cart,
-    order
-  } = useOrderStore();
+  const { setCurrentBranchId, currentBranchId, cart, order } = useOrderStore();
   const [selectedCategory, setSelectedCategory] = useState<
     "all" | "appetizer" | "main" | "beverage" | "merchandise"
   >("all");
@@ -36,7 +31,8 @@ const PlaceOrder = () => {
   const filteredMenu = useMemo(() => {
     return menu.filter(
       (dish) =>
-        dish.category === selectedCategory || selectedCategory === "all" && dish.isAvailable,
+        dish.category === selectedCategory ||
+        (selectedCategory === "all" && dish.isAvailable),
     );
   }, [menu, branchId, selectedCategory]);
 
@@ -48,6 +44,9 @@ const PlaceOrder = () => {
       useOrderStore.setState({ cart: [], order: null });
     }
   }, [order]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [vatAmount, setVatAmount] = useState(0);
   useEffect(() => {
     const init = async () => {
       if (!branches.length) await fetchBranches();
@@ -85,11 +84,6 @@ const PlaceOrder = () => {
   if (!branch) {
     return <div>{t("order:messages.branchNotFound")}</div>;
   }
-  
-  const [totalItems, setTotalItems] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [vatAmount, setVatAmount] = useState(0);
-
 
   return (
     <div className="p-2 relative flex flex-col gap-4 h-full">
@@ -159,7 +153,9 @@ const PlaceOrder = () => {
           <HugeiconsIcon strokeWidth={2} size={26} icon={ShoppingCart02Icon} />
         </div>
         <div className="flex flex-col leading-tight items-start">
-          <p className="text-white font-serif font-medium">{t("order:currentOrder")}</p>
+          <p className="text-white font-serif font-medium">
+            {t("order:currentOrder")}
+          </p>
           <p className="text-white font-semibold text-sm">
             {t("order:messages.itemCountAndTotal", {
               count: totalItems,
