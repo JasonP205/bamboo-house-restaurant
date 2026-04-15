@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import ViewOrderDetail from "@/components/order/ViewOrderDetail";
 import { useSocketStore } from "@/stores/useSocketStore";
 import { useAuthStore } from "@/stores/useAuthStore";
+import NotFound from "@/pages/NotFound";
 
 const PlaceOrder = () => {
   const [searchParams] = useSearchParams();
@@ -37,7 +38,7 @@ const PlaceOrder = () => {
   }, [menu, branchId, selectedCategory]);
 
   if (!branchId || !tableId) {
-    return <div>{t("order:messages.invalidBranchOrTable")}</div>;
+    return <NotFound/>;
   }
   useEffect(() => {
     if (order && order.status === "completed") {
@@ -46,7 +47,6 @@ const PlaceOrder = () => {
   }, [order]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [vatAmount, setVatAmount] = useState(0);
   useEffect(() => {
     const init = async () => {
       if (!branches.length) await fetchBranches();
@@ -146,7 +146,6 @@ const PlaceOrder = () => {
         branchId={branchId}
         calTotalItem={setTotalItems}
         calTotalPrice={setTotalPrice}
-        calVatAmount={setVatAmount}
         className="fixed bottom-2 items-center gap-2 left-1/2 p-2 flex -translate-x-1/2 w-[95%] bg-accent rounded-xl shadow-lg"
       >
         <div className="bg-surface/20 shink-0 w-12 aspect-square flex items-center justify-center rounded-full text-white text-2xl font-bold">

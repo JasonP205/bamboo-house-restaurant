@@ -53,9 +53,7 @@ export const useAuthStore = create<AuthState>()(
           console.error("Error logging in staff:", error);
           get().clearSession();
           throw error;
-        } finally {
-          set({ loading: false });
-        }
+        } 
       },
       staffRegister: async (data: AddStaffFormData) => {
         try {

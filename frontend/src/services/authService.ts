@@ -10,11 +10,15 @@ export const authService = {
     return response.data.accessToken;
   },
   staffLogin: async (staffId: string, password: string) => {
-    const response = await api.post("/auth/login/staff", {
-      staffId,
-      password,
-    });
-    return response.data.accessToken;
+    try {
+      const response = await api.post("/auth/login/staff", {
+        staffId,
+        password,
+      });
+      return response.data.accessToken;
+    } catch (error) {
+      throw error;
+    }
   },
   customerRegister: async (
     firstName: string,

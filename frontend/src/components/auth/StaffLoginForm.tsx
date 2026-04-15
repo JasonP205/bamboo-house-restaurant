@@ -51,10 +51,10 @@ const StaffLoginForm = () => {
         timeout: 5000,
       });
     } catch (error) {
-      toast.danger(t("auth:toast.staff.login.error.title"), {
-        description: t("auth:toast.staff.login.error.message"),
+      toast.danger("Staff ID or password is incorrect", {
         timeout: 5000,
       });
+      console.error("Login error:", error);
     }
   };
 
