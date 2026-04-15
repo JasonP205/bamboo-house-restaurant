@@ -85,7 +85,7 @@ const ViewDishDetail = ({ dish, children, className }: ViewDishDetailProps) => {
                     <Label>{t("order.notes")}</Label>
                     <InputGroup>
                       <InputGroup.TextArea
-                        placeholder={t("order.notesPlaceholder")}
+                        placeholder={t("notesPlaceholder")}
                         value={notes}
                         className="resize-none text-sm"
                         onChange={(e) => setNotes(e.target.value)}
@@ -122,8 +122,8 @@ const ViewDishDetail = ({ dish, children, className }: ViewDishDetailProps) => {
                   onClick={handleAddToCart}
                 >
                   {currentQuantity > 0
-                    ? t("order.updateCart")
-                    : t("order.addToCart")}
+                    ? t("updateCart")
+                    : t("addToCart")}
                 </Button>
               </div>
             </Drawer.Body>
