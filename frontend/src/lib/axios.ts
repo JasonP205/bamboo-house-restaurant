@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const api = axios.create({
-  baseURL: "https://api.hwagfu.dev/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5002/api",
   withCredentials: true,
 });
 
