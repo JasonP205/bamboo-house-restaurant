@@ -33,7 +33,6 @@ export const createOrder = async (req, res) => {
   try {
     const { branchId, tableId, dishes } = req.body;
 
-    // 1. Validate
     if (!branchId || !tableId || !dishes?.length) {
       return res.status(400).json({
         success: false,
@@ -41,7 +40,6 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // 2. Check table
     const table = await Table.findById(tableId);
     if (!table) {
       return res.status(404).json({
@@ -50,7 +48,6 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // 3. Check branch
     if (table.branch.toString() !== branchId) {
       return res.status(400).json({
         success: false,
@@ -58,7 +55,6 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // 4. Check bàn đang dùng
     const existingOrder = await Order.findOne({
       table: tableId,
       status: { $in: ["pending", "in-progress", "served"] },
@@ -71,14 +67,12 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // 5. Lấy dish từ DB
     const dishIds = dishes.map((d) => d.dish);
 
     const dbDishes = await Dish.find({
       _id: { $in: dishIds },
     });
 
-    // 6. Map items + tính tiền
     let subTotal = 0;
 
     const items = dishes.map((item) => {
@@ -100,13 +94,11 @@ export const createOrder = async (req, res) => {
       };
     });
 
-    // 7. Generate orderCode
     const orderCode = "ORD" + Date.now().toString().slice(-6);
     const vat_percentage = parseFloat(process.env.VAT_PERCENTAGE || "0");
     const vatAmount = subTotal * vat_percentage;
     const totalPrice = subTotal + vatAmount;
 
-    // 8. Create order
     const newOrder = await Order.create({
       orderCode,
       table: tableId,
@@ -119,10 +111,8 @@ export const createOrder = async (req, res) => {
       timeIn: new Date(),
     });
 
-    // 9. Update table
     await Table.updateOne({ _id: tableId }, { $set: { isInUse: true } });
 
-    // 🔥 10. Populate để trả đúng format
     const populatedOrder = await Order.findById(newOrder._id)
       .populate("items.dishId", "name imageUrl")
       .populate("table", "number")
@@ -130,7 +120,6 @@ export const createOrder = async (req, res) => {
 
     const formattedOrder = formatOrder(populatedOrder);
 
-    // 🔥 11. SOCKET REALTIME
     io.to(branchId.toString()).emit("tableUpdated", {
       tableId,
       orderId: newOrder._id,
@@ -147,7 +136,6 @@ export const createOrder = async (req, res) => {
     io.to(tableId.toString()).emit("order-created", orderCreatedPayload);
     clearTableCart(tableId);
 
-    // 12. Response
     return res.status(201).json({
       success: true,
       order: formattedOrder,

@@ -3,6 +3,7 @@ import http from "http";
 import express from "express";
 import { socketMiddleware } from "../middleware/socketMiddleware.js";
 import Order from "../models/Order.js";
+import { formatOrder } from "../lib/formatOrder.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -44,11 +45,16 @@ io.on("connection", (socket) => {
       const incompleteOrder = await Order.findOne({
         table: tableId,
         status: { $ne: "completed" },
-      }).populate("items.dishId servedBy");
+      })
+        .populate("table", "number")
+        .populate("servedBy", "displayName")
+        .populate("items.dishId", "name price imageUrl")
+        .lean();
 
       if (incompleteOrder) {
         console.log(`Found incomplete order for table ${tableId}: ${incompleteOrder._id}`);
-        socket.emit("current-order", incompleteOrder);
+        const formattedOrder = formatOrder(incompleteOrder);
+        socket.emit("current-order", formattedOrder);
       }
     } catch (error) {
       console.error("Error fetching incomplete order:", error);
