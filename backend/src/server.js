@@ -8,7 +8,6 @@ import {connectDB} from "./lib/db.js";
 import branchRoute from "./routes/branchRoute.js";
 import staffRoute from "./routes/staffRoute.js";
 import authRoute from "./routes/authRoute.js";
-import testRoute from "./routes/testRoute.js";
 import { protectedRouteStaff } from "./middleware/authMiddleware.js";
 import { deviceIDMiddleware } from "./middleware/deviceIDMiddleware.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -37,9 +36,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-app.use("/api/test", testRoute);
 app.use("/api/auth", authRoute);
-// app.use(deviceIDMiddleware);
 app.use("/api/menu", menuRoute);
 app.use("/api/branches", branchRoute);
 app.use("/api/orders", orderRoute);
