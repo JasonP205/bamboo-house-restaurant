@@ -36,7 +36,7 @@ const NumberInput = ({
   return (
     <NumberField
       formatOptions={formatOptions}
-      defaultValue={value}
+      value={value}
       onChange={onChange}
       step={step}
       isInvalid={isInvalid}

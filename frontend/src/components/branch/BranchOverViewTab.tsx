@@ -1,8 +1,6 @@
 import {
-  Button,
   Card,
   CardHeader,
-  Separator,
   useOverlayState,
 } from "@heroui/react";
 import { useTranslation } from "react-i18next";
@@ -16,7 +14,6 @@ import {
   DiningTableIcon,
   Mail02Icon,
   IdIcon,
-  Edit,
 } from "@hugeicons/core-free-icons";
 import type { BranchDetail } from "@/types/branch";
 import InfoRow from "./InfoRow";

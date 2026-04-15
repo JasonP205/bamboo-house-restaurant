@@ -5,7 +5,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage";
-import { Toast } from "@heroui/react";
+import { Toast,ToastQueue} from "@heroui/react";
 import BranchesPage from "./pages/branches/BranchesPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BranchDetail from "./pages/branches/BranchDetail";
@@ -18,19 +18,21 @@ import CustomerLayOut from "./components/ui/CustomerLayOut";
 import { useEffect } from "react";
 import OrderMonitor from "./pages/orders/staff/OrderMonitor";
 import LandingPage from "./pages/LandingPage";
-import { useTranslation } from "react-i18next";
+import NotFound from "./pages/NotFound";
+import HistoryOrder from "./pages/orders/staff/HistoryOrder";
+import StaffProfilePage from "./pages/staff/StaffProfilePage";
 
 function App() {
-  const { t } = useTranslation(["common"]);
   const { getDeviceId, deviceId } = useAuthStore();
   useEffect(() => {
     if (!deviceId) {
       getDeviceId();
     }
   }, [deviceId]);
+  const maxQueue = new ToastQueue({maxVisibleToasts: 2});
   return (
     <>
-      <Toast.Provider placement="top" className="z-100" />
+      <Toast.Provider queue={maxQueue} placement="top" className="z-100" />
       <Router>
         <div className="min-w-screen min-h-svh">
           <Routes>
@@ -48,6 +50,8 @@ function App() {
               </Route>
 
               <Route path="orders" element={<OrderMonitor />} />
+              <Route path="history" element={<HistoryOrder />} />
+              <Route path="staff/:staffId" element={<StaffProfilePage />} />
             </Route>
             <Route path="order" element={<CustomerLayOut />}>
               <Route index element={<PlaceOrder />} />
@@ -57,7 +61,7 @@ function App() {
               <Route path="login" element={<LoginPage />} />
             </Route>
 
-            <Route path="*" element={<h1>{t("errors.notFound")}</h1>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </Router>

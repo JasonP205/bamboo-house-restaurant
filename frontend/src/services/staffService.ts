@@ -1,5 +1,12 @@
 import api from "@/lib/axios";
 
+export type UpdateStaffPayload = {
+    displayName: string;
+    email: string;
+    gender: "male" | "female" | "other";
+    dateOfJoining: string;
+};
+
 export const staffService = {
     fetchStaffOfBranch: async (branchId: string) => {
         try {
@@ -30,6 +37,24 @@ export const staffService = {
             return res.data.avatarUrl;
         } catch (error) {
             console.error("Error updating avatar:", error);
+            throw error;
+        }
+    },
+    fetchStaffById: async (staffId: string) => {
+        try {
+            const res = await api.get(`/staffs/${staffId}`);
+            return res.data.staff;
+        } catch (error) {
+            console.error("Error fetching staff detail:", error);
+            throw error;
+        }
+    },
+    updateStaffById: async (staffId: string, payload: UpdateStaffPayload) => {
+        try {
+            const res = await api.patch(`/staffs/${staffId}`, payload);
+            return res.data.staff;
+        } catch (error) {
+            console.error("Error updating staff detail:", error);
             throw error;
         }
     }

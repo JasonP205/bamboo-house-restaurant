@@ -170,7 +170,7 @@ const StaffTab = () => {
                     <Table.Cell>
                       <Tooltip>
                         <Link
-                          to={`/app/staff/${staff._id}`}
+                          to={`/staff/${staff._id}`}
                           className="text-primary hover:underline flex items-center gap-1"
                         >
                           <HugeiconsIcon size={15} icon={LinkSquare02Icon} />

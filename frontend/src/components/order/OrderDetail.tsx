@@ -1,7 +1,6 @@
 import {
   Button,
   Drawer,
-  Separator,
   Skeleton,
   useOverlayState,
 } from "@heroui/react";
@@ -9,7 +8,6 @@ import { useOrderStore } from "@/stores/useOrderStore";
 import type { Order } from "@/types/order";
 import { useTranslation } from "react-i18next";
 import AlertDialog from "../ui/AlertDialog";
-import { formatTime } from "@/lib/helper";
 import { useEffect, useState } from "react";
 import OrderBill from "./OrderBill";
 import { toast } from "@heroui/react";
@@ -21,35 +19,15 @@ interface OrderDetailProps {
 }
 const OrderDetail = ({ selectedOrder, state }: OrderDetailProps) => {
   const { t } = useTranslation(["order"]);
-  const { i18n } = useTranslation();
   const [hasPrintedBill, setHasPrintedBill] = useState(false);
 
   useEffect(() => {
     setHasPrintedBill(false);
   }, [selectedOrder?._id, selectedOrder?.status]);
 
-  const formatCurrency = (value: number) =>
-    new Intl.NumberFormat(i18n.language, {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 2,
-    }).format(value);
 
   const mustPrintBeforeComplete = selectedOrder?.status === "served";
   const isCompleteBlocked = mustPrintBeforeComplete && !hasPrintedBill;
-
-  const statusStyle = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "bg-warning-soft-hover text-warning border border-warning/40 w-full p-4 rounded-lg animate-pulse";
-      case "in-progress":
-        return "bg-info-soft-hover text-info border border-info/40 w-full p-4 rounded-lg animate-pulse";
-      case "served":
-        return "bg-success-soft-hover text-success border border-success/40 w-full p-4 rounded-lg animate-pulse";
-      default:
-        return "bg-muted-soft-hover text-muted border border-muted/40 w-full p-4 rounded-lg animate-pulse";
-    }
-  };
   const { revokeOrder, updateOrderStatus } = useOrderStore();
 
   const handleRevokeOrder = async () => {

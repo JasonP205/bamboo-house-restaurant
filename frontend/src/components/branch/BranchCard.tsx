@@ -1,5 +1,5 @@
 import type { Branch } from "@/types/branch";
-import { Switch, Spinner, Tooltip } from "@heroui/react";
+import { Switch, Spinner } from "@heroui/react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import {

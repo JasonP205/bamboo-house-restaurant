@@ -49,5 +49,9 @@
     "downloadButton": "Download QR Code",
     "preparing": "Creating Image...",
     "printButton": "Print QR Code"
+  },
+  "common":{
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   }
 }

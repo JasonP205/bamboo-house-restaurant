@@ -16,7 +16,7 @@ interface CreateTableFormProps {
 const CreateTableForm = ({ action }: CreateTableFormProps) => {
   const [groups, setGroups] = useState<number[]>([]);
   const [data, setData] = useState<Record<number, TableData>>({});
-  const [errors, setErrors] = useState<Record<number, string>>({});
+  const [_errors, setErrors] = useState<Record<number, string>>({});
   const { t } = useTranslation(["branch"]);
   const { createTable, creatingTable } = useBranchStore();
   const addGroup = () => {

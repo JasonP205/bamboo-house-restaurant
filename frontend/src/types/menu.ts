@@ -1,4 +1,5 @@
 import type { DishFormData } from "@/components/dishes/CreateDishForm";
+import type { EditDishPatchData } from "@/services/menuService";
 
 export interface Dish {
   _id: string;
@@ -41,4 +42,6 @@ export interface MenuState {
   getMenu: () => Promise<void>;
   changeDishStatus: (dishId: string) => Promise<void>;
   getDishById: (dishId: string) => Promise<void>;
+  deleteDish: (dishId: string) => Promise<void>;
+  updateDish: (dishId: string, data: EditDishPatchData) => Promise<void>;
 }

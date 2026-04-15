@@ -1,11 +1,7 @@
-import React from "react";
 import type { Dish } from "@/types/menu";
-import { Card, Avatar, Button } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { useOrderStore } from "@/stores/useOrderStore";
-import { Add01Icon, MinusSignIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+
 import ViewDishDetail from "./ViewDishDetail";
 interface DishUIProps {
   dish: Dish;
@@ -13,9 +9,6 @@ interface DishUIProps {
 
 const DishUI = ({ dish }: DishUIProps) => {
   const { i18n } = useTranslation();
-  const { addToCart, cart, removeFromCart } = useOrderStore();
-  const currentQuantity =
-    cart.find((item) => item.dish._id === dish._id)?.quantity || 0;
   return (
     <ViewDishDetail dish={dish} className="w-full">
       <Card className="w-full p-2 rounded-lg shadow-none items-center border-none flex flex-row gap-2">

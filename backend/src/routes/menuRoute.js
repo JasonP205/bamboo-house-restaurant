@@ -8,6 +8,8 @@ const router = express.Router({ mergeParams: true });
 router.post("/", protectedRouteStaff, uploadImage.single("image"), dishController.createDish);
 router.get("/", dishController.getMenu);
 router.get("/:dishId", dishController.getDishById);
+router.put("/:dishId", protectedRouteStaff, uploadImage.single("image"), dishController.updateDish);
+router.delete("/:dishId", protectedRouteStaff, dishController.deleteDish);
 router.patch("/:dishId/status", protectedRouteStaff, dishController.updateDishStatus);
 
 export default router;

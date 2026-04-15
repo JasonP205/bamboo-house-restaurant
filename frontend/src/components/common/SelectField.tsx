@@ -9,6 +9,7 @@ interface SelectFieldProps {
   onChange?:(value: Key | Key[] | null) => void;
   fullWidth?: boolean;
   defaultValue?: string;
+  value?: string;
   classNames?: {
     label?: string;
     description?: string;
@@ -27,12 +28,22 @@ const SelectField = ({
   onSelect,
   onChange,
   defaultValue,
+  value,
   isInvalid,
   errorMessage,
   mode = "single",
 }: SelectFieldProps) => {
   return (
-    <Select aria-label="select" isInvalid={isInvalid} onChange={onChange} fullWidth={fullWidth} defaultValue={defaultValue} placeholder={placeholder} selectionMode={mode}>
+    <Select
+      aria-label="select"
+      isInvalid={isInvalid}
+      onChange={onChange}
+      fullWidth={fullWidth}
+      defaultValue={defaultValue}
+      value={value}
+      placeholder={placeholder}
+      selectionMode={mode}
+    >
       <Label className={cn(classNames?.label)}>{label}</Label>
       <Select.Trigger>
         <Select.Value />

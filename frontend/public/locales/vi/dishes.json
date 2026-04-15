@@ -1,0 +1,107 @@
+{
+  "createDish": {
+    "title": "Thêm món ăn mới",
+    "state": {
+      "empty": "Chi nhánh này hiện chưa có món ăn nào trong thực đơn."
+    },
+    "ctaButton": "Tạo món ăn đầu tiên",
+    "createAnotherButton": "Tạo thêm món khác",
+    "form": {
+      "label": {
+        "name": {
+          "vi": "Tên tiếng Việt",
+          "en": "Tên tiếng Anh"
+        },
+        "description": "Mô tả món ăn",
+        "descriptionHelper": "Bạn có thể viết mô tả bằng tiếng Việt hoặc tiếng Anh. Hệ thống sẽ tự động dịch sang ngôn ngữ còn lại.",
+        "image": "Hình ảnh món ăn",
+        "category": "Danh mục",
+        "branch": "Áp dụng tại chi nhánh",
+        "categoryValues": {
+          "appetizer": "Khai vị",
+          "main": "Món chính",
+          "merchandise": "Sản phẩm khác",
+          "beverage": "Đồ uống"
+        },
+        "price": "Giá bán",
+        "dietary": "Đặc điểm món ăn",
+        "dietaryValues": {
+          "vegan": "Món chay",
+          "glutenFree": "Không Gluten",
+          "nutFree": "Không hạt"
+        },
+        "dietaryDescription": "Chọn tối đa 3 đặc điểm nổi bật để khách hàng dễ dàng lựa chọn theo sở thích hoặc chế độ ăn kiêng."
+      },
+      "placeholder": {
+        "name": {
+          "vi": "Nhập tên tiếng Việt",
+          "en": "Nhập tên tiếng Anh"
+        },
+        "description": "Chia sẻ đôi chút về hương vị món ăn...",
+        "image": "Tải ảnh món ăn lên",
+        "category": "Chọn danh mục",
+        "branch": "Chọn chi nhánh",
+        "price": "Nhập giá"
+      },
+      "submitButton": "Thêm vào thực đơn",
+      "submitButtonLoading": "Đang lưu...",
+      "cancelButton": "Hủy bỏ",
+      "tip": {
+        "title": "Mẹo nhỏ từ Bamboo",
+        "content": "Hãy sử dụng ánh sáng tự nhiên ấm áp để bức ảnh trông ngon miệng và sang trọng hơn. Ảnh tỉ lệ 3:4 với món ăn ở giữa là đẹp nhất đấy!"
+      },
+      "validation": {
+        "name": {
+          "en": "Vui lòng nhập tên tiếng Anh.",
+          "vi": "Vui lòng nhập tên tiếng Việt."
+        },
+        "branch": "Vui lòng chọn ít nhất một chi nhánh phục vụ món này.",
+        "price": "Món ăn cần có giá cụ thể, bạn kiểm tra lại nhé.",
+        "category": "Vui lòng chọn danh mục cho món ăn.",
+        "description": "Một vài lời mô tả hấp dẫn sẽ giúp khách dễ gọi món hơn đó.",
+        "image": "Đừng quên tải lên hình ảnh minh họa cho món ăn nhé."
+      }
+    }
+  },
+  "toast": {
+    "createDishSuccess": "Món ăn đã được thêm thành công!",
+    "createDishError": "Không thể thêm món ăn vào lúc này.",
+    "toggleStatusError": "Không thể thay đổi trạng thái món ăn."
+  },
+  "dish": {
+    "available": "Còn hàng",
+    "unavailable": "Hết hàng",
+    "category": {
+      "all": "Tất cả",
+      "appetizer": "Khai vị",
+      "main": "Món chính",
+      "merchandise": "Sản phẩm",
+      "beverage": "Đồ uống"
+    },
+    "dietary": {
+      "all": "Tất cả",
+      "vegan": "Món chay",
+      "glutenFree": "Không Gluten",
+      "nutFree": "Không hạt"
+    }
+  },
+  "search": {
+    "placeholder": "Tìm món theo tên...",
+    "noResults": "Không tìm thấy kết quả cho \"{{searchTerm}}\". Bạn thử kiểm tra lại chính tả hoặc tìm tên khác xem sao nhé."
+  },
+  "dishDetail": {
+    "details": "Chi tiết món ăn",
+    "image": "Hình ảnh",
+    "imagePlaceholder": "Cập nhật ảnh mới",
+    "applyChanges": "Lưu thay đổi",
+    "loading": "Đang tải...",
+    "notFound": "Không tìm thấy món ăn",
+    "noChanges": "Không có thay đổi để cập nhật.",
+    "updateSuccess": "Đã cập nhật món ăn thành công.",
+    "updateFailed": "Cập nhật thất bại, vui lòng thử lại.",
+    "deleteSuccess": "Đã xóa món ăn thành công.",
+    "deleteFailed": "Không thể xóa món ăn. Vui lòng thử lại.",
+    "deleteAlertTitle": "Xóa Món Ăn",
+    "deleteAlertDescription": "Hành động này không thể hoàn tác. Bạn có chắc chắn muốn xóa món ăn này không?"
+  }
+}

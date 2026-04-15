@@ -17,7 +17,6 @@ import {
   Hashtag,
   Login02Icon,
 } from "@hugeicons/core-free-icons";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/useAuthStore";

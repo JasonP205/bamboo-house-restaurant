@@ -1,22 +1,57 @@
 {
-    "staffNavItems": {
-        "dashboard": "Dashboard",
-        "branches": "Chi Nhánh",
-        "staff": "Nhân Viên",
-        "menu": "Thực Đơn",
-        "orders": "Đơn Hàng",
-        "settings": "Cài Đặt",
-        "logoutButton": "Đăng Xuất",
-        "advertise": "Quảng Cáo"
-    },
-    "toggleLangOptions": {
-        "en": "Chuyển sang Tiếng Anh",
-        "vi": "Chuyển sang Tiếng Việt"
-    },
-    "notifications": {
-        "noTablesFoundForBranch": "Không tìm thấy bàn nào cho chi nhánh này."
-    },
-    "errors": {
-        "notFound": "Không tìm thấy trang"
+  "staffNavItems": {
+    "dashboard": "Bảng điều khiển",
+    "branches": "Chi nhánh",
+    "staff": "Nhân viên",
+    "menu": "Thực đơn",
+    "orders": "Đơn hàng",
+    "settings": "Cài đặt",
+    "logoutButton": "Đăng xuất",
+    "history": "Lịch sử",
+    "home": "Trang chủ"
+  },
+  "pageTitles": {
+    "branches": "Quản lý chi nhánh",
+    "menu": "Quản lý thực đơn",
+    "orders": "Đơn hàng hiện tại",
+    "history": "Lịch sử đơn hàng"
+  },
+  "toggleLangOptions": {
+    "en": "Chuyển sang tiếng Anh",
+    "vi": "Chuyển sang tiếng Việt"
+  },
+  "notifications": {
+    "noNotifications": "Hiện chưa có thông báo nào.",
+    "newOrder": "Bạn có đơn hàng mới!",
+    "orderUpdate": "Đơn hàng #{{orderId}} đã chuyển sang trạng thái {{status}}",
+    "mobileNotSupported": "Giao diện quản lý chưa hỗ trợ phiên bản di động. Bạn vui lòng sử dụng máy tính để tiếp tục nhé.",
+    "noTablesFoundForBranch": "Không tìm thấy dữ liệu bàn cho chi nhánh này."
+  },
+  "errors": {
+    "notFound": "Trang không tồn tại"
+  },
+  "staff":{
+    "title": "Hồ sơ nhân viên",
+    "staffAvatar": "Ảnh đại diện",
+    "staffName": "Tên nhân viên",
+    "staffNumber": "Mã số nhân viên",
+    "dateOfJoining": "Ngày bắt đầu làm việc",
+    "gender": "Giới tính",
+    "genderValue": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
     }
+  },
+  "table": {
+    "qrcodeTitle": "Mã QR bàn số {{tableNumber}}",
+    "qrcodeDescription": "Đặt mã QR này tại bàn để khách hàng có thể quét và gọi món trực tiếp từ điện thoại.",
+    "downloadButton": "Tải mã QR về",
+    "preparing": "Đang khởi tạo ảnh...",
+    "printButton": "In mã QR"
+  },
+  "common":{
+    "confirm": "Xác nhận",
+    "cancel": "Hủy bỏ"
+  }
 }

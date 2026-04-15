@@ -1,14 +1,10 @@
 import {
-  Select,
-  ListBox,
-  Popover,
   Button,
-  type Selection,
   Tooltip,
 } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { LanguageSkillIcon, Tool } from "@hugeicons/core-free-icons";
+import { LanguageSkillIcon } from "@hugeicons/core-free-icons";
 
 interface ToggleLangProps {
   className?: string;
@@ -16,23 +12,9 @@ interface ToggleLangProps {
   compact?: boolean;
 }
 
-const LANGUAGES = [
-  { code: "EN", id: "en" },
-  { code: "VI", id: "vi" },
-];
-
 const ToggleLang = ({ className, compact }: ToggleLangProps) => {
   const { i18n } = useTranslation();
   const { t } = useTranslation(["common"]);
-
-  const languages = [
-    { code: "EN", label: t("toggleLangOptions.en"), id: "en" },
-    { code: "VI", label: t("toggleLangOptions.vi"), id: "vi" },
-  ];
-
-  const handleChange = (key: React.Key) => {
-    i18n.changeLanguage(key as string);
-  };
 
   const switchLang = () => {
     if (i18n.language === "en") {

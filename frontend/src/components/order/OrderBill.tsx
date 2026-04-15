@@ -43,12 +43,6 @@ const OrderBill = ({ order, onPrinted }: OrderBillProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-end">
-        <Button onClick={handlePrint} variant="outline" size="sm">
-          {t("order:bill.print")}
-        </Button>
-      </div>
-
       <div ref={billRef} className="print-area print-80mm mx-auto w-full max-w-2xl bg-white text-black border border-gray-200 rounded-xl p-6">
         <div className="text-center border-b border-dashed border-gray-300 pb-4">
           <div className="mx-auto mb-2 h-14 w-14 overflow-hidden rounded-full border border-gray-300">
@@ -81,13 +75,19 @@ const OrderBill = ({ order, onPrinted }: OrderBillProps) => {
           </p>
         </div>
 
-        <table className="w-full text-sm mt-4">
+        <table className="w-full text-sm mt-4 table-fixed">
+          <colgroup>
+            <col className="w-[46%]" />
+            <col className="w-[14%]" />
+            <col className="w-[20%]" />
+            <col className="w-[20%]" />
+          </colgroup>
           <thead>
             <tr className="border-b border-gray-300">
-              <th className="text-left py-2">{t("order:dish")}</th>
-              <th className="text-right py-2">{t("order:quantity")}</th>
-              <th className="text-right py-2">{t("order:price")}</th>
-              <th className="text-right py-2">{t("order:bill.lineTotal")}</th>
+              <th className="text-left py-2 pr-2">{t("order:dish")}</th>
+              <th className="text-right py-2 px-1">{t("order:quantity")}</th>
+              <th className="text-right py-2 pl-2">{t("order:price")}</th>
+              <th className="text-right py-2 pl-2">{t("order:bill.lineTotal")}</th>
             </tr>
           </thead>
           <tbody>
@@ -103,9 +103,9 @@ const OrderBill = ({ order, onPrinted }: OrderBillProps) => {
                     <p className="text-xs text-gray-500 capitalize">{dishNameVi}</p>
                     {item.note ? <p className="text-xs text-gray-500">{t("order:note")}: {item.note}</p> : null}
                   </td>
-                  <td className="py-3 text-right">{item.quantity}</td>
-                  <td className="py-3 text-right">{formatCurrency(item.price)}</td>
-                  <td className="py-3 text-right font-semibold">{formatCurrency(lineTotal)}</td>
+                  <td className="py-3 px-1 text-right">{item.quantity}</td>
+                  <td className="py-3 pl-2 text-right whitespace-nowrap">{formatCurrency(item.price)}</td>
+                  <td className="py-3 pl-2 text-right font-semibold whitespace-nowrap">{formatCurrency(lineTotal)}</td>
                 </tr>
               );
             })}
@@ -132,6 +132,17 @@ const OrderBill = ({ order, onPrinted }: OrderBillProps) => {
         </div>
 
         <p className="text-center text-xs text-gray-500 mt-6">{t("order:bill.thankYou")}</p>
+      </div>
+
+      <div className="flex justify-center pt-1 print:hidden">
+        <Button
+          onClick={handlePrint}
+          variant="secondary"
+          size="md"
+          className="w-full max-w-2xs"
+        >
+          {t("order:bill.print")}
+        </Button>
       </div>
     </div>
   );

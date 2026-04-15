@@ -1,6 +1,6 @@
 import { useAuthStore } from "../../stores/useAuthStore";
-import { Navigate, useSearchParams, Link } from "react-router-dom";
-import { Spinner, Card, Avatar, Button } from "@heroui/react";
+import { Navigate, useSearchParams } from "react-router-dom";
+import { Spinner, Card, Avatar } from "@heroui/react";
 import { useEffect } from "react";
 
 const GoogleCallback = () => {

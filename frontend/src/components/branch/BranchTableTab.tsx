@@ -14,7 +14,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useBranchStore } from "@/stores/useBranchStore";
 import { useTranslation } from "react-i18next";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Delete, PackageOutOfStockIcon } from "@hugeicons/core-free-icons";
+import { PackageOutOfStockIcon } from "@hugeicons/core-free-icons";
 import CreateTableModal from "../table/CreateTableModal";
 import DeleteTableDialog from "./DeleteTableDialog";
 interface BranchTableTabProps {

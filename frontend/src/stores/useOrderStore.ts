@@ -21,15 +21,15 @@ export const useOrderStore = create<OrderState>((set, get) => ({
   setCurrentBranchId: (branchId: string | null) => {
     set({ currentBranchId: branchId });
   },
-  getAllOrdersOfBranch: async () => {
+  getAllOrdersOfBranch: async (branchId?: string) => {
     try {
-      const branchId = useAuthStore.getState().branchId;
-      if (!branchId) {
+      const id = branchId || useAuthStore.getState().branchId;
+      if (!id) {
         console.warn("No branch ID set for fetching orders");
         return;
       }
       set({ loading: true });
-      const response = await orderService.fetchOrdersOfBranch(branchId);
+      const response = await orderService.fetchOrdersOfBranch(id);
       set({ orderOfBranch: response, loading: false });
     } catch (error) {
       set({ loading: false });

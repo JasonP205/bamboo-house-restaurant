@@ -88,5 +88,20 @@
   "search": {
     "placeholder": "Search dishes by name...",
     "noResults": "Cannot find \"{{searchTerm}}\". Try searching with a different name or check your spelling."
+  },
+  "dishDetail": {
+    "details": "Dish Details",
+    "image": "Dish Image",
+    "imagePlaceholder": "Upload a new image",
+    "applyChanges": "Apply Changes",
+    "loading": "Loading...",
+    "notFound": "Dish not found",
+    "noChanges": "No changes to update.",
+    "updateSuccess": "Dish updated successfully.",
+    "updateFailed": "Failed to update dish.",
+    "deleteSuccess": "Dish deleted successfully.",
+    "deleteFailed": "Failed to delete dish.",
+    "deleteAlertTitle": "Delete Dish",
+    "deleteAlertDescription": "This action cannot be undone. Are you sure you want to delete this dish?"
   }
 }

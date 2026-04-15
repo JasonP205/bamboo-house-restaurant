@@ -1,5 +1,4 @@
 import { Modal } from "@heroui/react";
-import { Add } from "@hugeicons/core-free-icons";
 import AddStaffForm from "./AddStaffForm";
 import { useTranslation } from "react-i18next";
 

@@ -1,7 +1,7 @@
-import { map, z } from "zod";
+import {  z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   InputGroup,
@@ -15,7 +15,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useBranchStore } from "@/stores/useBranchStore";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Clock01Icon, Image02Icon } from "@hugeicons/core-free-icons";
+import { Clock01Icon } from "@hugeicons/core-free-icons";
 import ImageInput from "../common/ImageInput";
 const createBranchSchema = z.object({
   name: z
@@ -65,10 +65,6 @@ const CreateBranchForm = () => {
   });
   const [openingTime, setOpeningTime] = useState<TimeValue | null>(null);
   const [closingTime, setClosingTime] = useState<TimeValue | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const inputImageRef = useRef<HTMLInputElement | null>(null);
 
   const openingHours = {
     open: openingTime ? `${openingTime.toString()}` : "",
@@ -81,33 +77,6 @@ const CreateBranchForm = () => {
     setValue("openingHours", openingHours);
   }, [openingTime, closingTime]);
 
-  const handleImageClick = () => {
-    inputImageRef.current?.click();
-  };
-
-  const handlePreviewImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) previewFile(file);
-  };
-
-  const previewFile = (file: File) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewUrl(reader.result as string);
-      setValue("image", file);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      previewFile(file);
-    }
-  };
 
   useEffect(() => {
     if (Object.keys(errors).length < 1) return;
@@ -128,14 +97,13 @@ const CreateBranchForm = () => {
     } 
   }, [errors]);
 
-  const { createBranch, loading } = useBranchStore();
+  const { createBranch, loadingCreatingBranch } = useBranchStore();
 
   const onSubmit = async (data: CreateBranchFormData) => {
     try {
       console.log("Form Data:", data);
       await createBranch(data);
       reset();
-      setPreviewUrl(null);
       toast.success(t("createBranchForm.toast.success.title"), {
         description: t("createBranchForm.toast.success.description"),
         timeout: 4000,
@@ -260,10 +228,10 @@ const CreateBranchForm = () => {
           </TimeField>
         </div>
         <div className="flex flex-col space-y-2"></div>
-        <Button fullWidth type="submit" className="" isPending={loading}>
-          {loading ? (
+        <Button fullWidth type="submit" className="" isPending={loadingCreatingBranch}>
+          {loadingCreatingBranch ? (
             <>
-              <Spinner size="sm" />
+              <Spinner className="text-muted" size="sm" />
               {t("createBranchForm.submitButtonPending")}
             </>
           ) : (

@@ -11,6 +11,7 @@ import BranchTableTab from "@/components/branch/BranchTableTab";
 import BranchDetailSkeleton from "@/components/branch/BranchDetailSkeleton";
 import StaffTab from "@/components/branch/StaffTab";
 import { Breadcrumbs } from "@heroui/react";
+import HistoryOrder from "../orders/staff/HistoryOrder";
 
 const BranchDetail = () => {
   const { t } = useTranslation(["branch"]);
@@ -117,8 +118,8 @@ const BranchDetail = () => {
                   {t("branchDetail.tab.staff")}
                   <Tabs.Indicator />
                 </Tabs.Tab>
-                <Tabs.Tab id="analytics">
-                  {t("branchDetail.tab.analytics")}
+                <Tabs.Tab id="history">
+                  {t("branchDetail.tab.history")}
                   <Tabs.Indicator />
                 </Tabs.Tab>
               </Tabs.List>
@@ -135,8 +136,8 @@ const BranchDetail = () => {
             <Tabs.Panel className="pt-4" id="staff">
               <StaffTab />
             </Tabs.Panel>
-            <Tabs.Panel className="pt-4" id="analytics">
-              <p>View detailed analytics and reports for your branch.</p>
+            <Tabs.Panel className="pt-4" id="history">
+              <HistoryOrder branchId={branch._id} />
             </Tabs.Panel>
           </Tabs>
         </div>

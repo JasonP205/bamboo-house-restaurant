@@ -1,4 +1,3 @@
-import type { DishFormData } from "@/components/dishes/CreateDishForm";
 import type { Staff } from "./auth";
 export interface Branch {
   _id: string;
@@ -58,6 +57,7 @@ export interface branchState {
     [key: string]: boolean; 
   };
   branches: Branch[];
+  loadingCreatingBranch: boolean;
   selectedBranchId: string | null;
   selectedBranch: BranchDetail | null;
   tableBranch: Table[];

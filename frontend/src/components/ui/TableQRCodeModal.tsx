@@ -3,7 +3,6 @@ import { Button, Modal, Spinner } from "@heroui/react";
 import { toPng } from "html-to-image";
 import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useReactToPrint } from "react-to-print";
 
 interface TableQRCodeModalProps {
   tableId: string;
@@ -73,15 +72,9 @@ const TableQRCodeModal = ({
                     excavate: true,
                   }}
                 />
-                <a href={qrValue} target="_blank" rel="noopener noreferrer" className="text-sm text-muted break-all">
-                  {qrValue}
-                </a>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline">
-                {t("table.printButton")}
-              </Button>
               <Button onClick={handleDownload} isPending={creatingImage}>
                 {creatingImage ? (
                   <>

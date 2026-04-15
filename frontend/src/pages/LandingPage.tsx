@@ -2,10 +2,9 @@ import {
   cn,
   buttonVariants,
   cardVariants,
-  chipVariants,
   separatorVariants
 } from "@heroui/react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { 
   Leaf, 
   Utensils, 
@@ -15,7 +14,6 @@ import {
   Facebook, 
   Phone,
   Star,
-  Languages
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -294,16 +292,6 @@ export default function App() {
               <p className="text-white/80 text-lg mb-10 max-w-xl mx-auto">
                 {t('newsletter.subtitle')}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <input 
-                  type="email" 
-                  placeholder={t('newsletter.placeholder')} 
-                  className="flex-1 bg-white/10 border border-white/20 rounded-xl px-6 py-4 outline-none focus:bg-white/20 transition-all placeholder:text-white/40"
-                />
-                <button className={cn(buttonVariants({ variant: "primary" }), "bg-white text-accent font-bold h-auto py-4 px-8 rounded-xl cursor-pointer")}>
-                  {t('newsletter.button')}
-                </button>
-              </div>
             </motion.div>
           </div>
         </section>

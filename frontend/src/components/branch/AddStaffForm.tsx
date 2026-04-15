@@ -57,7 +57,7 @@ const AddStaffForm = () => {
     resolver: zodResolver(schema),
   });
 
-  const { staffRegister, loading } = useAuthStore();
+  const { staffRegister } = useAuthStore();
 
   const onSubmit = async (data: AddStaffFormData) => {
     try {

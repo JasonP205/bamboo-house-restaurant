@@ -49,7 +49,7 @@ export interface OrderState {
   loadingOrderSubmit: boolean;
   currentTableId: string | null;
   setCurrentTableId: (tableId: string | null) => void;
-  getAllOrdersOfBranch: () => Promise<void>;
+  getAllOrdersOfBranch: (branchId?: string) => Promise<void>;
   setCurrentBranchId: (branchId: string | null) => void;
   getOrderDetails: (orderId: string) => Promise<void>;
   addToCart: (dish: Dish, quantity: number, note?: string) => void;

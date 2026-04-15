@@ -19,6 +19,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import SelectField from "@/components/common/SelectField";
 import NumberInput from "@/components/common/NumberInput";
 import { Link } from "react-router-dom";
+import { toast } from "@heroui/react";
+import type { EditDishPatchData } from "@/services/menuService";
+import AlertDialog from "@/components/ui/AlertDialog";
+import { useNavigate } from "react-router-dom";
+
 const dishEditSchema = z.object({
   name: z.object({
     en: z.string().min(1, "English name is required"),
@@ -30,7 +35,6 @@ const dishEditSchema = z.object({
     vi: z.string().min(1, "Vietnamese description is required"),
   }),
   price: z.number().positive("Price must be a positive number"),
-  branchIds: z.array(z.string()).min(1, "At least one branch must be selected"),
   image: z
     .instanceof(File)
     .refine(
@@ -43,7 +47,15 @@ const dishEditSchema = z.object({
 type DishEditFormData = z.infer<typeof dishEditSchema>;
 const DishDetail = () => {
   const { dishId } = useParams();
-  const { selectedDish, loadingFetchDishes, getDishById } = useMenuStore();
+  const {
+    selectedDish,
+    loadingFetchDishes,
+    loadingCreateDish,
+    getDishById,
+    updateDish,
+    deleteDish,
+  } = useMenuStore();
+  const navigate = useNavigate();
   const { t } = useTranslation(["dishes"]);
   const { t: tCommon } = useTranslation(["common"]);
   const { i18n } = useTranslation();
@@ -57,6 +69,8 @@ const DishDetail = () => {
     register,
     setValue,
     handleSubmit,
+    reset,
+    watch,
     formState: { errors },
   } = useForm<DishEditFormData>({
     resolver: zodResolver(dishEditSchema),
@@ -66,14 +80,36 @@ const DishDetail = () => {
         vi: selectedDish?.name.vi || "",
       },
       description: {
-        en: selectedDish?.description.en || "",
-        vi: selectedDish?.description.vi || "",
+        en: "",
+        vi: "",
       },
-      category: selectedDish?.category || "",
-      price: selectedDish?.price || 0,
-      dietary: selectedDish?.dietary || [],
+      category: "",
+      price: 0,
+      dietary: [],
     },
   });
+
+  useEffect(() => {
+    if (!selectedDish) return;
+
+    reset({
+      name: {
+        en: selectedDish.name.en,
+        vi: selectedDish.name.vi,
+      },
+      description: {
+        en: selectedDish.description.en,
+        vi: selectedDish.description.vi,
+      },
+      category: selectedDish.category,
+      price: selectedDish.price,
+      dietary: selectedDish.dietary || [],
+      image: undefined,
+    });
+
+    setSelectedDietary(selectedDish.dietary || []);
+  }, [selectedDish, reset]);
+
   const dietaryOptions = [
     { value: "vegan", label: t("createDish.form.label.dietaryValues.vegan") },
     {
@@ -92,51 +128,125 @@ const DishDetail = () => {
     setSelectedDietary(values);
     setValue("dietary", values, { shouldValidate: true, shouldDirty: true });
   };
-  if (loadingFetchDishes || !selectedDish) {
-    return <div>Loading...</div>;
+
+  const nameEn = watch("name.en");
+  const nameVi = watch("name.vi");
+  const descEn = watch("description.en");
+  const descVi = watch("description.vi");
+  const selectedLang = i18n.language as "en" | "vi";
+
+  if (loadingFetchDishes) {
+    return <div>{t("dishDetail.loading")}</div>;
   }
+
   if (!selectedDish) {
-    return <div>Dish not found</div>;
+    return <div>{t("dishDetail.notFound")}</div>;
   }
-  const onSubmit = (data: DishEditFormData) => {
-    console.log(data);
+
+  const onSubmit = async (data: DishEditFormData) => {
+    if (!dishId) return;
+
+    const patchData: EditDishPatchData = {};
+
+    if (
+      data.name.en !== selectedDish.name.en ||
+      data.name.vi !== selectedDish.name.vi
+    ) {
+      patchData.name = data.name;
+    }
+
+    if (
+      data.description.en !== selectedDish.description.en ||
+      data.description.vi !== selectedDish.description.vi
+    ) {
+      patchData.description = data.description;
+    }
+
+    if (data.category !== selectedDish.category) {
+      patchData.category = data.category;
+    }
+
+    if (data.price !== selectedDish.price) {
+      patchData.price = data.price;
+    }
+
+    if (data.image) {
+      patchData.image = data.image;
+    }
+
+    const nextDietary = [...(data.dietary || [])].sort();
+    const prevDietary = [...(selectedDish.dietary || [])].sort();
+    if (JSON.stringify(nextDietary) !== JSON.stringify(prevDietary)) {
+      patchData.dietary = data.dietary || [];
+    }
+
+    if (Object.keys(patchData).length === 0) {
+      toast(t("dishDetail.noChanges"));
+      return;
+    }
+
+    try {
+      await updateDish(dishId, patchData);
+
+      toast.success(t("dishDetail.updateSuccess"));
+    } catch (error) {
+      console.error("Error updating dish:", error);
+      toast.danger(t("dishDetail.updateFailed"));
+    }
   };
+  const handleDeleteDish = async (dishId: string) => {
+    try {
+      await deleteDish(dishId);
+      toast.success(t("dishDetail.deleteSuccess"));
+      navigate("/menu");
+    } catch (error) {
+      console.error("Error deleting dish:", error);
+      toast.danger(t("dishDetail.deleteFailed"));
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full h-full">
       <div className="w-full flex flex-col gap-6 p-10">
         <Breadcrumbs>
           <Breadcrumbs.Item>
-            <Link to="/app/menu">{tCommon("staffNavItems.menu")}</Link>
+            <Link to="/menu">{tCommon("staffNavItems.menu")}</Link>
           </Breadcrumbs.Item>
           <Breadcrumbs.Item className="capitalize">
-            {selectedDish.name[i18n.language as "en" | "vi"]}
+            {(selectedLang === "vi" ? nameVi : nameEn) ||
+              selectedDish.name[selectedLang]}
           </Breadcrumbs.Item>
         </Breadcrumbs>
         <div className="lg:grid lg:grid-cols-3 flex flex-col gap-6">
           <div className="flex-col flex gap-4 w-full col-span-2">
             <h1 className="text-5xl capitalize text-balance md:text-6xl font-serif text-accent italic text-on-surface leading-tight -ml-1">
-              {selectedDish.name[i18n.language as "en" | "vi"]}
+              {(selectedLang === "vi" ? nameVi : nameEn) ||
+                selectedDish.name[selectedLang]}
             </h1>
             <p className="text-muted font-body leading-relaxed opacity-80">
-              {selectedDish.description[i18n.language as "en" | "vi"]}
+              {(selectedLang === "vi" ? descVi : descEn) ||
+                selectedDish.description[selectedLang]}
             </p>
           </div>
           <div className="flex flex-col items-center gap-4 w-full lg:flex-row col-span-1">
-            <Button
+            <AlertDialog
+              title={t("dishDetail.deleteAlertTitle")}
+              description={t("dishDetail.deleteAlertDescription")}
               className="rounded-xl flex-1 lg:h-15 shadow-lg hover:shadow-xl hover:shadow-danger/30 shadow-danger-soft transition-smooth duration-300"
-              size="lg"
-              fullWidth
               variant="danger-soft"
+              loading={loadingCreateDish}
+              onConfirm={() => handleDeleteDish(selectedDish._id)}
             >
-              Delete Dish
-            </Button>
+              {t("dishDetail.deleteAlertTitle")}
+            </AlertDialog>
             <Button
               fullWidth
               type="submit"
               className="rounded-xl flex-1 lg:h-15 shadow-lg hover:shadow-xl hover:shadow-accent/30 shadow-accent-soft transition-smooth duration-300"
               size="lg"
+              isPending={loadingCreateDish}
             >
-              Apply Changes
+              {t("dishDetail.applyChanges")}
             </Button>
           </div>
           <div className="md:col-span-2">
@@ -158,7 +268,6 @@ const DishDetail = () => {
                     <InputGroup fullWidth>
                       <InputGroup.Input
                         id="name-en"
-                        value={selectedDish.name.en}
                         className="capitalize"
                         placeholder={t("createDish.form.placeholder.name.en")}
                         {...register("name.en")}
@@ -177,7 +286,6 @@ const DishDetail = () => {
                     </Label>
                     <InputGroup fullWidth>
                       <InputGroup.Input
-                        value={selectedDish.name.vi}
                         id="name-vi"
                         className="capitalize"
                         placeholder={t("createDish.form.placeholder.name.vi")}
@@ -198,7 +306,7 @@ const DishDetail = () => {
                         shouldDirty: true,
                       })
                     }
-                    value={selectedDish.price}
+                    value={watch("price") || 0}
                     min={0}
                     fullWidth
                     isInvalid={!!errors.price}
@@ -216,6 +324,7 @@ const DishDetail = () => {
                     label={t("createDish.form.label.category")}
                     fullWidth
                     defaultValue={selectedDish.category}
+                    value={watch("category")}
                     isInvalid={!!errors.category}
                     errorMessage={t("createDish.form.validation.category")}
                     placeholder={t("createDish.form.placeholder.category")}
@@ -231,15 +340,15 @@ const DishDetail = () => {
                         label: t("createDish.form.label.categoryValues.main"),
                       },
                       {
-                        value: "dessert",
-                        label: t(
-                          "createDish.form.label.categoryValues.dessert",
-                        ),
-                      },
-                      {
                         value: "beverage",
                         label: t(
                           "createDish.form.label.categoryValues.beverage",
+                        ),
+                      },
+                      {
+                        value: "merchandise",
+                        label: t(
+                          "createDish.form.label.categoryValues.merchandise",
                         ),
                       },
                     ]}
@@ -265,7 +374,6 @@ const DishDetail = () => {
                     <InputGroup.TextArea
                       id="description-en"
                       className={`resize-none`}
-                      value={selectedDish.description.en}
                       maxLength={500}
                       rows={6}
                       placeholder={t("createDish.form.placeholder.description")}
@@ -288,7 +396,6 @@ const DishDetail = () => {
                       id="description-vi"
                       className={`resize-none`}
                       maxLength={500}
-                      value={selectedDish.description.vi}
                       rows={6}
                       placeholder={t("createDish.form.placeholder.description")}
                       {...register("description.vi")}
@@ -337,10 +444,16 @@ const DishDetail = () => {
               </Card.Header>
               <Card.Content className="p-4">
                 <ImageInput
+                  key={selectedDish._id}
                   placeholder={t("dishDetail.imagePlaceholder")}
                   ratio="square"
                   value={selectedDish.imageUrl}
-                  onChange={() => {}}
+                  onChange={(file) =>
+                    setValue("image", file, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    })
+                  }
                 />
               </Card.Content>
             </Card>

@@ -71,7 +71,7 @@ const Content = ({ children, blur }: { children: ReactNode; blur?: boolean }) =>
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             drag="y"
             dragConstraints={{ top: 0 }}
-            onDragEnd={(e, info) => {
+            onDragEnd={(_e, info) => {
               if (info.offset.y > 100) setOpen(false);
             }}
           >

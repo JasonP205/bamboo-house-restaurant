@@ -3,7 +3,6 @@ import { branchService } from "@/services/branchService";
 import { staffService } from "@/services/staffService";
 import type { branchState } from "@/types/branch";
 import { isAxiosError } from "axios";
-import type { DishFormData } from "@/components/dishes/CreateDishForm";
 import { useOrderStore } from "./useOrderStore";
 
 export const useBranchStore = create<branchState>((set, get) => ({
@@ -14,6 +13,7 @@ export const useBranchStore = create<branchState>((set, get) => ({
   selectedBranch: null,
   loadingEditBranch: false,
   loadingChangeBranchStatus: {},
+  loadingCreatingBranch: false,
   setSelectedBranchId: (id: string) => {
     set({ selectedBranchId: id });
   },
@@ -37,7 +37,7 @@ export const useBranchStore = create<branchState>((set, get) => ({
   },
   createBranch: async (data) => {
     try {
-      set({ loading: true });
+      set({ loadingCreatingBranch: true });
       const newBranch = await branchService.createBranch(data);
       if (newBranch) {
         set((state) => ({
@@ -51,7 +51,7 @@ export const useBranchStore = create<branchState>((set, get) => ({
         console.error("Error creating branch:", error);
       }
     } finally {
-      set({ loading: false });
+      set({ loadingCreatingBranch: false });
     }
   },
   getBranchInfo: async (id: string) => {

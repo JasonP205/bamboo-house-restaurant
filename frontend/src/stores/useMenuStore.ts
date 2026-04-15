@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { dishService } from "@/services/menuService";
 import type { MenuState } from "@/types/menu";
 import type { DishFormData } from "@/components/dishes/CreateDishForm";
+import type { EditDishPatchData } from "@/services/menuService";
 
 export const useMenuStore = create<MenuState>((set, get) => ({
   menu: [],
@@ -69,6 +70,39 @@ export const useMenuStore = create<MenuState>((set, get) => ({
       console.error("Error fetching dish details:", error);
     } finally {
       set({ loadingFetchDishes: false });
+    }
+  },
+  deleteDish: async (dishId: string) => {
+    try {
+      set({ loadingCreateDish: true });
+      await dishService.deleteDish(dishId);
+      set((state) => ({
+        menu: state.menu.filter((dish) => dish._id !== dishId),
+        selectedDish:
+          state.selectedDish?._id === dishId ? null : state.selectedDish,
+      }));
+    } catch (error) {
+      console.error("Error deleting dish:", error);
+      throw error;
+    } finally {
+      set({ loadingCreateDish: false });
+    }
+  },
+  updateDish: async (dishId: string, data: EditDishPatchData) => {
+    try {
+      set({ loadingCreateDish: true });
+      const updatedDish = await dishService.editDish(dishId, data);
+      set((state) => ({
+        menu: state.menu.map((dish) =>
+          dish._id === dishId ? { ...dish, ...updatedDish } : dish,
+        ),
+        selectedDish: updatedDish,
+      }));
+    } catch (error) {
+      console.error("Error updating dish:", error);
+      throw error;
+    } finally {
+      set({ loadingCreateDish: false });
     }
   },
 }));

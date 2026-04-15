@@ -2,13 +2,8 @@ import type { Table } from "@/types/branch";
 import { QrCodeIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTranslation } from "react-i18next";
-import { Modal, useOverlayState } from "@heroui/react";
 import TableQRCodeModal from "../ui/TableQRCodeModal";
-import OrderDetail from "./OrderDetail";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useState } from "react";
-import { useOrderStore } from "@/stores/useOrderStore";
-import type { Order } from "@/types/order";
 
 interface TableItemProps {
   table: Table;

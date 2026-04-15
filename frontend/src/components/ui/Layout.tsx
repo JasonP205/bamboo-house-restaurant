@@ -204,7 +204,7 @@ const Layout = () => {
                   {user?.displayName}
                 </p>
                 <p className="text-[10px] font-light">
-                  {user.role !== "customer" ? user.staffId : null}
+                  {user.staffId ? `Staff ID: ${user.staffId}` : "No Staff ID"}
                 </p>
               </div>
               <HugeiconsIcon icon={ArrowDown01Icon} size={15} />

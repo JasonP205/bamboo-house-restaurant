@@ -12,7 +12,6 @@ import {
   toast,
   NumberField,
   useOverlayState,
-  ScrollShadow,
 } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useBranchStore } from "@/stores/useBranchStore";

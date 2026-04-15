@@ -7,5 +7,7 @@ const router = express.Router();
 router.get("/", controllers.fetchStaffByBranchId);
 router.delete("/", controllers.deleteStaff);
 router.patch("/avatar", uploadImage.single("avatar"), controllers.updateAvatar);
+router.get("/:staffId", controllers.getStaffById);
+router.patch("/:staffId", controllers.updateStaffById);
 
 export default router;

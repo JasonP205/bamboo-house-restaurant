@@ -1,4 +1,4 @@
-import { useTheme, type ThemeMode } from "@/hooks/themeHook";
+import { useTheme } from "@/hooks/themeHook";
 import { Button, Tooltip } from "@heroui/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {

@@ -1,15 +1,12 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { toast } from "@heroui/react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Setting07Icon } from "@hugeicons/core-free-icons";
 import { useEffect } from "react";
-import { useSocketStore } from "@/stores/useSocketStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useTranslation } from "react-i18next";
 import ToggleLang from "./toggleLang";
 
 const CustomerLayOut = () => {
-  const { getDeviceId, deviceId, role } = useAuthStore();
+  const { role } = useAuthStore();
   const { t } = useTranslation(["common"]);
   const navigate = useNavigate();
   useEffect(() => {

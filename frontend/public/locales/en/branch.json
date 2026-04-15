@@ -72,7 +72,7 @@
       "staff": "Staff",
       "tables": "Tables",
       "menu": "Menu",
-      "analytics": "Analytics",
+      "history": "Order History",
       "config": "Configuration"
     },
     "overview": {
@@ -205,7 +205,27 @@
       "avatar": "Avatar",
       "dateOfJoined": "Date of Joined",
       "gender": "Gender",
-      "action": "Action"
+      "action": "Action",
+      "viewProfile": "View profile"
+    }
+  },
+  "staffProfile": {
+    "title": "Staff Profile",
+    "description": "Review and update staff account information.",
+    "loading": "Loading staff profile...",
+    "notFound": "Staff profile not found.",
+    "back": "Back",
+    "toast": {
+      "fetchFailed": "Failed to load staff profile.",
+      "updateSuccess": "Staff profile updated successfully.",
+      "updateFailed": "Failed to update staff profile."
+    },
+    "form": {
+      "displayName": "Display Name",
+      "email": "Email",
+      "gender": "Gender",
+      "dateOfJoining": "Date of Joining",
+      "save": "Save Changes"
     }
   }
 }

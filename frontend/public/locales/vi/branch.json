@@ -1,123 +1,231 @@
 {
   "toast": {
     "errors": {
-      "fetchBranchesTitle": "Lỗi tải danh sách chi nhánh",
-      "fetchBranchesMessage": "Đã có lỗi xảy ra khi lấy thông tin chi nhánh. Vui lòng tải lại trang hoặc liên hệ hỗ trợ nếu sự cố tiếp diễn."
+      "fetchBranchesTitle": "Không thể tải danh sách chi nhánh.",
+      "fetchBranchesMessage": "Chúng tôi gặp sự cố khi lấy thông tin chi nhánh. Bạn vui lòng làm mới trang hoặc liên hệ hỗ trợ nhé."
     }
   },
-  "createBranchButton": "Tạo chi nhánh mới",
+  "createBranchButton": "Thêm chi nhánh mới",
   "createBranchForm": {
     "title": "Tạo chi nhánh mới",
     "imageLabel": "Hình ảnh chi nhánh",
-    "imagePlaceholder": "Tải ảnh chi nhánh lên",
+    "imagePlaceholder": "Kéo và thả hình ảnh chi nhánh vào đây",
     "branchNameLabel": "Tên chi nhánh",
-    "branchNamePlaceholder": "Nhập tên chi nhánh",
-    "branchAddressLabel": "Địa chỉ chi nhánh",
-    "branchAddressPlaceholder": "Nhập địa chỉ chi nhánh",
+    "branchNamePlaceholder": "Ví dụ: Bamboo House - Quận 1",
+    "branchAddressLabel": "Địa chỉ",
+    "branchAddressPlaceholder": "Nhập địa chỉ chi tiết",
     "mapUrlLabel": "Tọa độ bản đồ",
     "mapUrlPlaceholder": "Ví dụ: 11.9403049, 108.482322",
-    "floorSpaceLabel": "Diện tích sàn (m²)",
+    "floorSpaceLabel": "Diện tích (m²)",
     "openingHoursLabel": "Giờ mở cửa",
-    "openingHoursPlaceholder": "Ví dụ: 9:00",
+    "openingHoursPlaceholder": "VD: 09:00 - 21:00",
     "closingHoursLabel": "Giờ đóng cửa",
-    "closingHoursPlaceholder": "Ví dụ: 22:00",
+    "closingHoursPlaceholder": "VD: 21:00",
     "phoneNumberLabel": "Số điện thoại liên hệ",
-    "phoneNumberPlaceholder": "Nhập số điện thoại",
+    "phoneNumberPlaceholder": "Nhập số điện thoại chi nhánh",
     "submitButton": "Tạo chi nhánh",
-    "submitButtonPending": "Đang tạo...",
-    "cancelButton": "Hủy bỏ",
+    "submitButtonPending": "Đang khởi tạo...",
+    "cancelButton": "Hủy",
     "validation": {
-      "imageRequired": "Vui lòng tải lên hình ảnh chi nhánh.",
-      "nameRequired": "Vui lòng nhập tên chi nhánh.",
-      "locationRequired": "Vui lòng nhập địa chỉ chi nhánh.",
-      "mapCoordinatesRequired": "Vui lòng nhập tọa độ bản đồ.",
+      "imageRequired": "Vui lòng thêm hình ảnh chi nhánh.",
+      "nameRequired": "Tên chi nhánh không được để trống.",
+      "locationRequired": "Địa chỉ chi nhánh là bắt buộc.",
+      "mapCoordinatesRequired": "Vui lòng nhập tọa độ để định vị trên bản đồ.",
       "contactNumberRequired": "Vui lòng nhập số điện thoại liên hệ.",
       "openingHoursRequired": "Vui lòng nhập giờ mở cửa.",
       "closingHoursRequired": "Vui lòng nhập giờ đóng cửa.",
       "invalidContactNumber": "Số điện thoại không hợp lệ.",
-      "invalidOpeningHours": "Định dạng giờ mở cửa không hợp lệ (Ví dụ: 9:00 SA).",
-      "invalidClosingHours": "Định dạng giờ đóng cửa không hợp lệ (Ví dụ: 9:00 CH).",
-      "floorSpaceRequired": "Vui lòng nhập diện tích sàn."
+      "invalidOpeningHours": "Định dạng giờ mở cửa không đúng (VD: 9:00 AM - 9:00 PM).",
+      "invalidClosingHours": "Định dạng giờ đóng cửa không đúng (VD: 9:00 PM).",
+      "floorSpaceRequired": "Vui lòng nhập diện tích mặt bằng."
     },
     "toast": {
       "success": {
         "title": "Tạo chi nhánh thành công",
-        "message": "Chi nhánh mới đã được tạo và hiện có sẵn trên hệ thống."
+        "description": "Chi nhánh mới đã sẵn sàng hoạt động trên hệ thống."
       },
       "error": {
-        "title": "Lỗi tạo chi nhánh",
-        "message": "Đã xảy ra lỗi trong quá trình tạo chi nhánh. Vui lòng thử lại sau hoặc liên hệ hỗ trợ."
+        "title": "Không thể tạo chi nhánh",
+        "description": "Đã có lỗi xảy ra. Bạn vui lòng thử lại sau nhé."
       }
     }
   },
   "page": {
     "title": "Quản lý chi nhánh - Bamboo House",
-    "description": "Quản lý các chi nhánh một cách hiệu quả. Tạo mới, cập nhật thông tin và đảm bảo khách hàng có trải nghiệm tốt nhất tại mọi địa điểm.",
-    "emptyBranchList": "Không có chi nhánh nào"
-  },
-  "branchCard": {
-    "locationLabel": "Địa chỉ",
-    "contactNumberLabel": "Số điện thoại",
-    "openingHours": "Giờ mở cửa"
+    "description": "Quản lý hệ thống chi nhánh hiệu quả: cập nhật thông tin, theo dõi hoạt động và đảm bảo trải nghiệm tốt nhất cho khách hàng tại mọi điểm đến.",
+    "emptyBranchList": "Hiện chưa có chi nhánh nào"
   },
   "branchDetail": {
     "notFound": "Không tìm thấy chi nhánh",
-    "actionDescription": "Đăng ký nhân viên mới, cập nhật thông tin chi nhánh và quản lý bàn tại địa điểm này.",
+    "actionDescription": "Đăng ký nhân viên, cập nhật thông tin chi nhánh và quản lý sơ đồ bàn tại đây.",
     "status": {
       "title":"Trạng thái hiện tại",
-      "open": "Đang mở cửa & hoạt động",
-      "closed": "Đang đóng cửa tạm thời"
+      "open": "Đang mở cửa",
+      "closed": "Tạm đóng cửa"
+    },
+    "badge": {
+      "open": "Mở cửa",
+      "closed": "Đóng cửa"
     },
     "tab": {
-      "overview": "Xem nhanh",
+      "overview": "Tổng quan",
       "staff": "Nhân viên",
-      "tables": "Bàn",
+      "tables": "Sơ đồ bàn",
       "menu": "Thực đơn",
-      "analytics": "Phân tích",
+      "history": "Lịch sử đơn hàng",
       "config": "Cấu hình"
     },
     "overview": {
-      "title": "Chi tiết chi nhánh",
-      "address": "Địa chỉ",
+      "title": "Thông tin chi tiết",
       "locationOnMap": "Vị trí trên bản đồ",
-      "contactNumber": "Số điện thoại",
-      "openingHours": "Giờ mở cửa",
-      "kitchenHours": "Bếp đóng cửa 30 phút trước giờ đóng cửa",
+      "address": "Địa chỉ",
+      "contactNumber": "Thông tin liên hệ",
+      "openingHours": "Giờ phục vụ",
+      "kitchenHours": "Bếp đóng cửa trước 30 phút khi chi nhánh đóng cửa",
+      "floorSpace": "Tổng diện tích",
       "tables": "Tổng số bàn",
-      "staffs": "Tổng nhân viên",
-      "keyInventory": "Thông số chính"
+      "staffs": "Số lượng nhân viên",
+      "keyInventory": "Kho hàng chính"
     },
     "tables": {
       "tableNumber": "Số bàn",
       "capacity": "Loại bàn",
+      "quantity": "Số lượng",
       "isInUse": "Trạng thái",
-      "isBooked": "Trạng thái đặt bàn",
+      "isBooked": "Đặt chỗ",
+      "status": {
+        "available": "Trống",
+        "occupied": "Có khách",
+        "reserved": "Đã đặt trước"
+      },
       "data": {
-        "small": "Bàn Lotus 4",
-        "medium": "Vườn Bamboo 6",
-        "large": "Vườn Lotus 8",
-        "grand": "Sảnh Bamboo 10"
+        "4": "Bàn Sen (4 người)",
+        "6": "Sân Vườn Trúc (6 người)",
+        "8": "Vườn Sen (8 người)",
+        "10": "Đại sảnh Tre (10 người)"
       },
       "emptyState": {
-        "title": "Không tìm thấy bàn nào",
-        "description": "Chi nhánh này hiện tại không có bàn nào. Vui lòng thêm bàn để quản lý đặt chỗ và khách hàng đến trực tiếp một cách hiệu quả."
+        "title": "Chưa có sơ đồ bàn",
+        "description": "Chi nhánh này chưa có thông tin bàn. Hãy thêm bàn mới để bắt đầu quản lý đơn hàng nhé."
+      },
+      "addTable": {
+        "button": "Thêm bàn mới",
+        "addField": "Thêm bàn",
+        "modalTitle": "Thêm bàn vào hệ thống",
+        "validation": {
+          "capacity": "Vui lòng chọn loại bàn.",
+          "quantity": "Số lượng phải từ 1 bàn trở lên."
+        },
+        "success": "Đã cập nhật sơ đồ bàn thành công",
+        "error": "Không thể thêm bàn. Vui lòng thử lại sau.",
+        "creating": "Đang tạo...",
+        "submit": "Áp dụng thay đổi"
+      }
+    },
+    "deleteTable": {
+      "title": "Xác nhận xóa bàn",
+      "description": "Bạn có chắc chắn muốn xóa các bàn đã chọn? Hành động này không thể hoàn tác.",
+      "cancelButton": "Hủy",
+      "confirmButton": "Xác nhận xóa",
+      "processing": "Đang xóa...",
+      "toast": {
+        "success": {
+          "title": "Đã xóa thành công",
+          "description": "{{count}} bàn đã được gỡ bỏ khỏi hệ thống."
+        },
+        "error": {
+          "title": "Lỗi khi xóa bàn",
+          "description": "Đã xảy ra sự cố. Vui lòng thử lại hoặc liên hệ bộ phận kỹ thuật."
+        },
+        "noSelection": {
+          "title": "Chưa chọn bàn",
+          "description": "Vui lòng chọn ít nhất một bàn để xóa."
+        }
       }
     }
   },
   "editBranch" : {
     "triggerButton": "Chỉnh sửa thông tin",
-    "title": "Chỉnh sửa thông tin chi nhánh", 
+    "title": "Cập nhật chi tiết chi nhánh", 
     "submitButton": "Lưu thay đổi",
     "submitButtonPending": "Đang lưu...",
     "toast" : {
       "success": {
-        "title": "Cập nhật chi nhánh thành công",
-        "message": "Thông tin chi nhánh đã được cập nhật thành công."
+        "title": "Cập nhật thành công",
+        "message": "Thông tin chi nhánh đã được thay đổi trên toàn hệ thống."
       },
       "error": {
-        "title": "Lỗi cập nhật chi nhánh",
-        "message": "Đã xảy ra lỗi trong quá trình cập nhật chi nhánh. Vui lòng thử lại sau hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn."
+        "title": "Cập nhật thất bại",
+        "message": "Không thể lưu thay đổi. Vui lòng kiểm tra lại kết nối."
       }
+    }
+  },
+  "staffTab":{
+    "addStaffButton": "Thêm nhân viên",
+    "addStaffButtonPending": "Đang thêm...",
+    "deleteStaffButton": "Xóa nhân viên",
+    "emptyState": {
+      "title": "Chưa có nhân viên",
+      "description": "Chi nhánh này chưa có danh sách nhân viên. Hãy thêm thành viên mới để quản lý vận hành tốt hơn nhé."
+    },
+    "addStaffModal": {
+      "title": "Thêm thành viên mới",
+      "nameLabel": "Họ và tên",
+      "namePlaceholder": "Nhập đầy đủ họ tên",
+      "emailLabel": "Địa chỉ Email",
+      "emailPlaceholder": "example@email.com",
+      "phoneLabel": "Số điện thoại",
+      "phonePlaceholder": "Nhập số điện thoại",
+      "positionLabel": "Vị trí",
+      "positionPlaceholder": "VD: Phục vụ, Đầu bếp, Quản lý",
+      "submitButton": "Xác nhận thêm",
+      "submitButtonPending": "Đang xử lý...",
+      "validation": {
+        "nameRequired": "Vui lòng nhập họ tên.",
+        "emailRequired": "Vui lòng nhập email.",
+        "phoneRequired": "Vui lòng nhập số điện thoại.",
+        "positionRequired": "Vui lòng chọn vị trí làm việc.",
+        "invalidEmail": "Email không hợp lệ.",
+        "invalidPhone": "Số điện thoại không hợp lệ."
+      },
+      "toast": {
+        "success": {
+          "title": "Thêm nhân viên thành công",
+          "description": "Chào mừng {{name}} đã gia nhập đội ngũ chi nhánh."
+        },
+        "error": {
+          "title": "Lỗi khi thêm nhân viên",
+          "description": "Không thể thêm {{name}}. Bạn vui lòng thử lại sau nhé."
+        }
+      }
+    },
+    "table": {
+      "name": "Tên nhân viên",
+      "email": "Email",
+      "avatar": "Ảnh",
+      "dateOfJoined": "Ngày gia nhập",
+      "gender": "Giới tính",
+      "action": "Thao tác",
+      "viewProfile": "Xem hồ sơ"
+    }
+  },
+  "staffProfile": {
+    "title": "Hồ sơ nhân viên",
+    "description": "Xem và cập nhật thông tin tài khoản nhân viên.",
+    "loading": "Đang tải hồ sơ nhân viên...",
+    "notFound": "Không tìm thấy hồ sơ nhân viên.",
+    "back": "Quay lại",
+    "toast": {
+      "fetchFailed": "Không thể tải hồ sơ nhân viên.",
+      "updateSuccess": "Đã cập nhật hồ sơ nhân viên thành công.",
+      "updateFailed": "Cập nhật hồ sơ thất bại."
+    },
+    "form": {
+      "displayName": "Tên hiển thị",
+      "email": "Email",
+      "gender": "Giới tính",
+      "dateOfJoining": "Ngày gia nhập",
+      "save": "Lưu thay đổi"
     }
   }
 }
