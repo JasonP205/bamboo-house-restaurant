@@ -64,7 +64,7 @@ const OrderDetail = ({ selectedOrder, state }: OrderDetailProps) => {
             <Drawer.CloseTrigger />
             <Drawer.Header>
               <Drawer.Heading>
-                {t("order.detail.title")} - #{selectedOrder?.orderCode}
+                {t("detail.title")} - #{selectedOrder?.orderCode}
               </Drawer.Heading>
             </Drawer.Header>
             <Drawer.Body>
