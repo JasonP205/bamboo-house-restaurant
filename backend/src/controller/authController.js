@@ -46,7 +46,7 @@ const googleAuthCallback = async (req, res, next) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
       maxAge: REFRESH_TOKEN_TTL.staff,
     });
 
@@ -148,65 +148,12 @@ const staffLogin = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
       maxAge: REFRESH_TOKEN_TTL.staff,
     });
     return res.json({ success: true, accessToken });
   } catch (error) {
     console.error("Error during staff login:", error);
-    return res.status(500).json({ success: false, message: error.message });
-  }
-};
-const customerLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email and password are required" });
-    }
-
-    const customer = await Customer.findOne({ email });
-    if (!customer) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email or password" });
-    }
-
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      customer.passwordHash,
-    );
-    if (!isPasswordValid) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email or password" });
-    }
-
-    const accessToken = jwt.sign(
-      { id: customer._id, role: "customer" },
-      process.env.JWT_SECRET,
-      { expiresIn: ACCESS_TOKEN_TTL },
-    );
-    const refreshToken = crypto.randomBytes(64).toString("hex");
-
-    const session = new Session({
-      userId: customer._id,
-      userType: "Customer",
-      refreshToken,
-      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL.customer),
-    });
-    await session.save();
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: REFRESH_TOKEN_TTL.customer,
-    });
-    return res.json({ success: true, accessToken });
-  } catch (error) {
-    console.error("Error during customer login:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -225,7 +172,7 @@ const logout = async (req, res) => {
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
     });
     return res.json({ success: true, message: "Logged out successfully" });
   } catch (error) {
@@ -304,7 +251,6 @@ const refresh = async (req, res) => {
 export {
   registerStaff,
   staffLogin,
-  customerLogin,
   logout,
   fetchMe,
   refresh,
