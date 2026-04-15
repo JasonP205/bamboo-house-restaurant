@@ -28,6 +28,7 @@
 	"vat": "VAT",
 	"total": "Total",
 	"revokeOrder": "Revoke order",
+	"revokeOrderButton": "Cancel order",
 	"revokeOrderDescription": "This action cannot be undone. Are you sure you want to revoke this order?",
 	"approveOrder": "Approve order",
 	"nextStep": "Next step",

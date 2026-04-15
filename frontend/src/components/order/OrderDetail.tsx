@@ -82,15 +82,15 @@ const OrderDetail = ({ selectedOrder, state }: OrderDetailProps) => {
             <Drawer.Footer>
               <AlertDialog
                 variant="danger-soft"
-                title={t("order.revokeOrder")}
-                description={t("order.revokeOrderDescription")}
+                title={t("revokeOrder")}
+                description={t("revokeOrderDescription")}
                 onConfirm={handleRevokeOrder}
               >
-                {t("order.revokeOrder")}
+                {t("revokeOrderButton")}
               </AlertDialog>
               {selectedOrder?.status === "pending" ? (
                 <Button onClick={handleUpdateOrderStatus}>
-                  {t("order.approveOrder")}
+                  {t("approveOrder")}
                 </Button>
               ) : (
                 <Button
@@ -99,7 +99,7 @@ const OrderDetail = ({ selectedOrder, state }: OrderDetailProps) => {
                     selectedOrder?.status === "completed" || isCompleteBlocked
                   }
                 >
-                  {t("order.nextStep")}
+                  {t("nextStep")}
                 </Button>
               )}
             </Drawer.Footer>

@@ -28,6 +28,7 @@
 	"vat": "Thuế VAT",
 	"total": "Tổng thanh toán",
 	"revokeOrder": "Hủy đơn hàng",
+	"revokeOrderButton": "Hủy đơn",
 	"revokeOrderDescription": "Hành động này không thể hoàn tác. Bạn có chắc chắn muốn hủy đơn hàng này không?",
 	"approveOrder": "Xác nhận đơn",
 	"nextStep": "Bước tiếp theo",

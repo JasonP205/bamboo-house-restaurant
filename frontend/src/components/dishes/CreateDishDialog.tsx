@@ -15,10 +15,8 @@ interface CreateDishDialogProps {
 }
 const CreateDishDialog = ({ state, title, children, className }: CreateDishDialogProps) => {
   const { t } = useTranslation(["dishes"]);
-  // const { addDish, loadingCreateDish } = useBranchStore();
   const { addDish, loadingCreateDish } = useMenuStore();
   const onCreateDish = async (data: DishFormData) => {
-    console.log("Dish Data:", data);
     try {
       await addDish(data);
       toast.success(t("toast.createDishSuccess"));

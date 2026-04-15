@@ -98,7 +98,6 @@ const EditBranchForm = ({
   const { t } = useTranslation(["branch"]);
 
   useEffect(() => {
-    console.log("Opening Hours:", openingHours);
     setValue("openingHours", openingHours);
   }, [openingTime, closingTime]);
 
@@ -157,7 +156,6 @@ const EditBranchForm = ({
 
   const onSubmit = async (data: EditBranchFormData) => {
     try {
-      console.log("Form Data:", data);
       await editBranch(data);
       reset();
       setPreviewUrl(null);

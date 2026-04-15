@@ -74,9 +74,6 @@ const CreateDishForm = ({
     setValue("dietary", values, { shouldValidate: true, shouldDirty: true });
   };
   const onSubmitHandler = (data: DishFormData) => {
-    if (errors) {
-      console.log("Validation errors:", errors);
-    }
     onSubmit?.(data);
   };
   return (

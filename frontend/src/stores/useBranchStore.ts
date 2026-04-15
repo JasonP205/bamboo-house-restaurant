@@ -138,7 +138,6 @@ export const useBranchStore = create<branchState>((set, get) => ({
       });
     }
   },
-  // Table
   tableBranch: [],
   loadingTables: false,
   loadingDeleteTable: false,

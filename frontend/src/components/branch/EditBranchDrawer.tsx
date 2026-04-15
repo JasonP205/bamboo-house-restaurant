@@ -13,7 +13,7 @@ const EditBranchDrawer = ({ state }: EditBranchDrawerProps) => {
       <Drawer.Backdrop variant="blur">
         <Drawer.Content placement="right">
           <Drawer.Dialog>
-            <Drawer.CloseTrigger /> {/* Optional: Close button */}
+            <Drawer.CloseTrigger /> 
             <Drawer.Header>
               <Drawer.Heading className="font-serif text-accent dark:text-surface-secondary-foreground text-2xl">
                 {t("editBranch.title")}

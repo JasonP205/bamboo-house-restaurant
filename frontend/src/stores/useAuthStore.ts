@@ -21,7 +21,6 @@ export const useAuthStore = create<AuthState>()(
       branchId: null,
       getDeviceId: () => {
         const deviceId = uuid().toString();
-        console.log("Generated device ID:", deviceId);
         set({ deviceId });
       },
       clearSession: () => {
@@ -121,7 +120,6 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ loading: true });
           const res = await authService.fetchMe();
-          console.log("Fetched user data:", res);
           if (res.success) {
             set({
               user: res.user,

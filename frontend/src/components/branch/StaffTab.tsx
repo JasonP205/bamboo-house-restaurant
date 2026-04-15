@@ -238,11 +238,11 @@ const StaffTab = () => {
           className="flex-1"
           isDisabled={selectedIds.length === 0}
         >
-          {t("staffTab.deleteStaffButton")}
+          {t("branch:staffTab.deleteStaffButton")}
         </Button>
         <AddStaffDialog className="flex-1">
           <Button fullWidth variant="primary">
-            {t("staffTab.addStaffButton")}
+            {t("branch:staffTab.addStaffButton")}
           </Button>
         </AddStaffDialog>
       </div>

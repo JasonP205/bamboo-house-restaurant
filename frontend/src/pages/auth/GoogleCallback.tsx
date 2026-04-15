@@ -13,13 +13,10 @@ const GoogleCallback = () => {
   if (error) {
     return (
       <div className="relative w-full h-screen flex flex-col items-center justify-center gap-6 overflow-hidden">
-        {/* Background */}
         <div className="absolute inset-0 bg-[url('/img/screen.png')] bg-cover bg-center bg-no-repeat"></div>
 
-        {/* Overlay tối nhẹ */}
         <div className="absolute inset-0 bg-background/40 backdrop-blur-sm"></div>
 
-        {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-4">
           <Card className="rounded-full px-5 py-3 bg-danger/10 backdrop-blur-md border border-white/20 shadow-lg">
             <div className="flex items-center gap-3">
@@ -35,7 +32,7 @@ const GoogleCallback = () => {
           </Card>
 
           <p className="text-muted/70 text-sm italic tracking-wide">
-            Bamboo House — EST 2012
+            Bamboo House — EST 2026
           </p>
         </div>
       </div>
@@ -60,13 +57,10 @@ const GoogleCallback = () => {
   if (loading) {
     return (
       <div className="relative w-full h-screen flex flex-col items-center justify-center gap-6 overflow-hidden">
-        {/* Background */}
         <div className="absolute inset-0 bg-[url('/img/screen.png')] bg-cover bg-center bg-no-repeat"></div>
 
-        {/* Overlay tối nhẹ */}
         <div className="absolute inset-0 bg-background/40 backdrop-blur-sm"></div>
 
-        {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-4">
           <Spinner size="lg" />
 
@@ -91,7 +85,7 @@ const GoogleCallback = () => {
           </Card>
 
           <p className="text-muted/70 text-sm italic tracking-wide">
-            Bamboo House — EST 2012
+            Bamboo House — EST 2026
           </p>
         </div>
       </div>

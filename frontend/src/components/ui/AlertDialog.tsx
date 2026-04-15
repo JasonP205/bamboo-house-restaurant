@@ -19,7 +19,7 @@ export default ({
   loading,
   ...buttonProps
 }: AlertDialogProps) => {
-    const { t } = useTranslation(["common"]);
+    const { t } = useTranslation("common");
   return (
     <AlertDialog>
       <Button className={className} {...buttonProps} isPending={loading}>
@@ -37,10 +37,10 @@ export default ({
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button variant="outline" slot="close">
-                {t("common.cancel")}
+                {t("cancel")}
               </Button>
               <Button {...buttonProps} onClick={onConfirm} isPending={loading}>
-                {t("common.confirm")}
+                {t("confirm")}
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>

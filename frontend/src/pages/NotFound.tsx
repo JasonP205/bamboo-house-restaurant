@@ -9,7 +9,6 @@ export default function NotFound() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background elements consistent with landing page */}
       <div className="diagonal-grid-bg absolute inset-0 opacity-20 pointer-events-none" />
       
       <div className="relative z-10 text-center max-w-2xl">
@@ -46,7 +45,6 @@ export default function NotFound() {
         </motion.div>
       </div>
       
-      {/* Decorative botanical elements */}
       <div className="absolute -bottom-20 -right-20 opacity-10 pointer-events-none">
         <Leaf size={300} className="text-accent rotate-45" />
       </div>

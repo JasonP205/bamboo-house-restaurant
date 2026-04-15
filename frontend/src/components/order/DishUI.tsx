@@ -36,22 +36,6 @@ const DishUI = ({ dish }: DishUIProps) => {
           <span className="text-sm self-end font-medium mt-1">
             ${dish.price.toFixed(2)}
           </span>
-          {/* <div className="ml-auto flex items-center gap-2">
-              <button
-                className="p-2 bg-accent-soft rounded-full"
-                disabled={currentQuantity <= 0}
-                onClick={() => removeFromCart(dish._id)}
-              >
-                <HugeiconsIcon size={12} icon={MinusSignIcon} />
-              </button>
-              <span className="mx-2">{currentQuantity}</span>
-              <button
-                className="p-2 bg-accent-soft rounded-full"
-                onClick={() => addToCart(dish)}
-              >
-                <HugeiconsIcon size={12} icon={Add01Icon} />
-              </button>
-            </div> */}
         </div>
       </Card>
     </ViewDishDetail>

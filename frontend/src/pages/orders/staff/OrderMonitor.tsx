@@ -60,7 +60,6 @@ const OrderMonitor = () => {
   const gridClassName =
     "grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-3 sm:gap-4 p-3 sm:p-4 scrollbar-hidden";
 
-  // ✅ FIX: dependency + truyền branchId
   useEffect(() => {
     if (!branchId) return;
 
@@ -71,7 +70,6 @@ const OrderMonitor = () => {
     init();
   }, [branchId]);
 
-  // ⛔ loading
   if (loadingTables || loading) {
     return (
       <div className={gridClassName}>
@@ -79,8 +77,6 @@ const OrderMonitor = () => {
       </div>
     );
   }
-
-  // ⛔ no tables
   if (!tableBranch || tableBranch.length === 0) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-muted">

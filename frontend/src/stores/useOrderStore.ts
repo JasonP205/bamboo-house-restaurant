@@ -105,9 +105,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       const order = await orderService.sendOrder(orderData);
       if (order) {
         set({ order, cart: [] });
-        console.log("Order submitted successfully:", order);
       }
-      console.log("Order data to be sent:", orderData);
       set({ loadingOrderSubmit: false });
     } catch (error) {
       set({ loadingOrderSubmit: false });
@@ -131,7 +129,6 @@ export const useOrderStore = create<OrderState>((set, get) => ({
             : table,
         ),
       }));
-      console.log("Order revoked successfully:", orderId);
     } catch (error) {
       console.error("Error revoking order:", error);
     }

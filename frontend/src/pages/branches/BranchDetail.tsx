@@ -35,7 +35,6 @@ const BranchDetail = () => {
       <BranchDetailSkeleton title={branch?.name || t("branchDetail.title")} />
     );
   }
-  /* ── Empty state ── */
   if (!branch) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-muted">
@@ -48,7 +47,6 @@ const BranchDetail = () => {
     <div className="w-full h-full overflow-y-auto scrollbar-thin">
       <Metadata title={`${branch.name} - Bamboo House`} />
       <div className="mx-auto flex flex-col gap-6">
-        {/* ── 1. Hero image ─────────────────────────────────────── */}
         <div className="relative w-full aspect-21/9 overflow-hidden shadow-lg bg-surface-secondary">
           <div className="absolute top-4 left-4 backdrop-blur-2xl bg-surface/70 rounded-full px-3 py-1">
             <Breadcrumbs>
@@ -101,7 +99,6 @@ const BranchDetail = () => {
           </div>
         </div>
 
-        {/* ── 2. Title area (primary hierarchy) ─────────────────── */}
         <div className="w-full p-4 md:p-12">
           <Tabs variant="secondary">
             <Tabs.ListContainer>
@@ -127,9 +124,6 @@ const BranchDetail = () => {
             <Tabs.Panel className="pt-4" id="overview">
               <BranchOverViewTab branch={branch} />
             </Tabs.Panel>
-            {/* <Tabs.Panel className="pt-4" id="menu">
-              <DishesTab />
-            </Tabs.Panel> */}
             <Tabs.Panel className="pt-4" id="tables">
               <BranchTableTab branchId={branch._id} />
             </Tabs.Panel>
