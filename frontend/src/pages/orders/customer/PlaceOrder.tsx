@@ -85,14 +85,10 @@ const PlaceOrder = () => {
   if (!branch) {
     return <div>{t("order:messages.branchNotFound")}</div>;
   }
-  const vat_percentage = parseFloat(import.meta.env.VITE_VAT_PERCENTAGE || "0");
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-  const subtotalPrice = cart.reduce(
-    (total, item) => total + item.quantity * item.price,
-    0
-  );
-  const vat_amount = subtotalPrice * vat_percentage;
-  const totalPrice = subtotalPrice + vat_amount;
+  
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [vatAmount, setVatAmount] = useState(0);
 
 
   return (
@@ -154,6 +150,9 @@ const PlaceOrder = () => {
       <ViewOrderDetail
         tableId={tableId}
         branchId={branchId}
+        calTotalItem={setTotalItems}
+        calTotalPrice={setTotalPrice}
+        calVatAmount={setVatAmount}
         className="fixed bottom-2 items-center gap-2 left-1/2 p-2 flex -translate-x-1/2 w-[95%] bg-accent rounded-xl shadow-lg"
       >
         <div className="bg-surface/20 shink-0 w-12 aspect-square flex items-center justify-center rounded-full text-white text-2xl font-bold">

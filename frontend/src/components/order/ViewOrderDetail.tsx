@@ -9,6 +9,9 @@ interface ViewOrderDetailProps {
   className?: string;
   tableId: string;
   branchId: string;
+  calTotalItem?: (total: number) => void;
+  calTotalPrice?: (total: number) => void;
+  calVatAmount?: (vat: number) => void;
 }
 
 const ViewOrderDetail = ({
@@ -16,6 +19,9 @@ const ViewOrderDetail = ({
   className,
   tableId,
   branchId,
+  calTotalItem,
+  calTotalPrice,
+  calVatAmount,
 }: ViewOrderDetailProps) => {
   const { t } = useTranslation(["order"]);
   const { i18n } = useTranslation();
@@ -77,6 +83,10 @@ const ViewOrderDetail = ({
   const vat_percentage = parseFloat(import.meta.env.VITE_VAT_PERCENTAGE || "0");
   const vat_amount = subtotalPrice * vat_percentage;
   const totalPrice = subtotalPrice + vat_amount;
+
+  if (calTotalItem) calTotalItem(totalItems);
+  if (calTotalPrice) calTotalPrice(totalPrice);
+  if (calVatAmount) calVatAmount(vat_amount);
 
   const statusClass = (status: string) => {
     switch (status) {
