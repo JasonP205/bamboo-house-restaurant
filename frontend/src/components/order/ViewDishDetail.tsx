@@ -82,7 +82,7 @@ const ViewDishDetail = ({ dish, children, className }: ViewDishDetailProps) => {
                 </ScrollShadow>
                 <div className="flex flex-col gap-4 mt-4">
                   <TextField>
-                    <Label>{t("order.notes")}</Label>
+                    <Label>{t("notes")}</Label>
                     <InputGroup>
                       <InputGroup.TextArea
                         placeholder={t("notesPlaceholder")}

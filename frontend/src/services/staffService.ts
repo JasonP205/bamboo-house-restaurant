@@ -19,7 +19,8 @@ export const staffService = {
     },
     deleteStaff: async (staffIds: string[]) => {
         try {
-            await api.delete(`/staffs`, { data: { staffIds } });
+            const res = await api.delete(`/staffs`, { data: { staffIds } });
+            return res.data?.deletedCount ?? 0;
         } catch (error) {
             console.error("Error deleting staff:", error);
             throw error;

@@ -200,7 +200,7 @@ const ViewOrderDetail = ({
                     }
                     className="w-full"
                   >
-                    {t("order.updateOrder")}
+                    {t("updateOrder")}
                   </Button>
                 ) : (
                   <Button
@@ -209,7 +209,7 @@ const ViewOrderDetail = ({
                     isDisabled={cart.length === 0 || loadingOrderSubmit}
                     className="w-full"
                   >
-                    {t("order.sendOrder")}
+                    {t("sendOrder")}
                   </Button>
                 )}
               </div>

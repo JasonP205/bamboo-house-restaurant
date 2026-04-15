@@ -134,7 +134,7 @@ export const updateStaffById = async (req, res) => {
     const requester = req.staff;
     const isManager = requester?.role === "manager";
     
-    if (!isManager && sameBranch) {
+    if (!isManager) {
       return res.status(403).json({
         success: false,
         message: "You do not have permission to update this staff profile",

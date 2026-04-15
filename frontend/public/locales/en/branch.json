@@ -164,6 +164,23 @@
     "addStaffButton": "Add New Staff",
     "addStaffButtonPending": "Adding...",
     "deleteStaffButton": "Delete Staff",
+    "deleteStaff": {
+      "processing": "Deleting...",
+      "toast": {
+        "success": {
+          "title": "Deleted Successfully",
+          "description": "{{count}} selected staff account(s) have been removed."
+        },
+        "error": {
+          "title": "Failed to Delete Staff",
+          "description": "An error occurred while deleting selected staff. Please try again."
+        },
+        "noSelection": {
+          "title": "No Staff Selected",
+          "description": "Please select at least one staff member to delete."
+        }
+      }
+    },
     "emptyState": {
       "title": "No staff members found",
       "description": "This branch currently has no staff members. Please add staff to manage operations effectively."

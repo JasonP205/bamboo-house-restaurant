@@ -254,10 +254,19 @@ export const useBranchStore = create<branchState>((set, get) => ({
           delete: true,
         },
       });
-      await staffService.deleteStaff(staffIds);
+      const deletedCount = await staffService.deleteStaff(staffIds);
       const deletedSet = new Set(staffIds);
       set((state) => ({
         staffs: state.staffs.filter((staff) => !deletedSet.has(staff._id)),
+        selectedBranch: state.selectedBranch
+          ? {
+              ...state.selectedBranch,
+              totalStaffs: Math.max(
+                0,
+                state.selectedBranch.totalStaffs - deletedCount,
+              ),
+            }
+          : null,
       }));
     } catch (error) {
       console.error("Error deleting staff:", error);

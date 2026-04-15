@@ -164,6 +164,23 @@
     "addStaffButton": "Thêm nhân viên",
     "addStaffButtonPending": "Đang thêm...",
     "deleteStaffButton": "Xóa nhân viên",
+    "deleteStaff": {
+      "processing": "Đang xóa...",
+      "toast": {
+        "success": {
+          "title": "Đã xóa thành công",
+          "description": "Đã xóa {{count}} nhân viên khỏi hệ thống."
+        },
+        "error": {
+          "title": "Lỗi khi xóa nhân viên",
+          "description": "Đã xảy ra sự cố khi xóa nhân viên đã chọn. Vui lòng thử lại."
+        },
+        "noSelection": {
+          "title": "Chưa chọn nhân viên",
+          "description": "Vui lòng chọn ít nhất một nhân viên để xóa."
+        }
+      }
+    },
     "emptyState": {
       "title": "Chưa có nhân viên",
       "description": "Chi nhánh này chưa có danh sách nhân viên. Hãy thêm thành viên mới để quản lý vận hành tốt hơn nhé."

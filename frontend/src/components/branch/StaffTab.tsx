@@ -19,7 +19,13 @@ import { Link } from "react-router-dom";
 
 const StaffTab = () => {
   const { t } = useTranslation(["branch"]);
-  const { staffs, getStaffsOfBranch, loadingFetchStaffs } = useBranchStore();
+  const {
+    staffs,
+    getStaffsOfBranch,
+    loadingFetchStaffs,
+    deleteStaff,
+    loadingStaffAction,
+  } = useBranchStore();
 
   useEffect(() => {
     const init = async () => {
@@ -64,12 +70,41 @@ const StaffTab = () => {
     return Array.from(selectedKeys) as string[];
   }, [selectedKeys, staffs]);
 
+  const isDeletingStaff = Boolean(loadingStaffAction.delete);
+
   const copyClicked = (value: string) => {
     navigator.clipboard.writeText(value);
     toast.success(`Copied to clipboard: ${value}`, {
       timeout: 2000,
     });
-  }
+  };
+
+  const deleteSelectedStaffs = async () => {
+    if (selectedIds.length === 0) {
+      toast.warning(t("staffTab.deleteStaff.toast.noSelection.title"), {
+        description: t("staffTab.deleteStaff.toast.noSelection.description"),
+        timeout: 3000,
+      });
+      return;
+    }
+
+    try {
+      await deleteStaff(selectedIds);
+      setSelectedKeys(new Set());
+      setPage(1);
+      toast.success(t("staffTab.deleteStaff.toast.success.title"), {
+        description: t("staffTab.deleteStaff.toast.success.description", {
+          count: selectedIds.length,
+        }),
+        timeout: 3000,
+      });
+    } catch (error) {
+      toast.danger(t("staffTab.deleteStaff.toast.error.title"), {
+        description: t("staffTab.deleteStaff.toast.error.description"),
+        timeout: 3000,
+      });
+    }
+  };
 
   return (
     <div className="w-full flex flex-col gap-3">
@@ -236,9 +271,13 @@ const StaffTab = () => {
           fullWidth
           variant="danger-soft"
           className="flex-1"
-          isDisabled={selectedIds.length === 0}
+          isDisabled={selectedIds.length === 0 || isDeletingStaff}
+          isPending={isDeletingStaff}
+          onPress={deleteSelectedStaffs}
         >
-          {t("branch:staffTab.deleteStaffButton")}
+          {isDeletingStaff
+            ? t("branch:staffTab.deleteStaff.processing")
+            : t("branch:staffTab.deleteStaffButton")}
         </Button>
         <AddStaffDialog className="flex-1">
           <Button fullWidth variant="primary">
