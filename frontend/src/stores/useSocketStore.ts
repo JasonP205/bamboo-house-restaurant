@@ -96,6 +96,12 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       useOrderStore.setState({ cart: incomingCart });
     });
 
+    socket.on("current-order", (data) => {
+      if (!data) return;
+      console.log("Loaded existing incomplete order from DB:", data);
+      useOrderStore.setState({ order: data });
+    });
+
     socket.on("remove-from-cart", (data) => {
       const dishId = data.dishId;
       useOrderStore.setState((state) => ({

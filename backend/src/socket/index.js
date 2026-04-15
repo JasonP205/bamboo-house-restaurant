@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import http from "http";
 import express from "express";
 import { socketMiddleware } from "../middleware/socketMiddleware.js";
+import Order from "../models/Order.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -29,7 +30,7 @@ io.on("connection", (socket) => {
     console.log(`Socket ${socket.id} joined branch room ${branchId}`);
   });
 
-  socket.on("join-TableRoom", (tableId) => {
+  socket.on("join-TableRoom", async (tableId) => {
     socket.join(tableId);
     console.log(`Socket ${socket.id} joined table room ${tableId}`);
 
@@ -37,6 +38,21 @@ io.on("connection", (socket) => {
       currentOrders.set(tableId, []);
     }
     socket.emit("current-cart", currentOrders.get(tableId));
+
+    // Check if there's an incomplete order for this table
+    try {
+      const incompleteOrder = await Order.findOne({
+        table: tableId,
+        status: { $ne: "completed" },
+      }).populate("items.dishId servedBy");
+
+      if (incompleteOrder) {
+        console.log(`Found incomplete order for table ${tableId}: ${incompleteOrder._id}`);
+        socket.emit("current-order", incompleteOrder);
+      }
+    } catch (error) {
+      console.error("Error fetching incomplete order:", error);
+    }
   });
 
   socket.on("cart-updated", ({ dish, quantity, note, tableId }) => {
