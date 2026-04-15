@@ -5,7 +5,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage";
-import { Toast,ToastQueue} from "@heroui/react";
+import { Toast, ToastQueue } from "@heroui/react";
 import BranchesPage from "./pages/branches/BranchesPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BranchDetail from "./pages/branches/BranchDetail";
@@ -24,12 +24,13 @@ import StaffProfilePage from "./pages/staff/StaffProfilePage";
 
 function App() {
   const { getDeviceId, deviceId } = useAuthStore();
+  const { role } = useAuthStore();
   useEffect(() => {
     if (!deviceId) {
       getDeviceId();
     }
   }, [deviceId]);
-  const maxQueue = new ToastQueue({maxVisibleToasts: 2});
+  const maxQueue = new ToastQueue({ maxVisibleToasts: 2 });
   return (
     <>
       <Toast.Provider queue={maxQueue} placement="top" className="z-100" />
@@ -40,14 +41,18 @@ function App() {
             <Route path="login-callback" element={<GoogleCallback />} />
 
             <Route element={<ProtectedRoute requireLogin />}>
-              <Route path="branches" element={<Outlet />}>
-                <Route index element={<BranchesPage />} />
-                <Route path=":branchId" element={<BranchDetail />} />
-              </Route>
-              <Route path="menu" element={<Outlet />}>
-                <Route index element={<MenuPage />} />
-                <Route path=":dishId" element={<DishDetail />} />
-              </Route>
+              {role === "manager" && (
+                <>
+                  <Route path="branches" element={<Outlet />}>
+                    <Route index element={<BranchesPage />} />
+                    <Route path=":branchId" element={<BranchDetail />} />
+                  </Route>
+                  <Route path="menu" element={<Outlet />}>
+                    <Route index element={<MenuPage />} />
+                    <Route path=":dishId" element={<DishDetail />} />
+                  </Route>
+                </>
+              )}
 
               <Route path="orders" element={<OrderMonitor />} />
               <Route path="history" element={<HistoryOrder />} />
