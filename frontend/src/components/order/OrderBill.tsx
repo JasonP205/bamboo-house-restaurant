@@ -20,10 +20,7 @@ const OrderBill = ({ order, onPrinted }: OrderBillProps) => {
     [order.dishes],
   );
 
-  const vatRate = useMemo(() => {
-    if (!order.subTotal) return 0;
-    return (order.vatAmount / order.subTotal) * 100;
-  }, [order.subTotal, order.vatAmount]);
+  const vatRate = 0.08
 
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat(i18n.language, {
