@@ -95,9 +95,11 @@ export const createOrder = async (req, res) => {
     });
 
     const orderCode = "ORD" + Date.now().toString().slice(-6);
-    const vat_percentage = parseFloat(process.env.VAT_PERCENTAGE || "0");
-    const vatAmount = subTotal * vat_percentage;
-    const totalPrice = subTotal + vatAmount;
+    const round = (num) => Math.round(num * 100) / 100;
+    subTotal = round(subTotal);
+    const vat_percentage = parseFloat(process.env.VAT_PERCENTAGE || "0") / 100;
+    const vatAmount = round(subTotal * vat_percentage);
+    const totalPrice = round(subTotal + vatAmount);
 
     const newOrder = await Order.create({
       orderCode,
@@ -210,9 +212,18 @@ export const addOrderItem = async (req, res) => {
 
     order.items.push(...newItems);
 
-    const addedPrice = newItems.reduce((t, i) => t + i.price * i.quantity, 0);
-
-    order.totalPrice += addedPrice;
+    const round = (num) => Math.round(num * 100) / 100;
+    let subTotal = 0;
+    order.items.forEach((item) => {
+      subTotal += item.price * item.quantity;
+    });
+    subTotal = round(subTotal);
+    const vat_percentage = parseFloat(process.env.VAT_PERCENTAGE || "0") / 100;
+    const vatAmount = round(subTotal * vat_percentage);
+    const totalPrice = round(subTotal + vatAmount);
+    order.subTotal = subTotal;
+    order.vatAmount = vatAmount;
+    order.totalPrice = totalPrice;
 
     await order.save();
 
