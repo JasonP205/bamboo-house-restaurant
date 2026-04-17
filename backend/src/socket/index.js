@@ -6,6 +6,10 @@ import Order from "../models/Order.js";
 import { formatOrder } from "../lib/formatOrder.js";
 
 const app = express();
+if (process.env.NODE_ENV !== "production") {
+  app.set("trust proxy", 1);
+}
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
