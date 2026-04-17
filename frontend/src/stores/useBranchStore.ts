@@ -302,8 +302,8 @@ export const useBranchStore = create<branchState>((set, get) => ({
           : table,
       ),
     }));
-    if (orderId) {
-      useOrderStore.getState().getOrderDetails(orderId);
-    }
+    // if (orderId) {
+    //   useOrderStore.getState().getOrderDetails(orderId);
+    // }
   },
 }));

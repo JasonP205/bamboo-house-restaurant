@@ -40,7 +40,6 @@ const OrderMonitor = () => {
     init();
   }, [getAllOrdersOfBranch]);
 
-  // ✅ FIX: handle click table
   const handleViewOrder = (table: Table) => {
     if (!table.currentOrder) return;
 
