@@ -36,17 +36,17 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       console.error("Error fetching orders:", error);
     }
   },
-  getOrderDetails: async (orderId: string) => {
-    try {
-      const order = await orderService.getOrderDetails(orderId);
-      if (order) {
-        const prevOrderOfBranch = get().orderOfBranch || [];
-        set({ orderOfBranch: [order, ...prevOrderOfBranch], loading: false });
-      }
-    } catch (error) {
-      console.error("Error fetching order details:", error);
-    }
-  },
+  // getOrderDetails: async (orderId: string) => {
+  //   try {
+  //     const order = await orderService.getOrderDetails(orderId);
+  //     if (order) {
+  //       const prevOrderOfBranch = get().orderOfBranch || [];
+  //       set({ orderOfBranch: [order, ...prevOrderOfBranch], loading: false });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching order details:", error);
+  //   }
+  // },
   updateCartItem: (dish: Dish, quantity: number, note?: string) => {
     const existingItemIndex = get().cart.findIndex(
       (item) => item.dish._id === dish._id,

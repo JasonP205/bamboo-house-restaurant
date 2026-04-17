@@ -51,7 +51,7 @@ export interface OrderState {
   setCurrentTableId: (tableId: string | null) => void;
   getAllOrdersOfBranch: (branchId?: string) => Promise<void>;
   setCurrentBranchId: (branchId: string | null) => void;
-  getOrderDetails: (orderId: string) => Promise<void>;
+  // getOrderDetails: (orderId: string) => Promise<void>;
   addToCart: (dish: Dish, quantity: number, note?: string) => void;
   updateCartItem: (dish: Dish, quantity: number, note?: string) => void;
   removeFromCart: (dishId: string) => void;
