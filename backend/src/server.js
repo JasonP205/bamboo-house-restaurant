@@ -14,6 +14,7 @@ import { v2 as cloudinary } from "cloudinary";
 import passport from "./lib/passportConfig.js";
 import orderRoute from "./routes/orderRoute.js";
 import menuRoute from "./routes/menuRoute.js";
+import copyrightRoute from "./routes/copyrightRoute.js";
 import { app, server } from "./socket/index.js";
 
 const start = process.hrtime.bigint();
@@ -36,6 +37,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+app.use("/copyrights", copyrightRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/menu", menuRoute);
 app.use("/api/branches", branchRoute);
